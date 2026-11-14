@@ -1,0 +1,9 @@
+-- Configuring done (1.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: E:/PRAXIS/build/Release
+[1/6] Building CXX object CMakeFiles\praxis_core.dir\src\frontend\preprocessor.cpp.obj
+[2/6] Building CXX object CMakeFiles\praxis_core.dir\src\runtime\value.cpp.obj
+[3/6] Building CXX object CMakeFiles\praxis_core.dir\src\runtime\interpreter.cpp.obj
+[4/6] Linking CXX static library praxis_core.lib
+[5/6] Linking CXX executable praxis.exe
+[6/6] Linking CXX executable praxis_unit.exe

@@ -1,0 +1,1494 @@
+{
+  "executable": "E:\\PRAXIS\\build\\Release\\praxis.exe",
+  "executable_sha256": "b711d23b1422086104ca4d559fc910c50f4c608a3fcfa80c14557530be85215d",
+  "total": 244,
+  "passed": 244,
+  "categories": {
+    "arithmetic": 38,
+    "assignment": 11,
+    "conversion": 8,
+    "control": 5,
+    "loops": 10,
+    "scope": 8,
+    "array": 6,
+    "reference": 6,
+    "string": 11,
+    "native": 2,
+    "lexer": 9,
+    "function": 15,
+    "cli": 7,
+    "preprocess": 8,
+    "semantic_rejection": 47,
+    "syntax_rejection": 10,
+    "lex_rejection": 9,
+    "preprocess_rejection": 6,
+    "runtime_rejection": 19,
+    "repl": 9
+  },
+  "results": [
+    {
+      "name": "add",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "subtract",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "multiply",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "divide",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "remainder",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "negative_divide",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "negative_remainder",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "precedence",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parentheses",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "left_subtract",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "left_divide",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unary_minus",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unary_plus",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "long_literal",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "long_suffix",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mixed_rank",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bool_promotion",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "char_promotion",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "float_add",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "double_divide",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "exponent",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "leading_dot",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "float_double",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "less",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "greater",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "less_equal",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "greater_equal",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "equal",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "not_equal",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "logical_and",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "logical_or",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "logical_not",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "not_zero",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "compare_precedence",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "logical_precedence",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "long_compare",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "float_round",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "negative_zero",
+      "category": "arithmetic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "assignment",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "add_assign",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "sub_assign",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mul_assign",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "div_assign",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mod_assign",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "prefix_increment",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "postfix_increment",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "prefix_decrement",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "postfix_decrement",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "assignment_lvalue",
+      "category": "assignment",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "int_from_double",
+      "category": "conversion",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "negative_truncate",
+      "category": "conversion",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bool_from_int",
+      "category": "conversion",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bool_from_double",
+      "category": "conversion",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "char_output",
+      "category": "conversion",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "float_from_int",
+      "category": "conversion",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "if_true",
+      "category": "control",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "if_false",
+      "category": "control",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "dangling_else",
+      "category": "control",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "while",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "do_once",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "do_loop",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "for",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "for_empty",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "while_break",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "for_continue",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "while_continue",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "do_continue",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "nested_break",
+      "category": "loops",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "shadow",
+      "category": "scope",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "block_mutate",
+      "category": "scope",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "for_scope",
+      "category": "scope",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "branch_scope",
+      "category": "scope",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_list",
+      "category": "array",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_zero_fill",
+      "category": "array",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_empty_list",
+      "category": "array",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_write",
+      "category": "array",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_loop",
+      "category": "array",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_char",
+      "category": "array",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reference",
+      "category": "reference",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reference_chain",
+      "category": "reference",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reference_array",
+      "category": "reference",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "const_reference",
+      "category": "reference",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "copy_value",
+      "category": "reference",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_default",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_literal",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_plus",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_prepend",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_append",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_char",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_copy",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_compare",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_length",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "short_and",
+      "category": "control",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "short_or",
+      "category": "control",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "endl",
+      "category": "native",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "escape",
+      "category": "lexer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "comments",
+      "category": "lexer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "factorial",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "fibonacci",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "pass_value",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "pass_reference",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "const_parameter",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parameter_convert",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "return_convert",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "void_return",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "forward_declaration",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mutual_recursion",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "global_scope",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "global_zero",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "return_in_loop",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_function",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parameter_shadow",
+      "category": "function",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "return_status",
+      "category": "cli",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "macro",
+      "category": "preprocess",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "macro_nested",
+      "category": "preprocess",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "macro_undef",
+      "category": "preprocess",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "macro_literal",
+      "category": "preprocess",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unknown_name",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "duplicate_local",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "const_assignment",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rvalue_assignment",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_assignment",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_to_int",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "int_to_string",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reference_temporary",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reference_conversion",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reference_const",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "missing_reference_init",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "missing_const_init",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "void_object",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "float_index",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "scalar_index",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bool_increment",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "float_remainder",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "break_outside",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "continue_outside",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "scope_escape",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "for_escape",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "string_condition",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "const_ref_write",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_too_many",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_narrow",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_nonbrace",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bad_member",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "member_on_int",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "integer_shift",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "text_plus_text",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "return_missing",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_of_refs",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "call_main",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bad_arity",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "undefined_function",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "missing_return",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "duplicate_function",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "overload",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parameter_redeclare",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "before_declaration",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "missing_main",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "invalid_main",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "return_void_value",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "missing_semicolon",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "missing_brace",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bad_expression",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_bound_zero",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_bound_name",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "pointer",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "scalar_braces",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "missing_paren",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unterminated_string",
+      "category": "lex_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unterminated_comment",
+      "category": "lex_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bad_escape",
+      "category": "lex_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "multi_character",
+      "category": "lex_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "octal",
+      "category": "lex_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "hex",
+      "category": "lex_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bad_exponent",
+      "category": "lex_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unsupported_character",
+      "category": "lex_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "trailing_escape",
+      "category": "lex_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unsupported_directive",
+      "category": "preprocess_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "function_macro",
+      "category": "preprocess_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unknown_header",
+      "category": "preprocess_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "redefine",
+      "category": "preprocess_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "uninitialized",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "array_uninitialized",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bounds_high",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bounds_negative",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "divide_zero",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mod_zero",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "float_divide_zero",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "int_add_overflow",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "int_sub_overflow",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "int_mul_overflow",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "long_add_overflow",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "long_mul_overflow",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "long_div_overflow",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "long_neg_overflow",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "conversion_range",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "char_range",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "self_init",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "floating_overflow",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "literal_bang",
+      "category": "lexer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "literal_plus",
+      "category": "lexer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "literal_parenthesis",
+      "category": "lexer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "literal_brace",
+      "category": "lexer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "literal_semicolon",
+      "category": "lexer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "literal_keyword",
+      "category": "lexer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "literal_hash",
+      "category": "lexer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "zero_before_dynamic_init",
+      "category": "scope",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "nul_literal_output",
+      "category": "native",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "nul_string_conversion",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "nul_string_concat",
+      "category": "string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "endl_not_string",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "long_expression",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "call_depth",
+      "category": "runtime_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "include_order",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "for_redeclare",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "keyword_identifier",
+      "category": "syntax_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "std_identifier",
+      "category": "semantic_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "constant_global_chain",
+      "category": "scope",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "constant_global_array",
+      "category": "scope",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "static_reference_binding",
+      "category": "reference",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "for_nested_shadow",
+      "category": "scope",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "undef_requires_name",
+      "category": "preprocess_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "directive_requires_name",
+      "category": "preprocess_rejection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "negative_zero_output",
+      "category": "conversion",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "long_to_float_rounding",
+      "category": "conversion",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "cli_--help0--help",
+      "category": "cli",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "cli_--version0--version",
+      "category": "cli",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "cli_nonsense2nonsense",
+      "category": "cli",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "cli_run2run",
+      "category": "cli",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "cli_run1missing.cpp",
+      "category": "cli",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "cli_run2--bad",
+      "category": "cli",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repl_reset",
+      "category": "repl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repl_runtime_recovery",
+      "category": "repl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repl_array_persistence",
+      "category": "repl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repl_declarations",
+      "category": "repl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repl_functions",
+      "category": "repl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repl_references",
+      "category": "repl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repl_invalid_rollback",
+      "category": "repl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repl_macro_persistence",
+      "category": "repl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repl_multiline",
+      "category": "repl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "quoted_include",
+      "category": "preprocess",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "include_path",
+      "category": "preprocess",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "include_cycle",
+      "category": "preprocess",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "include_diagnostic_location",
+      "category": "preprocess",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

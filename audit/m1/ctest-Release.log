@@ -1,0 +1,35 @@
+Start testing: Nov 14 14:17 India Standard Time
+----------------------------------------------------------
+1/2 Testing: unit
+1/2 Test: unit
+Command: "E:/PRAXIS/build/Release/praxis_unit.exe"
+Directory: E:/PRAXIS/build/Release
+"unit" start time: Nov 14 14:17 India Standard Time
+Output:
+----------------------------------------------------------
+15 frontend checks passed
+<end of output>
+Test time =   0.66 sec
+----------------------------------------------------------
+Test Passed.
+"unit" end time: Nov 14 14:17 India Standard Time
+"unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/2 Testing: integration
+2/2 Test: integration
+Command: "C:/Users/mishr/anaconda3/python.exe" "E:/PRAXIS/tests/integration/run.py" "E:/PRAXIS/build/Release/praxis.exe"
+Directory: E:/PRAXIS/build/Release
+"integration" start time: Nov 14 14:17 India Standard Time
+Output:
+----------------------------------------------------------
+244/244 integration checks passed
+<end of output>
+Test time =  30.98 sec
+----------------------------------------------------------
+Test Passed.
+"integration" end time: Nov 14 14:18 India Standard Time
+"integration" time elapsed: 00:00:30
+----------------------------------------------------------
+
+End testing: Nov 14 14:18 India Standard Time

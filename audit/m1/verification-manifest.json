@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-14",
+  "timezone": "Asia/Calcutta",
+  "repository": "E:\\PRAXIS",
+  "branch": "main",
+  "starting_commit": null,
+  "implementation_commit": "f33b72a9b58f36396fcb638a0f49f8a1003799f5",
+  "decision": "PASS (documented M1 subset)",
+  "binaries": {
+    "Debug": "be493a5ab56e533c232de0b0f59e4fba17ebdf895880c8a7fa7bec2b50a17a98",
+    "Release": "b711d23b1422086104ca4d559fc910c50f4c608a3fcfa80c14557530be85215d"
+  }
+}

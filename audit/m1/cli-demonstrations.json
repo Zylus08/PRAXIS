@@ -1,0 +1,116 @@
+{
+  "executable": "E:\\PRAXIS\\build\\Release\\praxis.exe",
+  "executable_sha256": "b711d23b1422086104ca4d559fc910c50f4c608a3fcfa80c14557530be85215d",
+  "passed": 14,
+  "total": 14,
+  "results": [
+    {
+      "example": "hello",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "Hello World\n",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "arithmetic",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "14",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "conditions",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "1",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "loops",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "012345\n",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "factorial",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "3628800",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "fibonacci",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "55",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "functions",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "72",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "scopes",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "21",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "arrays",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "10",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "references",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "9",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "strings",
+      "passed": true,
+      "run_exit": 0,
+      "stdout": "hi!",
+      "stderr": "",
+      "check_exit": 0
+    },
+    {
+      "example": "error_diagnostics",
+      "passed": true,
+      "run_exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\examples\\error_diagnostics.cpp:5:5: semantic: expression is not a modifiable scalar lvalue\n",
+      "check_exit": 1
+    },
+    {
+      "command": "--help",
+      "passed": true,
+      "stdout": "Usage: praxis --version | --help | repl | run FILE [-I DIR] | check FILE [-I DIR]\n",
+      "stderr": ""
+    },
+    {
+      "command": "--version",
+      "passed": true,
+      "stdout": "Praxis 0.1.0 (M1 subset)\n",
+      "stderr": ""
+    }
+  ]
+}
