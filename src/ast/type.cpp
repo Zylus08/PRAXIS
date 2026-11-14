@@ -24,6 +24,7 @@ Type common(Type a, Type b) {
     return {a.base > b.base ? a.base : b.base};
 }
 std::string typeName(Type t) {
+    if(t.base==Base::Record || t.base==Base::Parameter){std::string n=t.name;if(!t.arguments.empty()){n+="<";for(size_t i=0;i<t.arguments.size();++i){if(i)n+=",";n+=typeName(t.arguments[i]);}n+=">";}return std::string(t.constant?"const ":"")+n+(t.reference?"&":"")+(t.extent?"["+std::to_string(t.extent)+"]":"");}
     const char *names[] = {
         "void",   "bool",        "char",           "int",     "long long",       "float",
         "double", "std::string", "string literal", "ostream", "endl manipulator"};

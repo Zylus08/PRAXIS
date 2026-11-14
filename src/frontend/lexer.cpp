@@ -159,7 +159,7 @@ std::vector<Token> lex(const Source &s) {
             std::string pair = t + peek();
             if (pairs.contains(pair))
                 t += take();
-            else if (std::string("+-*/%=!<>&|;:,(){}[].#").find(t[0]) == std::string::npos)
+            else if (std::string("+-*/%=!<>&|;:,(){}[].#~").find(t[0]) == std::string::npos)
                 fail(start, "lex", "unsupported character");
         }
         out.push_back({k, t, start});

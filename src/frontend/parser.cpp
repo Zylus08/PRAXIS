@@ -33,7 +33,7 @@ bool Parser::typeStart() const {
     auto s = peek().text;
     return s == "const" || s == "bool" || s == "char" || s == "int" || s == "long" ||
            s == "float" || s == "double" || s == "void" ||
-           (s == "std" && peek(1).is("::") && peek(2).is("string"));
+           (s == "std" && peek(1).is("::") && peek(2).is("string")) || knownTypes.contains(s) || templateTypes.contains(s);
 }
 Type Parser::type() {
     Type t;
@@ -59,8 +59,9 @@ Type Parser::type() {
         expect("::");
         expect("string");
         t.base = Base::String;
-    } else
-        fail(tok.loc, "parse", "expected supported type");
+    } else if(templateTypes.contains(s)){t.base=Base::Parameter;t.name=s;}
+    else if(knownTypes.contains(s)){t.base=Base::Record;t.name=s;if(peek().is("<"))t.arguments=typeArguments();}
+    else fail(tok.loc, "parse", "expected supported type");
     if (match("const"))
         t.constant = true;
     t.reference = match("&");
@@ -95,6 +96,7 @@ Decl Parser::declaration(Type t, Token name) {
         } else
             d.init = expression();
     }
+    if(match("(")){d.direct=true;if(!match(")")){do{d.arguments.push_back(expression());}while(match(","));expect(")");}}
     expect(";");
     return d;
 }
@@ -121,7 +123,7 @@ S Parser::statement() {
     auto t = peek();
     if (t.is("{"))
         return block();
-    if (typeStart()) {
+    if (typeStart() && !(peek().kind==TokenKind::Identifier && peek(1).is("("))) {
         auto ty = type();
         auto n = identifier();
         auto s = std::make_shared<Stmt>(Stmt::Kind::Declaration, t);
@@ -250,6 +252,7 @@ E Parser::prefix() {
             t.text += "::" + identifier().text;
         }
         e = std::make_shared<Expr>(Expr::Kind::Name, t, t.text);
+        if(peek().is("<")){size_t saved=pos;take();bool types=typeStart();pos=saved;if(types)e->typeArguments=typeArguments();}
     } else
         fail(t.loc, "parse", "expected expression");
     return postfix(e);
@@ -276,8 +279,6 @@ E Parser::postfix(E e) {
             auto n = identifier();
             auto c = std::make_shared<Expr>(Expr::Kind::Member, n, n.text);
             c->args = {e};
-            expect("(");
-            expect(")");
             e = c;
         } else if (match("++") || match("--")) {
             auto c = std::make_shared<Expr>(Expr::Kind::Postfix, t, t.text);
@@ -294,42 +295,70 @@ E Parser::postfix(E e) {
     }
     return e;
 }
+
+std::vector<Type> Parser::typeArguments(){
+    expect("<");std::vector<Type> a;
+    if(peek().is(">"))fail(peek().loc,"parse","empty template argument list unsupported");
+    do{a.push_back(type());if(a.size()>8)fail(peek().loc,"parse","template argument limit");}while(match(","));
+    if(peek().is(">>")){auto t=take();t.text=">";tokens.insert(tokens.begin()+static_cast<ptrdiff_t>(pos),t);}
+    else expect(">");return a;
+}
+std::vector<std::string> Parser::templateParameters(){
+    expect("template");expect("<");std::vector<std::string> names;
+    do{if(!match("typename")&&!match("class"))fail(peek().loc,"parse","only template type parameters are supported");auto n=identifier();if(templateTypes.contains(n.text))fail(n.loc,"parse","duplicate template parameter");templateTypes.insert(n.text);names.push_back(n.text);if(names.size()>8)fail(n.loc,"parse","template parameter limit");}while(match(","));expect(">");return names;
+}
+std::vector<Decl> Parser::parameters(){
+    expect("(");std::vector<Decl> out;
+    if(match(")"))return out;
+    if(peek().is("void")&&peek(1).is(")")){take();take();return out;}
+    do{auto t=type();auto n=identifier();out.push_back({n,t});}while(match(","));expect(")");return out;
+}
+bool Parser::functionAhead()const{
+    if(!peek().is("("))return false;
+    if(peek(1).is(")"))return true;
+    const auto& t=peek(1);return t.kind==TokenKind::Keyword || knownTypes.contains(t.text)||templateTypes.contains(t.text)||(t.is("std")&&peek(2).is("::"));
+}
+void Parser::functionBody(const std::shared_ptr<Function>& f){
+    f->constMember=match("const");
+    if(match(":")){
+        if(!f->constructor)fail(f->name.loc,"parse","initializer list requires constructor");
+        do{MemberInit init;init.name=identifier();expect("(");if(!match(")")){do{init.args.push_back(expression());}while(match(","));expect(")");}f->initializers.push_back(init);}while(match(","));
+    }
+    if(!match(";"))f->body=block();
+}
+std::shared_ptr<Function> Parser::function(Type t,Token n,std::string owner){
+    auto f=std::make_shared<Function>();f->name=n;f->result=t;f->owner=owner;f->params=parameters();functionBody(f);return f;
+}
+std::shared_ptr<Class> Parser::classDeclaration(){
+    bool access=take().is("struct");auto c=std::make_shared<Class>();c->name=identifier();knownTypes.insert(c->name.text);
+    if(peek().is(":"))fail(peek().loc,"parse","inheritance is unsupported");
+    expect("{");
+    while(!match("}")){
+        if(peek().kind==TokenKind::End)fail(peek().loc,"parse","unterminated class");
+        if(peek().is("public")||peek().is("private")){access=take().is("public");expect(":");continue;}
+        if(peek().is("protected")||peek().is("virtual")||peek().is("static")||peek().is("template")||peek().is("friend"))fail(peek().loc,"parse","unsupported class member feature");
+        if((peek().is(c->name.text)&&peek(1).is("("))||peek().is("~")){
+            auto f=std::make_shared<Function>();f->owner=c->name.text;f->publicAccess=access;f->destructor=match("~");f->constructor=!f->destructor;f->name=expect(c->name.text);f->params=parameters();functionBody(f);c->methods.push_back(f);continue;
+        }
+        auto t=type();auto n=identifier();
+        if(functionAhead()){auto f=function(t,n,c->name.text);f->publicAccess=access;c->methods.push_back(f);}
+        else{auto d=declaration(t,n);d.publicAccess=access;c->fields.push_back(d);}
+    }
+    expect(";");return c;
+}
 Program Parser::parse(bool script) {
-    Program p;
-    p.script = script;
-    while (peek().kind != TokenKind::End) {
-        if (typeStart()) {
-            auto t = type();
-            auto name = identifier();
-            if (match("(")) {
-                auto f = std::make_shared<Function>();
-                f->name = name;
-                f->result = t;
-                if (!match(")")) {
-                    if (peek().is("void") && peek(1).is(")")) {
-                        take();
-                        take();
-                    } else {
-                        do {
-                            auto pt = type();
-                            auto pn = identifier();
-                            f->params.push_back({pn, pt, {}, {}, false});
-                        } while (match(","));
-                        expect(")");
-                    }
-                }
-                if (!match(";"))
-                    f->body = block();
-                p.items.push_back({{}, f});
-            } else {
-                auto s = std::make_shared<Stmt>(Stmt::Kind::Declaration, name);
-                s->decl = declaration(t, name);
-                p.items.push_back({s, {}});
-            }
-        } else if (script)
-            p.items.push_back({statement(), {}});
-        else
-            fail(peek().loc, "parse", "expected global declaration or function");
+    Program p;p.script=script;
+    while(peek().kind!=TokenKind::End){
+        auto oldParams=templateTypes;std::vector<std::string> params;if(peek().is("template"))params=templateParameters();
+        if(peek().is("class")||peek().is("struct")){auto c=classDeclaration();c->templateParameters=params;p.items.push_back({{},{},c});}
+        else if(typeStart()){
+            auto t=type();auto name=identifier();std::string owner;
+            if(match("::")){owner=name.text;name=identifier();}
+            if(functionAhead()) {auto f=function(t,name,owner);f->templateParameters=params;p.items.push_back({{},f,{}});}
+            else {if(!params.empty()||!owner.empty())fail(name.loc,"parse","expected function declaration");auto st=std::make_shared<Stmt>(Stmt::Kind::Declaration,name);st->decl=declaration(t,name);p.items.push_back({st,{},{}});}
+        }else if(script&&params.empty())p.items.push_back({statement(),{},{}});
+        else fail(peek().loc,"parse","expected global declaration, class or function");
+        templateTypes=oldParams;
     }
     return p;
 }

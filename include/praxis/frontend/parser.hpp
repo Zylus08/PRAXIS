@@ -1,10 +1,19 @@
 #pragma once
 #include "praxis/ast/ast.hpp"
+#include <set>
 namespace praxis {
 class Parser {
     std::vector<Token> tokens;
     size_t pos = 0;
     int depth = 0;
+    std::set<std::string> knownTypes, templateTypes;
+    std::vector<Type> typeArguments();
+    std::vector<std::string> templateParameters();
+    std::vector<Decl> parameters();
+    std::shared_ptr<Function> function(Type,Token,std::string="");
+    std::shared_ptr<Class> classDeclaration();
+    void functionBody(const std::shared_ptr<Function>&);
+    bool functionAhead() const;
     const Token &peek(size_t = 0) const;
     Token take();
     bool match(const std::string &);
@@ -21,7 +30,7 @@ class Parser {
     int precedence(const std::string &) const;
 
   public:
-    explicit Parser(std::vector<Token> t) : tokens(std::move(t)) {}
+    explicit Parser(std::vector<Token> t, std::set<std::string> names={}) : tokens(std::move(t)),knownTypes(std::move(names)) {}
     Program parse(bool script = false);
 };
 } // namespace praxis
