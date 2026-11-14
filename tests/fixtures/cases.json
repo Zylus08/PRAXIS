@@ -1,0 +1,1802 @@
+[
+  {
+    "name": "add",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (17+25);}\n",
+    "stdout": "42",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "subtract",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (17-25);}\n",
+    "stdout": "-8",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "multiply",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (7*6);}\n",
+    "stdout": "42",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "divide",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (43/6);}\n",
+    "stdout": "7",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "remainder",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (43%6);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "negative_divide",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (-43/6);}\n",
+    "stdout": "-7",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "negative_remainder",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (-43%6);}\n",
+    "stdout": "-1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "precedence",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (2+3*4);}\n",
+    "stdout": "14",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "parentheses",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << ((2+3)*4);}\n",
+    "stdout": "20",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "left_subtract",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (20-6-3);}\n",
+    "stdout": "11",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "left_divide",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (48/4/3);}\n",
+    "stdout": "4",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "unary_minus",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (-(-12));}\n",
+    "stdout": "12",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "unary_plus",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (+12);}\n",
+    "stdout": "12",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "long_literal",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (3000000000+2);}\n",
+    "stdout": "3000000002",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "long_suffix",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (42LL*1000000000LL);}\n",
+    "stdout": "42000000000",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "mixed_rank",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (3+4LL);}\n",
+    "stdout": "7",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "bool_promotion",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (true+true);}\n",
+    "stdout": "2",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "char_promotion",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << ('A'+1);}\n",
+    "stdout": "66",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "float_add",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (1.5f+2.25f);}\n",
+    "stdout": "3.75",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "double_divide",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (5.0/2);}\n",
+    "stdout": "2.5",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "exponent",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (1e2+2.5e-1);}\n",
+    "stdout": "100.25",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "leading_dot",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (.5+1.);}\n",
+    "stdout": "1.5",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "float_double",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (1.25f+2.5);}\n",
+    "stdout": "3.75",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "less",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (3<4);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "greater",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (3>4);}\n",
+    "stdout": "0",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "less_equal",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (3<=3);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "greater_equal",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (3>=3);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "equal",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (3==3);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "not_equal",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (3!=3);}\n",
+    "stdout": "0",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "logical_and",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (true&&false);}\n",
+    "stdout": "0",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "logical_or",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (false||true);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "logical_not",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (!42);}\n",
+    "stdout": "0",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "not_zero",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (!0);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "compare_precedence",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (1+2==3&&4>2);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "logical_precedence",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (true||false&&false);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "long_compare",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (9007199254740993LL>9007199254740992LL);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "float_round",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (16777217.0f==16777216.0f);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "negative_zero",
+    "category": "arithmetic",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout << (-0.0==0.0);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "assignment",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=0; int b=0; a=b=7; std::cout<<a<<b;}\n",
+    "stdout": "77",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "add_assign",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=4;a+=3;std::cout<<a;}\n",
+    "stdout": "7",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "sub_assign",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=4;a-=7;std::cout<<a;}\n",
+    "stdout": "-3",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "mul_assign",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=4;a*=3;std::cout<<a;}\n",
+    "stdout": "12",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "div_assign",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=10;a/=3;std::cout<<a;}\n",
+    "stdout": "3",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "mod_assign",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=10;a%=3;std::cout<<a;}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "prefix_increment",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=2;std::cout<<++a<<a;}\n",
+    "stdout": "33",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "postfix_increment",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=2;std::cout<<a++<<a;}\n",
+    "stdout": "23",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "prefix_decrement",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=2;std::cout<<--a<<a;}\n",
+    "stdout": "11",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "postfix_decrement",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=2;std::cout<<a--<<a;}\n",
+    "stdout": "21",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "assignment_lvalue",
+    "category": "assignment",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=0;(a=2)=3;std::cout<<a;}\n",
+    "stdout": "3",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "int_from_double",
+    "category": "conversion",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=3.9;std::cout<<a;}\n",
+    "stdout": "3",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "negative_truncate",
+    "category": "conversion",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=-3.9;std::cout<<a;}\n",
+    "stdout": "-3",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "bool_from_int",
+    "category": "conversion",
+    "source": "#include <iostream>\n#include <string>\nint main(){bool a=9;bool b=0;std::cout<<a<<b;}\n",
+    "stdout": "10",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "bool_from_double",
+    "category": "conversion",
+    "source": "#include <iostream>\n#include <string>\nint main(){bool a=.5;std::cout<<a;}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "char_output",
+    "category": "conversion",
+    "source": "#include <iostream>\n#include <string>\nint main(){char c=65;std::cout<<c;}\n",
+    "stdout": "A",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "float_from_int",
+    "category": "conversion",
+    "source": "#include <iostream>\n#include <string>\nint main(){float f=5;std::cout<<f/2;}\n",
+    "stdout": "2.5",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "if_true",
+    "category": "control",
+    "source": "#include <iostream>\n#include <string>\nint main(){if(2)std::cout<<1;else std::cout<<0;}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "if_false",
+    "category": "control",
+    "source": "#include <iostream>\n#include <string>\nint main(){if(0)std::cout<<1;else std::cout<<0;}\n",
+    "stdout": "0",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "dangling_else",
+    "category": "control",
+    "source": "#include <iostream>\n#include <string>\nint main(){if(true)if(false)std::cout<<1;else std::cout<<2;}\n",
+    "stdout": "2",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "while",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){int i=0;while(i<4){std::cout<<i;i++;}}\n",
+    "stdout": "0123",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "do_once",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){int i=4;do{std::cout<<i;i++;}while(i<4);}\n",
+    "stdout": "4",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "do_loop",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){int i=0;do{std::cout<<i;i++;}while(i<3);}\n",
+    "stdout": "012",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "for",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){for(int i=0;i<4;++i)std::cout<<i;}\n",
+    "stdout": "0123",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "for_empty",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){int i=0;for(;;){if(i==3)break;std::cout<<i++;}}\n",
+    "stdout": "012",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "while_break",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){int i=0;while(true){if(i==2)break;std::cout<<i++;}}\n",
+    "stdout": "01",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "for_continue",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){for(int i=0;i<5;++i){if(i==2)continue;std::cout<<i;}}\n",
+    "stdout": "0134",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "while_continue",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){int i=0;while(i<4){i++;if(i==2)continue;std::cout<<i;}}\n",
+    "stdout": "134",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "do_continue",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){int i=0;do{i++;if(i==2)continue;std::cout<<i;}while(i<3);}\n",
+    "stdout": "13",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "nested_break",
+    "category": "loops",
+    "source": "#include <iostream>\n#include <string>\nint main(){for(int i=0;i<2;++i){for(int j=0;j<3;++j){if(j==1)break;std::cout<<i<<j;}}}\n",
+    "stdout": "0010",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "shadow",
+    "category": "scope",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=1;{int x=2;std::cout<<x;}std::cout<<x;}\n",
+    "stdout": "21",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "block_mutate",
+    "category": "scope",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=1;{x=3;}std::cout<<x;}\n",
+    "stdout": "3",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "for_scope",
+    "category": "scope",
+    "source": "#include <iostream>\n#include <string>\nint main(){int i=9;for(int i=0;i<2;++i)std::cout<<i;std::cout<<i;}\n",
+    "stdout": "019",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "branch_scope",
+    "category": "scope",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=1;if(true){int x=2;std::cout<<x;}std::cout<<x;}\n",
+    "stdout": "21",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "array_list",
+    "category": "array",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[3]={2,4,6};std::cout<<a[0]<<a[2];}\n",
+    "stdout": "26",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "array_zero_fill",
+    "category": "array",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[3]={2};std::cout<<a[1]<<a[2];}\n",
+    "stdout": "00",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "array_empty_list",
+    "category": "array",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2]={};std::cout<<a[0]<<a[1];}\n",
+    "stdout": "00",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "array_write",
+    "category": "array",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2];a[1]=7;std::cout<<a[1];}\n",
+    "stdout": "7",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "array_loop",
+    "category": "array",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[4]={1,2,3,4};int s=0;for(int i=0;i<4;++i)s+=a[i];std::cout<<s;}\n",
+    "stdout": "10",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "array_char",
+    "category": "array",
+    "source": "#include <iostream>\n#include <string>\nint main(){char a[2]={'a','b'};std::cout<<a[0]<<a[1];}\n",
+    "stdout": "ab",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "reference",
+    "category": "reference",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=3;int& y=x;y=8;std::cout<<x;}\n",
+    "stdout": "8",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "reference_chain",
+    "category": "reference",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=3;int& y=x;int& z=y;z++;std::cout<<x;}\n",
+    "stdout": "4",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "reference_array",
+    "category": "reference",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2]={1,2};int& r=a[1];r=9;std::cout<<a[1];}\n",
+    "stdout": "9",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "const_reference",
+    "category": "reference",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=3;const int& r=a;a=4;std::cout<<r;}\n",
+    "stdout": "4",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "copy_value",
+    "category": "reference",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a=3;int b=a;b=4;std::cout<<a<<b;}\n",
+    "stdout": "34",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_default",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s;std::cout<<s.empty()<<s.size();}\n",
+    "stdout": "10",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_literal",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"hello\";std::cout<<s<<s.size();}\n",
+    "stdout": "hello5",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_plus",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"hi\";std::cout<<(s+\"!\");}\n",
+    "stdout": "hi!",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_prepend",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"hi\";std::cout<<(\"!\"+s);}\n",
+    "stdout": "!hi",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_append",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"hi\";s+=\"!\";std::cout<<s;}\n",
+    "stdout": "hi!",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_char",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"hi\";s+='!';std::cout<<s;}\n",
+    "stdout": "hi!",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_copy",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"a\";std::string t=s;t+=\"b\";std::cout<<s<<t;}\n",
+    "stdout": "aab",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_compare",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"abc\";std::cout<<(s==\"abc\")<<(s<\"abd\");}\n",
+    "stdout": "11",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_length",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"abc\";std::cout<<s.length();}\n",
+    "stdout": "3",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "short_and",
+    "category": "control",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=0;false&&++x;std::cout<<x;}\n",
+    "stdout": "0",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "short_or",
+    "category": "control",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=0;true||++x;std::cout<<x;}\n",
+    "stdout": "0",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "endl",
+    "category": "native",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\"hello\"<<std::endl;}\n",
+    "stdout": "hello\n",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "escape",
+    "category": "lexer",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\"a\\tb\\n\";}\n",
+    "stdout": "a\tb\n",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "comments",
+    "category": "lexer",
+    "source": "#include <iostream>\n#include <string>\nint main(){/* a\n b */ int x=2; // c\nstd::cout<<x;}\n",
+    "stdout": "2",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "factorial",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nlong long f(int n){if(n<=1)return 1;return n*f(n-1);} int main(){std::cout<<f(10);}",
+    "stdout": "3628800",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "fibonacci",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint f(int n){if(n<2)return n;return f(n-1)+f(n-2);} int main(){std::cout<<f(10);}",
+    "stdout": "55",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "pass_value",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint f(int x){x=7;return x;}int main(){int a=2;std::cout<<f(a)<<a;}",
+    "stdout": "72",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "pass_reference",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nvoid f(int& x){x+=7;}int main(){int a=2;f(a);std::cout<<a;}",
+    "stdout": "9",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "const_parameter",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint f(const int& x){return x;}int main(){int a=2;std::cout<<f(a);}",
+    "stdout": "2",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "parameter_convert",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint f(int x){return x;}int main(){std::cout<<f(2.9);}",
+    "stdout": "2",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "return_convert",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint f(){return 2.9;}int main(){std::cout<<f();}",
+    "stdout": "2",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "void_return",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nvoid f(){std::cout<<1;return;}int main(){f();}",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "forward_declaration",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint f(int n);int main(){std::cout<<f(3);}int f(int n){return n*2;}",
+    "stdout": "6",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "mutual_recursion",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nbool odd(int n);bool even(int n){if(n==0)return true;return odd(n-1);}bool odd(int n){if(n==0)return false;return even(n-1);}int main(){std::cout<<even(8)<<odd(8);}",
+    "stdout": "10",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "global_scope",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint x=3;int f(){return x;}int main(){int x=9;std::cout<<f()<<x;}",
+    "stdout": "39",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "global_zero",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint x;int a[2];int main(){std::cout<<x<<a[1];}",
+    "stdout": "00",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "return_in_loop",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint f(){for(int i=0;i<4;++i){if(i==2)return i;}return 9;}int main(){std::cout<<f();}",
+    "stdout": "2",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "string_function",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nstd::string f(std::string s){return s+\"!\";}int main(){std::cout<<f(\"hi\");}",
+    "stdout": "hi!",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "parameter_shadow",
+    "category": "function",
+    "source": "#include <iostream>\n#include <string>\nint f(int x){{int x=7;std::cout<<x;}return x;}int main(){std::cout<<f(2);}",
+    "stdout": "72",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "return_status",
+    "category": "cli",
+    "source": "#include <iostream>\n#include <string>\nint main(){return 7;}\n",
+    "stdout": "",
+    "exit": 7,
+    "phase": null
+  },
+  {
+    "name": "macro",
+    "category": "preprocess",
+    "source": "#define N 6\n#include <iostream>\nint main(){std::cout<<N*7;}",
+    "stdout": "42",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "macro_nested",
+    "category": "preprocess",
+    "source": "#define A B\n#define B 42\n#include <iostream>\nint main(){std::cout<<A;}",
+    "stdout": "42",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "macro_undef",
+    "category": "preprocess",
+    "source": "#define A 1\n#undef A\n#define A 2\n#include <iostream>\nint main(){std::cout<<A;}",
+    "stdout": "2",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "macro_literal",
+    "category": "preprocess",
+    "source": "#define A 7\n#include <iostream>\nint main(){std::cout<<\"A\";}",
+    "stdout": "A",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "unknown_name",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){x=1;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "duplicate_local",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x;int x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "const_assignment",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){const int x=1;x=2;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "rvalue_assignment",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){1=2;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "array_assignment",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2];int b[2];a=b;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "string_to_int",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=\"bad\";}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "int_to_string",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=42;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "reference_temporary",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int& r=3;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "reference_conversion",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){double d=3;int& r=d;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "reference_const",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){const int x=1;int& r=x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "missing_reference_init",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int& x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "missing_const_init",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){const int x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "void_object",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){void x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "float_index",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2];a[1.5]=2;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "scalar_index",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a;a[0]=2;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "bool_increment",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){bool x=true;++x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "float_remainder",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){double x=2.0;std::cout<<(x%2);}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "break_outside",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){break;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "continue_outside",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){continue;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "scope_escape",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){{int x=1;}std::cout<<x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "for_escape",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){for(int i=0;i<1;i++){}std::cout<<i;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "string_condition",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"x\";if(s){}}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "const_ref_write",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=1;const int& r=x;r=3;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "array_too_many",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2]={1,2,3};}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "array_narrow",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[1]={1.5};}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "array_nonbrace",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2]=1;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "bad_member",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s;s.clear();}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "member_on_int",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=1;x.size();}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "integer_shift",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=1;std::cout<<(x<<2);}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "text_plus_text",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<(\"a\"+\"b\");}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "return_missing",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){return;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "array_of_refs",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int& a[2];}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "call_main",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){main();}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "bad_arity",
+    "category": "semantic_rejection",
+    "source": "int f(int x){return x;}int main(){f();}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "undefined_function",
+    "category": "semantic_rejection",
+    "source": "int f(int x);int main(){f(1);}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "missing_return",
+    "category": "semantic_rejection",
+    "source": "int f(int x){if(x)return 1;}int main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "duplicate_function",
+    "category": "semantic_rejection",
+    "source": "int f(){return 1;}int f(){return 2;}int main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "overload",
+    "category": "semantic_rejection",
+    "source": "int f(int x){return x;}int f(double x){return 1;}int main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "parameter_redeclare",
+    "category": "semantic_rejection",
+    "source": "int f(int x){int x=1;return x;}int main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "before_declaration",
+    "category": "semantic_rejection",
+    "source": "int main(){f();}void f(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "missing_main",
+    "category": "semantic_rejection",
+    "source": "int x=1;",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "invalid_main",
+    "category": "semantic_rejection",
+    "source": "void main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "return_void_value",
+    "category": "semantic_rejection",
+    "source": "void f(){return 1;}int main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "missing_semicolon",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=1}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "missing_brace",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){if(true){}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "bad_expression",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "array_bound_zero",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[0];}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "array_bound_name",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int n=2;int a[n];}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "pointer",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int* p;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "scalar_braces",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x{1};}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "missing_paren",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){if(true std::cout<<1;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "unterminated_string",
+    "category": "lex_rejection",
+    "source": "\"bad",
+    "stdout": "",
+    "exit": 1,
+    "phase": "lex"
+  },
+  {
+    "name": "unterminated_comment",
+    "category": "lex_rejection",
+    "source": "/*bad",
+    "stdout": "",
+    "exit": 1,
+    "phase": "lex"
+  },
+  {
+    "name": "bad_escape",
+    "category": "lex_rejection",
+    "source": "\"\\q\"",
+    "stdout": "",
+    "exit": 1,
+    "phase": "lex"
+  },
+  {
+    "name": "multi_character",
+    "category": "lex_rejection",
+    "source": "'ab'",
+    "stdout": "",
+    "exit": 1,
+    "phase": "lex"
+  },
+  {
+    "name": "octal",
+    "category": "lex_rejection",
+    "source": "int x=012;",
+    "stdout": "",
+    "exit": 1,
+    "phase": "lex"
+  },
+  {
+    "name": "hex",
+    "category": "lex_rejection",
+    "source": "int x=0xff;",
+    "stdout": "",
+    "exit": 1,
+    "phase": "lex"
+  },
+  {
+    "name": "bad_exponent",
+    "category": "lex_rejection",
+    "source": "double x=1e;",
+    "stdout": "",
+    "exit": 1,
+    "phase": "lex"
+  },
+  {
+    "name": "unsupported_character",
+    "category": "lex_rejection",
+    "source": "@",
+    "stdout": "",
+    "exit": 1,
+    "phase": "lex"
+  },
+  {
+    "name": "trailing_escape",
+    "category": "lex_rejection",
+    "source": "\"x\\",
+    "stdout": "",
+    "exit": 1,
+    "phase": "lex"
+  },
+  {
+    "name": "unsupported_directive",
+    "category": "preprocess_rejection",
+    "source": "#if 1\nint main(){}\n#endif",
+    "stdout": "",
+    "exit": 1,
+    "phase": "preprocess"
+  },
+  {
+    "name": "function_macro",
+    "category": "preprocess_rejection",
+    "source": "#define F(x) x\nint main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "preprocess"
+  },
+  {
+    "name": "unknown_header",
+    "category": "preprocess_rejection",
+    "source": "#include <vector>\nint main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "preprocess"
+  },
+  {
+    "name": "redefine",
+    "category": "preprocess_rejection",
+    "source": "#define X 1\n#define X 2\nint main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "preprocess"
+  },
+  {
+    "name": "uninitialized",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x;std::cout<<x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "array_uninitialized",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2];std::cout<<a[0];}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "bounds_high",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2]={};std::cout<<a[2];}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "bounds_negative",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int a[2]={};a[-1]=0;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "divide_zero",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=0;std::cout<<(3/x);}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "mod_zero",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=0;std::cout<<(3%x);}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "float_divide_zero",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){double x=0;std::cout<<(3.0/x);}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "int_add_overflow",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=2147483647;x+=1;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "int_sub_overflow",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=-2147483647;x-=2;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "int_mul_overflow",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=1000000;x*=1000000;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "long_add_overflow",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){long long x=9223372036854775807LL;x+=1;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "long_mul_overflow",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){long long x=9223372036854775807LL;x*=2;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "long_div_overflow",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){long long x=-9223372036854775807LL-1;std::cout<<(x/-1);}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "long_neg_overflow",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){long long x=-9223372036854775807LL-1;std::cout<<-x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "conversion_range",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){double d=1e30;int x=d;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "char_range",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=200;char c=x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "self_init",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int x=x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "floating_overflow",
+    "category": "runtime_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){double x=1e308;std::cout<<x*x;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "literal_bang",
+    "category": "lexer",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\"!\";}\n",
+    "stdout": "!",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "literal_plus",
+    "category": "lexer",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\"+\";}\n",
+    "stdout": "+",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "literal_parenthesis",
+    "category": "lexer",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\"(\";}\n",
+    "stdout": "(",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "literal_brace",
+    "category": "lexer",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\"}\";}\n",
+    "stdout": "}",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "literal_semicolon",
+    "category": "lexer",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\";\";}\n",
+    "stdout": ";",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "literal_keyword",
+    "category": "lexer",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\"int\";}\n",
+    "stdout": "int",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "literal_hash",
+    "category": "lexer",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\"#\";}\n",
+    "stdout": "#",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "zero_before_dynamic_init",
+    "category": "scope",
+    "source": "#include <iostream>\nint f();int a=f();int b=7;int f(){return b;}int main(){std::cout<<a<<b;}",
+    "stdout": "77",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "nul_literal_output",
+    "category": "native",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<\"a\\0b\";}\n",
+    "stdout": "a",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "nul_string_conversion",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"a\\0b\";std::cout<<s.size();}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "nul_string_concat",
+    "category": "string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"x\";std::cout<<(s+\"a\\0b\");}\n",
+    "stdout": "xa",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "endl_not_string",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=std::endl;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "long_expression",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<(1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1);}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "call_depth",
+    "category": "runtime_rejection",
+    "source": "int f(){return f();}int main(){return f();}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "runtime"
+  },
+  {
+    "name": "include_order",
+    "category": "semantic_rejection",
+    "source": "int main(){std::cout<<1;}\n#include <iostream>\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "for_redeclare",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){for(int i=0;i<1;++i){int i=2;}}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "keyword_identifier",
+    "category": "syntax_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int class=1;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "parse"
+  },
+  {
+    "name": "std_identifier",
+    "category": "semantic_rejection",
+    "source": "#include <iostream>\n#include <string>\nint main(){int std=1;}\n",
+    "stdout": "",
+    "exit": 1,
+    "phase": "semantic"
+  },
+  {
+    "name": "constant_global_chain",
+    "category": "scope",
+    "source": "#include <iostream>\nconst int c=3;int f();int a=f();int b=c*2;int f(){return b;}int main(){std::cout<<a<<b;}",
+    "stdout": "66",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "constant_global_array",
+    "category": "scope",
+    "source": "#include <iostream>\nint f();int a=f();int b[2]={3,4};int f(){return b[1];}int main(){std::cout<<a;}",
+    "stdout": "4",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "static_reference_binding",
+    "category": "reference",
+    "source": "#include <iostream>\nint f();int a=f();int b=7;int& r=b;int f(){return r;}int main(){std::cout<<a;}",
+    "stdout": "7",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "for_nested_shadow",
+    "category": "scope",
+    "source": "#include <iostream>\n#include <string>\nint main(){for(int i=0;i<1;++i){{int i=7;std::cout<<i;}}}\n",
+    "stdout": "7",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "undef_requires_name",
+    "category": "preprocess_rejection",
+    "source": "#undef 3\nint main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "preprocess"
+  },
+  {
+    "name": "directive_requires_name",
+    "category": "preprocess_rejection",
+    "source": "# \"define\" X\nint main(){}",
+    "stdout": "",
+    "exit": 1,
+    "phase": "preprocess"
+  },
+  {
+    "name": "negative_zero_output",
+    "category": "conversion",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::cout<<-0.0;}\n",
+    "stdout": "-0",
+    "exit": 0,
+    "phase": null
+  },
+  {
+    "name": "long_to_float_rounding",
+    "category": "conversion",
+    "source": "#include <iostream>\n#include <string>\nint main(){long long x=4611686293305294849LL;float f=x;std::cout<<(f>4611686018427387904.0f);}\n",
+    "stdout": "1",
+    "exit": 0,
+    "phase": null
+  }
+]

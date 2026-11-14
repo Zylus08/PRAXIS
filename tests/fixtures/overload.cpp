@@ -1,0 +1,1 @@
+int f(int x){return x;}int f(double x){return 1;}int main(){}

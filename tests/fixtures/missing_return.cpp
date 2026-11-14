@@ -1,0 +1,1 @@
+int f(int x){if(x)return 1;}int main(){}
