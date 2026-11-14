@@ -1,7 +1,7 @@
 {
   "compiler": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.43.34808\\bin\\HostX64\\x64\\cl.EXE",
   "executable": "E:\\PRAXIS\\build\\Debug\\praxis.exe",
-  "executable_sha256": "9c71aa25060a0ba22df6b265f9fac10795a630e1a63266d2d7ae4debf40aaad9",
+  "executable_sha256": "b54df841c4811b3313429a593441adfe0f1eb66cede2205eb8f5fead309af6f5",
   "total": 135,
   "passed": 135,
   "results": [

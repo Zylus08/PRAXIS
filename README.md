@@ -1,62 +1,126 @@
-# Project PRAXIS — M1
+# Project PRAXIS — Milestone M2
+## Classes, Object Lifetimes, RAII, Templates & C++ Semantic Foundations
 
-Praxis is a standalone C++20 implementation of a **restricted C++ interpreter**. It lexes, preprocesses, parses, type-checks, and tree-walks user source itself. It does not compile user programs or depend on a compiler at runtime. This is not a fully conforming C++ implementation.
+Praxis is an independent, self-contained C++20 implementation of a **restricted C++ interpreter**. It lexes, preprocesses, parses, type-checks, and tree-walks user source itself. It does not compile user code or depend on a compiler backend at runtime. This is not a fully conforming C++ implementation.
 
-## Build and use (Windows x64)
+Milestone M2 elevates Praxis from a scalar interpreter to a class-aware, lifetime-correct runtime supporting object-oriented and generic C++ programming.
 
-Install Visual Studio 2022 Build Tools with C++ tools and CMake/Ninja. Python 3 is used only for verification.
+---
+
+## Key Milestone M2 Capabilities
+
+- **Classes and Structs:** `class` (default private access) and `struct` (default public access), data members, access control labels (`public:`, `private:`), member functions, `const` member functions, and implicit `this` member resolution.
+- **Constructors and Initializers:** Default constructors, parameterized constructors, copy constructors, member initializer lists executing strictly in **declaration order**, default member initializers, and scalar value initialization (`$zero`).
+- **Destructors and Deterministic RAII:** Reverse construction-order destruction, automatic cleanup on normal block exit, `return`, `break`, and `continue`, nested object cleanup, temporary expression lifecycle management, and constructor failure safety.
+- **Copy Semantics and Object Identity:** Explicit distinction between copy construction and copy assignment, synthesized memberwise copying, self-assignment guards, const field immutability, lvalue reference identity preservation (`T&`), and prvalue copy elision (`$elide`).
+- **Function and Constructor Overloading:** Principled overload resolution supporting free functions, member functions, constructors, and templates with standardized conversion ranks (0–3), const-correctness ranking, and ambiguity detection.
+- **Native Template Engine:** `template<typename T>` and `template<class T>`, function templates with explicit arguments and type deduction, class templates (`Box<T>`), deep AST cloning and type substitution, specialization caching, on-demand semantic analysis of instantiated bodies, and recursion limits.
+- **Telemetry and Resource Bounds:** High-resolution JSON profiling via `--profile`, with configurable limits (`--max-calls`, `--max-template-depth`, `--max-instantiations`, `--max-objects`, `--max-steps`).
+
+---
+
+## Build and Use (Windows x64)
+
+Prerequisites: Visual Studio 2022 Build Tools (MSVC v143 with C++ tools), CMake, and Ninja. Python 3 is required for verification testing.
 
 ```powershell
+# Build Debug and Release configurations
 ./tools/build.ps1 Debug
 ./tools/build.ps1 Release
+
+# Command-Line Usage
 ./build/Release/praxis.exe --version
 ./build/Release/praxis.exe --help
-./build/Release/praxis.exe run examples/hello.cpp
-./build/Release/praxis.exe check examples/hello.cpp
-./build/Release/praxis.exe run my_program.cpp -I my_headers
+./build/Release/praxis.exe run examples/m2/basic_class.cpp
+./build/Release/praxis.exe run examples/m2/class_template.cpp --profile
+./build/Release/praxis.exe check examples/m2/basic_class.cpp
 ./build/Release/praxis.exe repl
 ```
 
-`build.ps1` discovers the existing MSVC installation without changing persistent environment or Git configuration. Builds run sequentially to limit compiler memory usage. Debug uses `/Od /Z7 /RTC1`; Release uses `/O2`. Both use `/W4 /permissive-`. The executable uses the corresponding MSVC runtime; the Debug runtime is intended for development machines.
+---
 
-Standard CMake is also supported from a developer shell:
+## Example M2 Programs
 
-```powershell
-cmake -S . -B build/Release -G Ninja -DCMAKE_BUILD_TYPE=Release
-cmake --build build/Release --parallel 1
-ctest --test-dir build/Release --output-on-failure
-```
-
-## A small program
-
+### 1. Class with RAII Destructor & Member Initializer Order
 ```cpp
 #include <iostream>
-long long factorial(int n) {
-    if (n <= 1) return 1;
-    return n * factorial(n - 1);
-}
+#include <string>
+
+struct Resource {
+    int id;
+    Resource(int n) : id(n) { std::cout << "C" << id; }
+    ~Resource() { std::cout << "D" << id; }
+};
+
+class Container {
+    Resource first;
+    Resource second;
+public:
+    // Initializer list text order differs, but declaration order governs execution
+    Container() : second(2), first(1) {
+        std::cout << "!";
+    }
+};
+
 int main() {
-    std::cout << factorial(10) << std::endl;
+    Container c;
 }
+// Outputs: C1C2!D2D1
 ```
 
-The bundled `iostream` and `string` headers are virtual capability definitions implemented by Praxis. They never load toolchain headers. Project headers are read from the source directory and explicit `-I` paths.
+### 2. Class Template with Type Deduction
+```cpp
+#include <iostream>
+#include <string>
 
-## Verification
+template<class T>
+class Box {
+    T value;
+public:
+    Box(T v) : value(v) {}
+    T get() const { return value; }
+};
+
+template<class T>
+T multiply(T a, T b) {
+    return a * b;
+}
+
+int main() {
+    Box<int> b(10);
+    std::cout << b.get() << " " << multiply(2.5, 4.0) << std::endl;
+}
+// Outputs: 10 10
+```
+
+---
+
+## Verification and Testing
+
+Milestone M2 verification consists of 642 verification checks per configuration (1,284 total across Debug and Release):
+- **CTest Suite:** Frontend unit tests (`praxis_unit`), M2 unit tests (`praxis_m2_unit`), M2 integration tests, and M1 integration regression tests.
+- **Adversarial / Negative Tests:** 48 dedicated M2 negative and safety tests verifying parse rejection of unsupported constructs, semantic access control, overload ambiguity, const mutation, and constructor unwinding.
+- **Differential Verification:** 213 differential programs (78 M2 programs + 135 M1 regression programs) compiled with MSVC (`cl.exe /std:c++20 /EHsc /Od /Zc:nrvo-`) and compared byte-for-byte against Praxis execution.
 
 ```powershell
-./tools/verify.ps1 Debug -Differential
-./tools/verify.ps1 Release -Differential
+# Run full M2 verification suite (Unit, Integration, Adversarial, Differential)
+./tools/verify-m2.ps1 Debug
+./tools/verify-m2.ps1 Release
 ```
 
-Only `tests/differential/run.py` compiles fixture programs with MSVC, as an external oracle. The interpreter executable has no process-launch or compiler integration code. The harness compares stdout and exit status, re-runs Praxis for determinism, and records reference-compilation failures separately. Release verification may reuse actual Debug-reference outputs only when each source SHA-256 matches; the Release interpreter is still checked and run twice. Program state is made observable through output assertions. Runtime-error fixtures are intentionally excluded from reference execution.
-
-CTest runs C++ frontend unit assertions and Python integration fixtures. Reports are written to `audit/m1/`. See [test results](audit/m1/TEST_RESULTS.md), [differential results](audit/m1/DIFFERENTIAL_RESULTS.md), and the [milestone report](audit/m1/M1_FINAL_REPORT.md).
-
-## REPL
-
-Enter declarations and statements with semicolons. Definitions and blocks may span lines with balanced braces. `#include` and object macros persist, as do variables, references, and function definitions. `:quit` exits; `:reset` clears state. Output is explicit through `std::cout`; expressions are not implicitly printed.
-
-A submission is parsed and checked against the declaration history before execution. Static rejection does not commit the submission or preprocessing changes. Runtime failure does not roll back preceding mutations or output; its declaration remains in history. Redeclaration and function replacement are rejected. A declared function must already have a definition by the end of any submission that calls it. Top-level REPL objects have static storage. EOF with an incomplete submission returns failure. Recoverable submission errors are reported on stderr while the session continues.
-
-See [language support](docs/LANGUAGE_SUPPORT.md), [semantics](docs/SEMANTICS.md), [execution model](docs/EXECUTION_MODEL.md), [architecture](docs/ARCHITECTURE.md), and [limitations](docs/LIMITATIONS.md) before using the subset.
+For full documentation and verification evidence, see:
+- [Milestone M2 Final Report](audit/m2/M2_FINAL_REPORT.md)
+- [Baseline Reconnaissance](audit/m2/BASELINE_RECONNAISSANCE.md)
+- [Object Model & Copy Semantics](audit/m2/OBJECT_MODEL.md)
+- [Constructor & Destructor Semantics](audit/m2/CONSTRUCTOR_DESTRUCTOR_SEMANTICS.md)
+- [Template Instantiation Engine](audit/m2/TEMPLATE_INSTANTIATION.md)
+- [Overload Resolution](audit/m2/OVERLOAD_RESOLUTION.md)
+- [Differential Results vs MSVC](audit/m2/DIFFERENTIAL_RESULTS.md)
+- [Adversarial & Negative Results](audit/m2/ADVERSARIAL_RESULTS.md)
+- [Performance Profile](audit/m2/PERFORMANCE_PROFILE.md)
+- [Known Limitations](audit/m2/KNOWN_LIMITATIONS.md)
+- [Architecture Guide](docs/ARCHITECTURE.md)
+- [Execution Model](docs/EXECUTION_MODEL.md)
+- [Language Support](docs/LANGUAGE_SUPPORT.md)
+- [Semantic Rules](docs/SEMANTICS.md)
+- [Limitations & Non-Goals](docs/LIMITATIONS.md)

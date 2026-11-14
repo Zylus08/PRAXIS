@@ -1,7 +1,7 @@
 {
   "compiler": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.43.34808\\bin\\HostX64\\x64\\cl.EXE",
   "executable": "E:\\PRAXIS\\build\\Debug\\praxis.exe",
-  "executable_sha256": "9c71aa25060a0ba22df6b265f9fac10795a630e1a63266d2d7ae4debf40aaad9",
+  "executable_sha256": "b54df841c4811b3313429a593441adfe0f1eb66cede2205eb8f5fead309af6f5",
   "total": 78,
   "passed": 78,
   "results": [
@@ -904,7 +904,7 @@
     {
       "name": "value_initialized_temporary",
       "source_sha256": "c3d493c050c684155907c76d4d8d32a4661ae881626f662eb8dc8d57e999bd22",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -918,7 +918,7 @@
     {
       "name": "value_initialized_member",
       "source_sha256": "a9d477e2fbb0b391e2355884bbf8b70c300b379821246e4a4a4fe1b7bb3d8081",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -932,7 +932,7 @@
     {
       "name": "global_zero_class",
       "source_sha256": "bbcd36b975163a23ffbf5f0080e2f8592b50f2a3cf6fdb6bc0e97feac9fb826b",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -946,7 +946,7 @@
     {
       "name": "direct_prvalue_elision",
       "source_sha256": "eb133d5ed09e7599419a921ab99bf061ac674681a54075a67e075debfda1f726",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -960,7 +960,7 @@
     {
       "name": "member_prvalue_elision",
       "source_sha256": "1b3646db1a0b10b687f3b047fff8825fd27bb6227b30a805e2add26f36185d9a",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -974,7 +974,7 @@
     {
       "name": "self_assignment",
       "source_sha256": "35431a4cd8d5d2bb5bda6da609c24a43a9d91a1d42783bb47a6597b68e21b151",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -988,7 +988,7 @@
     {
       "name": "template_const_deduction",
       "source_sha256": "2ef2652b18805da2e0f12d47a70bd4f46673f00046e3570eca5db1668bfc2e07",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -1002,7 +1002,7 @@
     {
       "name": "nested_type_deduction",
       "source_sha256": "f10098bd81352f84e6b0b1c986181b5085ff71c0abd03f4596f118adc8d97b66",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -1016,7 +1016,7 @@
     {
       "name": "unselected_template_body",
       "source_sha256": "2d15875cb986f5c54b8a74ea5092bee6faa5d6475dfa7e99309a3fa1d47a4808",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -1030,7 +1030,7 @@
     {
       "name": "destructor_local_object",
       "source_sha256": "b60f5f6edb38ace937dd1952c4d626ae785e8c7f1b2c288534a507a2a1fde13f",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -1044,7 +1044,7 @@
     {
       "name": "while_cleanup",
       "source_sha256": "9ae46f3c681fe3cd61aaebd101a46c637f25bd79957dda19874e34e8e2fad3cb",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -1058,7 +1058,7 @@
     {
       "name": "do_cleanup",
       "source_sha256": "6cf4ad5b201b550c63789198fa84bcae7aabb35db78fd69622b75fd112f9ad50",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -1072,7 +1072,7 @@
     {
       "name": "parenthesized_prvalue",
       "source_sha256": "17615a0a4ceb1f5be3509e6b231b0aea0b9393d98fe815be9dc395ed35e32bbb",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
@@ -1086,7 +1086,7 @@
     {
       "name": "nested_value_zero",
       "source_sha256": "974fb6a0813cb678044a66b0bbc3113282cb92c4a465c1cba6447489be1ab623",
-      "reference_reused": false,
+      "reference_reused": true,
       "compile_exit": 0,
       "stage": "comparison",
       "passed": true,
