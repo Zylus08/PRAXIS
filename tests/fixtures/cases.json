@@ -1233,11 +1233,11 @@
   },
   {
     "name": "overload",
-    "category": "semantic_rejection",
+    "category": "overload_extension",
     "source": "int f(int x){return x;}int f(double x){return 1;}int main(){}",
     "stdout": "",
-    "exit": 1,
-    "phase": "semantic"
+    "exit": 0,
+    "phase": null
   },
   {
     "name": "parameter_redeclare",

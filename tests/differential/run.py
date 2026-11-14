@@ -25,5 +25,5 @@ for c in json.loads((ROOT/'tests/fixtures/cases.json').read_text()):
  results.append(row)
  print(('PASS' if row['passed'] else 'FAIL'),c['name'],flush=True)
 report=dict(compiler=prior.get('compiler') or shutil.which(args.compiler) or args.compiler,executable=str(exe),executable_sha256=hashlib.sha256(exe.read_bytes()).hexdigest(),total=len(results),passed=sum(r['passed'] for r in results),results=results)
-out=ROOT/'audit/m1'/('differential-'+exe.parent.name+'.json');out.write_text(json.dumps(report,indent=2));print(f"{report['passed']}/{report['total']} differential programs passed")
+out=ROOT/'audit/m2'/('regression-differential-'+exe.parent.name+'.json');out.write_text(json.dumps(report,indent=2));print(f"{report['passed']}/{report['total']} differential programs passed")
 raise SystemExit(0 if report['passed']==report['total'] else 1)

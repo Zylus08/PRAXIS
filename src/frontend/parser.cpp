@@ -36,6 +36,7 @@ bool Parser::typeStart() const {
            (s == "std" && peek(1).is("::") && peek(2).is("string")) || knownTypes.contains(s) || templateTypes.contains(s);
 }
 Type Parser::type() {
+    if(++depth>128)fail(peek().loc,"parse","type nesting limit");struct TypeExit{int& d;~TypeExit(){--d;}}typeExit{depth};
     Type t;
     t.constant = match("const");
     auto tok = take();
@@ -97,6 +98,8 @@ Decl Parser::declaration(Type t, Token name) {
             d.init = expression();
     }
     if(match("(")){d.direct=true;if(!match(")")){do{d.arguments.push_back(expression());}while(match(","));expect(")");}}
+    if(d.direct&&d.arguments.empty())fail(name.loc,"parse","empty parentheses declare a function; local function declarations unsupported");
+    if(d.direct&&d.arguments.size()==1){auto e=d.arguments[0];if(!e->parenthesized&&e->kind==Expr::Kind::Call&&e->args.size()==1&&e->args[0]->kind==Expr::Kind::Name&&knownTypes.contains(e->args[0]->op))fail(name.loc,"parse","most-vexing function declaration unsupported; parenthesize the expression");}
     expect(";");
     return d;
 }
@@ -240,6 +243,7 @@ E Parser::prefix() {
     E e;
     if (match("(")) {
         e = expression();
+        e->parenthesized=true;
         expect(")");
     } else if (t.kind == TokenKind::Integer || t.kind == TokenKind::Floating ||
                t.kind == TokenKind::String || t.kind == TokenKind::Character || t.is("true") ||

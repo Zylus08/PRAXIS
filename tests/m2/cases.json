@@ -1,0 +1,1010 @@
+[
+  {
+    "name": "basic_class",
+    "category": "class",
+    "source": "#include <iostream>\n#include <string>\nclass C {int n;public:C(int x):n(x){}void add(int x){n+=x;}int get() const{return n;}};int main(){C c(2);c.add(3);std::cout<<c.get();}",
+    "stdout": "5",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "struct",
+    "category": "class",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;int y;};int main(){S s;s.x=3;s.y=4;std::cout<<s.x+s.y;}",
+    "stdout": "7",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "constructor_destructor",
+    "category": "lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct G {int n;G(int x):n(x){std::cout<<\"C\"<<n;}~G(){std::cout<<\"D\"<<n;}};int main(){G a(1);{G b(2);}std::cout<<\"X\";}",
+    "stdout": "C1C2D2XD1",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "member_initializer_order",
+    "category": "construction",
+    "source": "#include <iostream>\n#include <string>\nstruct G {int n;G(int x):n(x){std::cout<<n;}~G(){std::cout<<n;}};struct S {G a;G b;S():b(2),a(1){std::cout<<\"P\";}~S(){std::cout<<\"Q\";}};int main(){S s;}",
+    "stdout": "12PQ21",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "copy_constructor",
+    "category": "copy",
+    "source": "#include <iostream>\n#include <string>\nclass S {int x;public:S(int n):x(n){}S(const S& s):x(s.x){std::cout<<\"C\";}int get() const{return x;}};int main(){S a(7);S b=a;std::cout<<b.get();}",
+    "stdout": "C7",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "copy_assignment",
+    "category": "copy",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n):x(n){}S(const S& s):x(s.x){std::cout<<\"C\";}};int main(){S a(1);S b=a;b.x=2;a=b;std::cout<<a.x<<b.x;}",
+    "stdout": "C22",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "const_member",
+    "category": "const",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n):x(n){}int get() const{return x;}};int main(){const S s(8);std::cout<<s.get();}",
+    "stdout": "8",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "access_control",
+    "category": "access",
+    "source": "#include <iostream>\n#include <string>\nclass S {int x;int hidden() const{return x;}public:S(int n):x(n){}int get() const{return hidden();}};int main(){S s(9);std::cout<<s.get();}",
+    "stdout": "9",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "free_overload",
+    "category": "overload",
+    "source": "#include <iostream>\n#include <string>\nint f(int x){return 1;}int f(double x){return 2;}int main(){std::cout<<f(1)<<f(1.0)<<f('a');}",
+    "stdout": "121",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "constructor_overload",
+    "category": "overload",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n):x(1){}S(double n):x(2){}};int main(){S a(2);S b(2.0);std::cout<<a.x<<b.x;}",
+    "stdout": "12",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "raii_return",
+    "category": "lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct G {int n;G(int x):n(x){std::cout<<\"C\"<<n;}~G(){std::cout<<\"D\"<<n;}};int f(){G a(1);{G b(2);return 7;}}int main(){std::cout<<f();}",
+    "stdout": "C1C2D2D17",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "raii_loop_control",
+    "category": "lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct G {int n;G(int x):n(x){std::cout<<\"C\"<<n;}~G(){std::cout<<\"D\"<<n;}};int main(){for(int i=0;i<3;++i){G g(i);if(i==0)continue;if(i==1)break;}}",
+    "stdout": "C0D0C1D1",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "nested_destruction",
+    "category": "lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct A {A(){std::cout<<\"a\";}~A(){std::cout<<\"A\";}};struct B {A a;B(){std::cout<<\"b\";}~B(){std::cout<<\"B\";}};int main(){B b;}",
+    "stdout": "abBA",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "function_template",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<typename T>T add(T a,T b){return a+b;}int main(){std::cout<<add<int>(2,3)<<\" \"<<add<double>(1.5,2.0);}",
+    "stdout": "5 3.5",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "class_template",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<typename T>class Box {T value;public:Box(T x):value(x){}T get() const{return value;}};int main(){Box<int> a(3);Box<double> b(2.5);std::cout<<a.get()<<\" \"<<b.get();}",
+    "stdout": "3 2.5",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "template_deduction",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>T add(T a,T b){return a+b;}int main(){std::cout<<add(3,4)<<\" \"<<add(1.25,2.5);}",
+    "stdout": "7 3.75",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "ambiguous_overload",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nint f(long long x){return 1;}int f(double x){return 2;}int main(){f(1);}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "invalid_template",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>T add(T a,T b){return a+b;}struct S {};int main(){S a;add(a,a);}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "default_member_initializer",
+    "category": "construction",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x=7;};int main(){S a;std::cout<<a.x;}",
+    "stdout": "7",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "scalar_value_init_member",
+    "category": "construction",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S():x(){}};int main(){S a;std::cout<<a.x;}",
+    "stdout": "0",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "copy_nested",
+    "category": "copy",
+    "source": "#include <iostream>\n#include <string>\nstruct A {int x;A(int n):x(n){}A(const A& a):x(a.x){std::cout<<\"C\";}};struct B {A a;B(int n):a(n){}};int main(){B a(3);B b=a;b.a.x=9;std::cout<<a.a.x<<b.a.x;}",
+    "stdout": "C39",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "assign_nested",
+    "category": "copy",
+    "source": "#include <iostream>\n#include <string>\nstruct A {int x;A(int n):x(n){}};struct B {A a;B(int n):a(n){}};int main(){B a(3);B b(4);a=b;b.a.x=9;std::cout<<a.a.x<<b.a.x;}",
+    "stdout": "49",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "object_reference",
+    "category": "reference",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n):x(n){}};void set(S& s){s.x=8;}int main(){S a(1);S& b=a;set(b);std::cout<<a.x;}",
+    "stdout": "8",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "const_object_reference",
+    "category": "reference",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n):x(n){}};int get(const S& s){return s.x;}int main(){S a(7);std::cout<<get(a);}",
+    "stdout": "7",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "class_by_value",
+    "category": "copy",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n):x(n){}S(const S& s):x(s.x){std::cout<<\"C\";}~S(){std::cout<<\"D\"<<x;}};void f(S s){s.x=8;}int main(){S s(1);f(s);std::cout<<s.x;}",
+    "stdout": "CD81D1",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "return_local_object",
+    "category": "copy",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n):x(n){std::cout<<\"N\";}S(const S& s):x(s.x){std::cout<<\"C\";}~S(){std::cout<<\"D\";}};S f(){S s(7);return s;}int main(){S a=f();std::cout<<a.x;}",
+    "stdout": "NCD7D",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "return_prvalue_object",
+    "category": "temporary",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n):x(n){std::cout<<\"N\";}S(const S& s):x(s.x){std::cout<<\"C\";}~S(){std::cout<<\"D\";}};S f(){return S(7);}int main(){S a=f();std::cout<<a.x;}",
+    "stdout": "N7D",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "temporary_statement",
+    "category": "temporary",
+    "source": "#include <iostream>\n#include <string>\nstruct G {G(int n){std::cout<<n;}~G(){std::cout<<\"D\";}};int main(){G(3);std::cout<<\"X\";}",
+    "stdout": "3DX",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "temporary_method",
+    "category": "temporary",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S(){std::cout<<\"C\";}~S(){std::cout<<\"D\";}int get() const{return 7;}};int main(){std::cout<<S().get();std::cout<<\"X\";}",
+    "stdout": "C7DX",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "temporary_condition",
+    "category": "temporary",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S(){std::cout<<\"C\";}~S(){std::cout<<\"D\";}bool test() const{return true;}};int main(){if(S().test())std::cout<<\"B\";}",
+    "stdout": "CDB",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "prvalue_parameter",
+    "category": "temporary",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S(int n){std::cout<<n;}S(const S& s){std::cout<<\"C\";}~S(){std::cout<<\"D\";}};void f(S s){std::cout<<\"F\";}int main(){f(S(2));std::cout<<\"X\";}",
+    "stdout": "2FDX",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "const_overload",
+    "category": "overload",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int f(){return 1;}int f() const{return 2;}};int main(){S s;const S c;std::cout<<s.f()<<c.f();}",
+    "stdout": "12",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "member_overload",
+    "category": "overload",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int f(int x){return 1;}int f(double x){return 2;}};int main(){S s;std::cout<<s.f(2)<<s.f(2.0);}",
+    "stdout": "12",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "reference_overload",
+    "category": "overload",
+    "source": "#include <iostream>\n#include <string>\nint f(int& x){return 1;}int f(const int& x){return 2;}int main(){int x=1;const int y=1;std::cout<<f(x)<<f(y);}",
+    "stdout": "12",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "template_nontemplate_tie",
+    "category": "overload",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>int f(T x){return 1;}int f(int x){return 2;}int main(){std::cout<<f(2)<<f(2.0)<<f<int>(2);}",
+    "stdout": "211",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "out_of_class_member",
+    "category": "class",
+    "source": "#include <iostream>\n#include <string>\nclass S {int x;public:S(int n):x(n){}int get() const;};int S::get() const{return x;}int main(){S s(6);std::cout<<s.get();}",
+    "stdout": "6",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "member_shadowing",
+    "category": "scope",
+    "source": "#include <iostream>\n#include <string>\nint x=9;struct S {int x;S(int n):x(n){}int f(int x){return x;}int g(){return x;}};int main(){S s(3);std::cout<<s.f(2)<<s.g()<<x;}",
+    "stdout": "239",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "implicit_member_call",
+    "category": "class",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x=3;int a() const{return x;}int b() const{return a()+1;}};int main(){S s;std::cout<<s.b();}",
+    "stdout": "4",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "global_destruction",
+    "category": "lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct G {int n;G(int v):n(v){std::cout<<\"C\"<<n;}~G(){std::cout<<\"D\"<<n;}};G a(1);G b(2);int main(){std::cout<<\"M\";}",
+    "stdout": "C1C2MD2D1",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "recursive_raii",
+    "category": "lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct G {int n;G(int v):n(v){std::cout<<n;}~G(){std::cout<<n;}};int f(int n){G g(n);if(n==0)return 0;return f(n-1);}int main(){f(3);}",
+    "stdout": "32100123",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "nested_template",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>struct Box {T value;Box(T x):value(x){}T get() const{return value;}};int main(){Box<int> inner(3);Box<Box<int>> outer(inner);std::cout<<outer.value.value;}",
+    "stdout": "3",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "template_reference",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>void set(T& x,T v){x=v;}int main(){int x=1;set(x,9);std::cout<<x;}",
+    "stdout": "9",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "template_two_parameters",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T,class U>T choose(T a,U b){return a;}int main(){std::cout<<choose(7,2.5)<<choose<double,int>(1.5,3);}",
+    "stdout": "71.5",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "template_class_copy",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>struct Box {T x;Box(T v):x(v){}};int main(){Box<int> a(4);Box<int> b=a;b.x=7;std::cout<<a.x<<b.x;}",
+    "stdout": "47",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "template_class_dtor",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>struct Box {T x;Box(T v):x(v){}~Box(){std::cout<<x;}};int main(){Box<int> a(4);Box<double> b(2.5);}",
+    "stdout": "2.54",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "template_repeated",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>T twice(T a){return a+a;}int main(){std::cout<<twice(2)<<twice(3)<<twice(1.5);}",
+    "stdout": "463",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "class_string_member",
+    "category": "native",
+    "source": "#include <iostream>\n#include <string>\nclass S {std::string s;public:S(std::string v):s(v){}std::string get() const{return s;}};int main(){S s(\"hi\");std::cout<<s.get();}",
+    "stdout": "hi",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "constructor_body_mutation",
+    "category": "construction",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n){x=n+1;}};int main(){S s(4);std::cout<<s.x;}",
+    "stdout": "5",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "default_ctor_suppressed",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S(int n){}};int main(){S s;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "private_field",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nclass S {int x;};int main(){S s;s.x=1;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "private_method",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nclass S {int f(){return 1;}};int main(){S s;s.f();}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "private_ctor",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nclass S {S(){}};int main(){S s;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "private_dtor",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nclass S {~S(){}public:S(){}};int main(){S s;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "const_field_mutation",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S():x(1){}void f() const{x=2;}};int main(){}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "const_object_mutation",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S():x(1){}};int main(){const S s;s.x=2;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "const_method_call",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {void f(){}};int main(){const S s;s.f();}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "const_nested_member",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct A {int x;A():x(1){}};struct B {A a;};int main(){const B b;b.a.x=2;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "invalid_member",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {};int main(){S s;s.missing=1;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "class_type_mismatch",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct A {};struct B {};int main(){A a;B b;a=b;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "class_reference_mismatch",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct A {};struct B {};int main(){A a;B& b=a;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "temporary_reference",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {};int main(){const S& s=S();}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "duplicate_initializer",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S():x(1),x(2){}};int main(){}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "unknown_initializer",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S():missing(1){}};int main(){}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "recursive_member",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S value;};int main(){}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "deleted_assignment",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {const int x;S():x(1){}};int main(){S a;S b;a=b;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "ambiguous_cross_rank",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nint f(int a,double b){return 1;}int f(double a,int b){return 2;}int main(){f(1,1);}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "ambiguous_ref_value",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nint f(int a){return 1;}int f(int& a){return 2;}int main(){int x=1;f(x);}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "template_wrong_count",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>T f(T x){return x;}int main(){f<int,double>(1);}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "template_conflicting_deduction",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>T f(T x,T y){return x;}int main(){f(1,2.0);}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "class_template_wrong_count",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>struct S {};int main(){S<int,double> s;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "template_invalid_member",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>int f(T x){return x.missing;}int main(){f(1);}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "class_template_invalid_body",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>struct S {T x;int f(){return x.bad;}};int main(){S<int> s;s.f();}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "inheritance",
+    "category": "unsupported",
+    "source": "#include <iostream>\n#include <string>\nstruct A {};struct B:A {};int main(){}",
+    "stdout": "",
+    "phase": "parse",
+    "exit": 1
+  },
+  {
+    "name": "virtual",
+    "category": "unsupported",
+    "source": "#include <iostream>\n#include <string>\nstruct S {virtual void f(){}};int main(){}",
+    "stdout": "",
+    "phase": "parse",
+    "exit": 1
+  },
+  {
+    "name": "throw",
+    "category": "unsupported",
+    "source": "#include <iostream>\n#include <string>\nint main(){throw 1;}",
+    "stdout": "",
+    "phase": "parse",
+    "exit": 1
+  },
+  {
+    "name": "try_catch",
+    "category": "unsupported",
+    "source": "#include <iostream>\n#include <string>\nint main(){try{}catch(int x){}}",
+    "stdout": "",
+    "phase": "parse",
+    "exit": 1
+  },
+  {
+    "name": "pointer",
+    "category": "unsupported",
+    "source": "#include <iostream>\n#include <string>\nstruct S {};int main(){S* p;}",
+    "stdout": "",
+    "phase": "parse",
+    "exit": 1
+  },
+  {
+    "name": "user_assignment",
+    "category": "unsupported",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S& operator=(const S& x){return x;}};int main(){}",
+    "stdout": "",
+    "phase": "parse",
+    "exit": 1
+  },
+  {
+    "name": "constructor_failure",
+    "category": "runtime",
+    "source": "#include <iostream>\n#include <string>\nstruct A {A(){std::cout<<\"A\";}~A(){std::cout<<\"a\";}};struct B {A a;B(){int z=0;int x=1/z;}~B(){std::cout<<\"b\";}};int main(){B b;}",
+    "stdout": "Aa",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "partial_member_failure",
+    "category": "runtime",
+    "source": "#include <iostream>\n#include <string>\nstruct A {A(){std::cout<<\"A\";}~A(){std::cout<<\"a\";}};struct B {B(){int z=0;int x=1/z;}~B(){std::cout<<\"b\";}};struct C {A a;B b;~C(){std::cout<<\"c\";}};int main(){C c;}",
+    "stdout": "Aa",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "uninitialized_member",
+    "category": "runtime",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;};int main(){S s;std::cout<<s.x;}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "later_member_read",
+    "category": "runtime",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int a;int b;S():a(b),b(2){}};int main(){S s;}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "runtime_unwind",
+    "category": "runtime",
+    "source": "#include <iostream>\n#include <string>\nstruct G {int n;G(int v):n(v){}~G(){std::cout<<n;}};int f(){G a(2);int z=0;return 1/z;}int main(){G a(1);f();}",
+    "stdout": "21",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "nesting_1",
+    "category": "generated_lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct L0 {L0(){std::cout<<\"0\";}~L0(){std::cout<<\"0\";}};struct L1 {L0 inner;L1(){std::cout<<\"1\";}~L1(){std::cout<<\"1\";}};int main(){L1 value;}",
+    "stdout": "0110",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "nesting_2",
+    "category": "generated_lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct L0 {L0(){std::cout<<\"0\";}~L0(){std::cout<<\"0\";}};struct L1 {L0 inner;L1(){std::cout<<\"1\";}~L1(){std::cout<<\"1\";}};struct L2 {L1 inner;L2(){std::cout<<\"2\";}~L2(){std::cout<<\"2\";}};int main(){L2 value;}",
+    "stdout": "012210",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "nesting_3",
+    "category": "generated_lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct L0 {L0(){std::cout<<\"0\";}~L0(){std::cout<<\"0\";}};struct L1 {L0 inner;L1(){std::cout<<\"1\";}~L1(){std::cout<<\"1\";}};struct L2 {L1 inner;L2(){std::cout<<\"2\";}~L2(){std::cout<<\"2\";}};struct L3 {L2 inner;L3(){std::cout<<\"3\";}~L3(){std::cout<<\"3\";}};int main(){L3 value;}",
+    "stdout": "01233210",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "nesting_4",
+    "category": "generated_lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct L0 {L0(){std::cout<<\"0\";}~L0(){std::cout<<\"0\";}};struct L1 {L0 inner;L1(){std::cout<<\"1\";}~L1(){std::cout<<\"1\";}};struct L2 {L1 inner;L2(){std::cout<<\"2\";}~L2(){std::cout<<\"2\";}};struct L3 {L2 inner;L3(){std::cout<<\"3\";}~L3(){std::cout<<\"3\";}};struct L4 {L3 inner;L4(){std::cout<<\"4\";}~L4(){std::cout<<\"4\";}};int main(){L4 value;}",
+    "stdout": "0123443210",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "nesting_5",
+    "category": "generated_lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct L0 {L0(){std::cout<<\"0\";}~L0(){std::cout<<\"0\";}};struct L1 {L0 inner;L1(){std::cout<<\"1\";}~L1(){std::cout<<\"1\";}};struct L2 {L1 inner;L2(){std::cout<<\"2\";}~L2(){std::cout<<\"2\";}};struct L3 {L2 inner;L3(){std::cout<<\"3\";}~L3(){std::cout<<\"3\";}};struct L4 {L3 inner;L4(){std::cout<<\"4\";}~L4(){std::cout<<\"4\";}};struct L5 {L4 inner;L5(){std::cout<<\"5\";}~L5(){std::cout<<\"5\";}};int main(){L5 value;}",
+    "stdout": "012345543210",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "nesting_6",
+    "category": "generated_lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct L0 {L0(){std::cout<<\"0\";}~L0(){std::cout<<\"0\";}};struct L1 {L0 inner;L1(){std::cout<<\"1\";}~L1(){std::cout<<\"1\";}};struct L2 {L1 inner;L2(){std::cout<<\"2\";}~L2(){std::cout<<\"2\";}};struct L3 {L2 inner;L3(){std::cout<<\"3\";}~L3(){std::cout<<\"3\";}};struct L4 {L3 inner;L4(){std::cout<<\"4\";}~L4(){std::cout<<\"4\";}};struct L5 {L4 inner;L5(){std::cout<<\"5\";}~L5(){std::cout<<\"5\";}};struct L6 {L5 inner;L6(){std::cout<<\"6\";}~L6(){std::cout<<\"6\";}};int main(){L6 value;}",
+    "stdout": "01234566543210",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "objects_1",
+    "category": "stress",
+    "source": "#include <iostream>\n#include <string>\nint created=0;int destroyed=0;struct G {G(){++created;}~G(){++destroyed;}};int main(){for(int i=0;i<1;++i){G g;}std::cout<<created<<\":\"<<destroyed;}",
+    "stdout": "1:1",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "objects_2",
+    "category": "stress",
+    "source": "#include <iostream>\n#include <string>\nint created=0;int destroyed=0;struct G {G(){++created;}~G(){++destroyed;}};int main(){for(int i=0;i<2;++i){G g;}std::cout<<created<<\":\"<<destroyed;}",
+    "stdout": "2:2",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "objects_7",
+    "category": "stress",
+    "source": "#include <iostream>\n#include <string>\nint created=0;int destroyed=0;struct G {G(){++created;}~G(){++destroyed;}};int main(){for(int i=0;i<7;++i){G g;}std::cout<<created<<\":\"<<destroyed;}",
+    "stdout": "7:7",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "objects_31",
+    "category": "stress",
+    "source": "#include <iostream>\n#include <string>\nint created=0;int destroyed=0;struct G {G(){++created;}~G(){++destroyed;}};int main(){for(int i=0;i<31;++i){G g;}std::cout<<created<<\":\"<<destroyed;}",
+    "stdout": "31:31",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "objects_100",
+    "category": "stress",
+    "source": "#include <iostream>\n#include <string>\nint created=0;int destroyed=0;struct G {G(){++created;}~G(){++destroyed;}};int main(){for(int i=0;i<100;++i){G g;}std::cout<<created<<\":\"<<destroyed;}",
+    "stdout": "100:100",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "objects_1000",
+    "category": "stress",
+    "source": "#include <iostream>\n#include <string>\nint created=0;int destroyed=0;struct G {G(){++created;}~G(){++destroyed;}};int main(){for(int i=0;i<1000;++i){G g;}std::cout<<created<<\":\"<<destroyed;}",
+    "stdout": "1000:1000",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "deduce_int",
+    "category": "generated_template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<typename T>T twice(T x){return x+x;}int main(){std::cout<<twice(3);}",
+    "stdout": "6",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "deduce_long_long",
+    "category": "generated_template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<typename T>T twice(T x){return x+x;}int main(){std::cout<<twice(3000000000LL);}",
+    "stdout": "6000000000",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "deduce_float",
+    "category": "generated_template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<typename T>T twice(T x){return x+x;}int main(){std::cout<<twice(1.25f);}",
+    "stdout": "2.5",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "deduce_double",
+    "category": "generated_template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<typename T>T twice(T x){return x+x;}int main(){std::cout<<twice(2.75);}",
+    "stdout": "5.5",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "deduce_std_string",
+    "category": "generated_template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<typename T>T twice(T x){return x+x;}int main(){std::string s=\"ab\";std::cout<<twice(s);}",
+    "stdout": "abab",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "unused_template_member",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>struct S {T x;int f(){return x.bad;}};int main(){S<int> s;s.x=3;std::cout<<s.x;}",
+    "stdout": "3",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "partial_explicit_conflict",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T,class U>U f(T a,U b,U c){return b;}int main(){f<int>(1,2,3.0);}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "value_initialized_temporary",
+    "category": "construction",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;};int main(){std::cout<<S().x;}",
+    "stdout": "0",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "value_initialized_member",
+    "category": "construction",
+    "source": "#include <iostream>\n#include <string>\nstruct A {int x;};struct B {A a;B():a(){}};int main(){B b;std::cout<<b.a.x;}",
+    "stdout": "0",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "global_zero_class",
+    "category": "construction",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(){std::cout<<x;}};S s;int main(){std::cout<<s.x;}",
+    "stdout": "00",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "direct_prvalue_elision",
+    "category": "temporary",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S(int n){std::cout<<n;}S(const S& s){std::cout<<\"C\";}~S(){std::cout<<\"D\";}};int main(){S s(S(3));}",
+    "stdout": "3D",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "member_prvalue_elision",
+    "category": "temporary",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S(int n){std::cout<<n;}S(const S& s){std::cout<<\"C\";}~S(){std::cout<<\"D\";}};struct B {S s;B():s(S(3)){}~B(){std::cout<<\"B\";}};int main(){B b;}",
+    "stdout": "3BD",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "self_assignment",
+    "category": "copy",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(int n):x(n){}S(const S& s):x(s.x){std::cout<<\"C\";}};int main(){S s(4);s=s;std::cout<<s.x;}",
+    "stdout": "4",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "template_const_deduction",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>void show(T& x){std::cout<<x;}int main(){const int n=4;show(n);}",
+    "stdout": "4",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "nested_type_deduction",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>struct Box {T value;Box(T x):value(x){}};template<class T>T get(const Box<T>& box){return box.value;}int main(){Box<int> b(8);std::cout<<get(b);}",
+    "stdout": "8",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "unselected_template_body",
+    "category": "template",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>int f(T x){return x.missing;}int f(int x){return 7;}int main(){std::cout<<f(1);}",
+    "stdout": "7",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "duplicate_template",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\ntemplate<class T>T f(T x){return x;}template<class U>U f(U x){return x;}int main(){}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "ctor_return_type",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int S(){return 1;}};int main(){}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "const_nested_assignment",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct A {const int x;A():x(1){}};struct B {A a;};int main(){B a;B b;a=b;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "private_copy",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nclass S {S(const S& s){}public:S(){}};int main(){S a;S b=a;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "missing_method_definition",
+    "category": "rejection",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int f();};int main(){S s;s.f();}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "destructor_local_object",
+    "category": "lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct A {~A(){std::cout<<\"A\";}};struct B {~B(){A a;std::cout<<\"B\";}};int main(){B b;}",
+    "stdout": "BA",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "while_cleanup",
+    "category": "lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct G {int n;G(int x):n(x){}~G(){std::cout<<n;}};int main(){int i=0;while(i<3){G g(i);++i;if(i<2)continue;break;}}",
+    "stdout": "01",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "do_cleanup",
+    "category": "lifetime",
+    "source": "#include <iostream>\n#include <string>\nstruct G {int n;G(int x):n(x){}~G(){std::cout<<n;}};int main(){int i=0;do{G g(i);++i;continue;}while(i<3);}",
+    "stdout": "012",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "destructor_failure_cleanup",
+    "category": "runtime",
+    "source": "#include <iostream>\n#include <string>\nstruct A {~A(){std::cout<<\"A\";}};struct B {A a;~B(){std::cout<<\"B\";int z=0;int x=1/z;}};int main(){A first;B second;}",
+    "stdout": "BAA",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "parameter_constructor_failure",
+    "category": "runtime",
+    "source": "#include <iostream>\n#include <string>\nstruct G {G(){std::cout<<\"G\";}~G(){std::cout<<\"g\";}};struct B {B(G g){int z=0;int x=1/z;}~B(){std::cout<<\"b\";}};int main(){G g;B b(g);}",
+    "stdout": "Ggg",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "most_vexing_empty",
+    "category": "unsupported",
+    "source": "#include <iostream>\n#include <string>\nstruct S {};int main(){S s();}",
+    "stdout": "",
+    "phase": "parse",
+    "exit": 1
+  },
+  {
+    "name": "most_vexing_nested",
+    "category": "unsupported",
+    "source": "#include <iostream>\n#include <string>\nstruct S {};int main(){S s(S());}",
+    "stdout": "",
+    "phase": "parse",
+    "exit": 1
+  },
+  {
+    "name": "parenthesized_prvalue",
+    "category": "temporary",
+    "source": "#include <iostream>\n#include <string>\nstruct S {S(){std::cout<<\"C\";}~S(){std::cout<<\"D\";}};int main(){S s((S()));}",
+    "stdout": "CD",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "user_ctor_not_zeroed",
+    "category": "runtime",
+    "source": "#include <iostream>\n#include <string>\nstruct S {int x;S(){}};int main(){std::cout<<S().x;}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "nested_value_zero",
+    "category": "construction",
+    "source": "#include <iostream>\n#include <string>\nstruct A {int x;A(){}};struct B {A a;};int main(){B b=B();std::cout<<b.a.x;}",
+    "stdout": "0",
+    "phase": null,
+    "exit": 0
+  }
+]

@@ -73,6 +73,9 @@ add('undef_requires_name','preprocess_rejection','#undef 3\nint main(){}',exit=1
 add('directive_requires_name','preprocess_rejection','# \"define\" X\nint main(){}',exit=1,phase='preprocess',raw=True)
 add('negative_zero_output','conversion','std::cout<<-0.0;', '-0')
 add('long_to_float_rounding','conversion','long long x=4611686293305294849LL;float f=x;std::cout<<(f>4611686018427387904.0f);','1')
+# M2 implements overloading; retain the original fixture as a positive regression.
+for c in cases:
+ if c['name']=='overload':c.update(phase=None,exit=0,category='overload_extension')
 root=Path('tests/fixtures');root.mkdir(parents=True,exist_ok=True)
 for c in cases:(root/(c['name']+'.cpp')).write_text(c['source'])
 Path('tests/fixtures/cases.json').write_text(json.dumps(cases,indent=2))

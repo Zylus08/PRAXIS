@@ -5,6 +5,7 @@ namespace praxis {
 void Analyzer::bind(const Token &n, Type t) {
     if (n.text == "std")
         fail(n.loc, "semantic", "std is reserved for native bindings");
+    if (classPatterns.contains(n.text))fail(n.loc,"semantic","object names hiding class types are unsupported");
     if (scopes.back().contains(n.text) || (scopes.size() == 1 && functions.contains(n.text)))
         fail(n.loc, "semantic", "duplicate declaration: " + n.text);
     scopes.back()[n.text] = t;
@@ -24,7 +25,7 @@ void Analyzer::modifiable(const E &e) {
 void Analyzer::convert(const E &e, Type t) {
     auto s = e->type;
     if (t.reference) {
-        if (!e->lvalue || s.extent || s.base != t.base || (!t.constant && s.constant))
+        if (!e->lvalue || s.extent || (s.base != t.base || s.name!=t.name || s.arguments!=t.arguments) || (!t.constant && s.constant))
             fail(e->token.loc, "semantic", "reference requires compatible lvalue");
         return;
     }
@@ -34,6 +35,7 @@ void Analyzer::convert(const E &e, Type t) {
         return;
     if (t.base == Base::String && (s.base == Base::String || s.base == Base::Text))
         return;
+    if(t.base==Base::Record){if(s.base==Base::Record&&s.name==t.name&&s.arguments==t.arguments)return;fail(e->token.loc,"semantic","incompatible class types");}
     if (t.base == s.base && t.base != Base::Stream)
         return;
     fail(e->token.loc, "semantic", "cannot convert " + typeName(s) + " to " + typeName(t));
@@ -90,7 +92,10 @@ Type Analyzer::expr(const E &e) {
             t.base = Base::Endl;
             t.constant = true;
         } else {
-            t = lookup(e->token);
+            bool found=false;
+            for(size_t i=scopes.size();i>1;--i){auto it=scopes[i-1].find(e->op);if(it!=scopes[i-1].end()){t=it->second;found=true;break;}}
+            if(!found&&!currentClass.empty()){auto c=program->compiledClasses.at(currentClass);for(auto& d:c->fields)if(d.name.text==e->op){t=d.type;t.constant=t.constant||constMethod;e->implicitMember=true;found=true;break;}}
+            if(!found)t=lookup(e->token);
             t.reference = false;
             e->lvalue = true;
         }
@@ -105,41 +110,9 @@ Type Analyzer::expr(const E &e) {
         e->lvalue = true;
         break;
     }
-    case Expr::Kind::Member: {
-        auto a = expr(e->args[0]);
-        if (a.base != Base::String || a.extent)
-            error("member operation requires std::string");
-        if (e->op == "size" || e->op == "length")
-            t.base = Base::Long;
-        else if (e->op == "empty")
-            t.base = Base::Bool;
-        else
-            error("unsupported string member");
-        break;
-    }
-    case Expr::Kind::Call: {
-        auto callee = e->args[0];
-        if (callee->kind != Expr::Kind::Name)
-            error("only named functions can be called");
-        for (auto it = scopes.rbegin(); it != scopes.rend(); ++it)
-            if (it->contains(callee->op))
-                error("called name denotes an object");
-        auto it = functions.find(callee->op);
-        if (it == functions.end())
-            error("function must be declared before use: " + callee->op);
-        auto f = it->second;
-        if (f->name.text == "main")
-            error("calling main is unsupported");
-        if (e->args.size() != f->params.size() + 1)
-            error("argument count mismatch");
-        for (size_t i = 0; i < f->params.size(); ++i) {
-            expr(e->args[i + 1]);
-            convert(e->args[i + 1], f->params[i].type);
-        }
-        called.insert(callee->op);
-        t = f->result;
-        break;
-    }
+    case Expr::Kind::Member:t=memberExpression(e);break;
+    case Expr::Kind::Call:t=callExpression(e);break;
+    case Expr::Kind::Construct:{for(auto a:e->args)expr(a);t=resolve(e->type,e->token.loc);e->target=constructor(t,e->args,e->token.loc)->id;break;}
     case Expr::Kind::Unary:
     case Expr::Kind::Postfix: {
         auto a = expr(e->args[0]);
@@ -159,6 +132,7 @@ Type Analyzer::expr(const E &e) {
         auto a = expr(e->args[0]);
         auto b = expr(e->args[1]);
         modifiable(e->args[0]);
+        if(a.base==Base::Record){if(e->op!="=")error("class compound assignment unsupported");convert(e->args[1],a);if(!record(a,e->token.loc)->assignable)error("implicit copy assignment is deleted (const member)");t=a;e->lvalue=true;break;}
         if (e->op != "=") {
             if (a.base == Base::String && e->op == "+=" &&
                 (b.base == Base::String || b.base == Base::Text || b.base == Base::Char)) {
@@ -176,7 +150,7 @@ Type Analyzer::expr(const E &e) {
         auto b = expr(e->args[1]);
         auto op = e->op;
         if (op == "<<" && a.base == Base::Stream) {
-            if (b.extent || b.base == Base::Void || b.base == Base::Stream)
+            if (b.extent || b.base == Base::Void || b.base == Base::Stream || b.base==Base::Record)
                 error("unsupported stream operand");
             t = a;
             break;
@@ -211,6 +185,7 @@ Type Analyzer::expr(const E &e) {
     return t;
 }
 void Analyzer::declare(Decl &d) {
+    d.type=resolve(d.type,d.name.loc);
     auto t = d.type;
     if (t.base == Base::Void || t.base == Base::Stream)
         fail(d.name.loc, "semantic", "invalid object type");
@@ -219,6 +194,8 @@ void Analyzer::declare(Decl &d) {
     if (t.extent && t.reference)
         fail(d.name.loc, "semantic", "arrays of references are invalid");
     bind(d.name, t);
+    if(t.base==Base::Record){classDeclaration(d);return;}
+    if(d.direct)fail(d.name.loc,"semantic","scalar direct initialization is unsupported");
     if (t.extent) {
         if (d.init)
             fail(d.name.loc, "semantic", "array initializer must be braced");
@@ -309,6 +286,7 @@ void Analyzer::stmt(const S &s, bool scoped) {
         if (s->expr) {
             expr(s->expr);
             convert(s->expr, result);
+            if(result.base==Base::Record){checkDestructor(result,s->token.loc);planCopy(s->expr,result);}
         } else if (result.base != Base::Void)
             fail(s->token.loc, "semantic", "missing return value");
         break;
@@ -321,75 +299,25 @@ void Analyzer::stmt(const S &s, bool scoped) {
         break;
     }
 }
-void Analyzer::check(Program &p) {
-    program = &p;
-    scopes = {{}};
-    functions.clear();
-    definitions.clear();
-    called.clear();
-    inFunction = false;
-    loops = 0;
-    for (auto &item : p.items) {
-        if (item.statement) {
-            stmt(item.statement);
-            continue;
+void Analyzer::check(Program& p){
+    program=&p;scopes={{}};functions.clear();templates.clear();classPatterns.clear();checked.clear();checking.clear();called.clear();buildingClasses.clear();currentClass.clear();inFunction=false;constMethod=false;loops=0;templateLevel=0;
+    p.compiledFunctions.clear();p.compiledClasses.clear();p.instantiations=0;p.cacheHits=0;p.templateNanoseconds=0;
+    for(auto& item:p.items){
+        if(item.record){auto c=item.record;if(classPatterns.contains(c->name.text)||scopes[0].contains(c->name.text)||functions.contains(c->name.text))fail(c->name.loc,"semantic","duplicate class name");classPatterns[c->name.text]=c;if(c->templateParameters.empty()){Type t{Base::Record};t.name=c->name.text;record(t,c->name.loc);}continue;}
+        if(item.statement){stmt(item.statement);continue;}
+        auto f=item.function;
+        if(!f->templateParameters.empty()){if(!f->owner.empty()||!f->body)fail(f->name.loc,"semantic","template methods/prototypes unsupported");
+            Substitution shape;for(size_t i=0;i<f->templateParameters.size();++i){Type t{Base::Parameter};t.name="$"+std::to_string(i);shape[f->templateParameters[i]]=t;}
+            for(auto old:templates[f->name.text]){if(old->templateParameters.size()!=f->templateParameters.size()||old->params.size()!=f->params.size())continue;Substitution prior;for(size_t i=0;i<old->templateParameters.size();++i){Type t{Base::Parameter};t.name="$"+std::to_string(i);prior[old->templateParameters[i]]=t;}bool same=true;for(size_t i=0;i<f->params.size();++i)same=same&&substitute(f->params[i].type,shape)==substitute(old->params[i].type,prior);if(same)fail(f->name.loc,"semantic","duplicate function template definition");}
+            templates[f->name.text].push_back(f);continue;}
+        if(!f->owner.empty()){
+            Type t{Base::Record};t.name=f->owner;auto c=record(t,f->name.loc);bool declared=false;
+            for(auto m:c->methods)if(m->name.text==f->name.text&&m->params.size()==f->params.size()&&m->constMember==f->constMember){bool same=true;for(size_t i=0;i<m->params.size();++i)same=same&&m->params[i].type==resolve(f->params[i].type,f->name.loc);if(same){f->publicAccess=m->publicAccess;declared=true;break;}}
+            if(!declared)fail(f->name.loc,"semantic","out-of-class definition has no matching declaration");
         }
-        auto f = item.function;
-        if (f->name.text == "std")
-            fail(f->name.loc, "semantic", "std is reserved for native bindings");
-        if (f->result.reference || f->result.constant)
-            fail(f->name.loc, "semantic", "qualified/reference return types are unsupported");
-        if (f->result.base == Base::String && !f->name.stringAvailable)
-            fail(f->name.loc, "semantic", "std::string requires <string>");
-        if (scopes[0].contains(f->name.text))
-            fail(f->name.loc, "semantic", "function conflicts with object");
-        auto old = functions.find(f->name.text);
-        if (old != functions.end()) {
-            auto g = old->second;
-            bool same = g->result == f->result && g->params.size() == f->params.size();
-            if (same)
-                for (size_t i = 0; i < f->params.size(); ++i) {
-                    auto a = g->params[i].type, b = f->params[i].type;
-                    if (!a.reference)
-                        a.constant = false;
-                    if (!b.reference)
-                        b.constant = false;
-                    same = same && a == b;
-                }
-            if (!same)
-                fail(f->name.loc, "semantic", "conflicting signature; overloading unsupported");
-        }
-        functions[f->name.text] = f;
-        if (f->name.text == "main" && (f->result.base != Base::Int || !f->params.empty()))
-            fail(f->name.loc, "semantic", "main must have signature int main()");
-        scopes.emplace_back();
-        for (auto &d : f->params) {
-            if (d.type.base == Base::Void ||
-                (d.type.base == Base::String && !d.name.stringAvailable))
-                fail(d.name.loc, "semantic", "invalid parameter type");
-            bind(d.name, d.type);
-        }
-        if (f->body) {
-            if (!definitions.insert(f->name.text).second)
-                fail(f->name.loc, "semantic", "duplicate function definition");
-            inFunction = true;
-            result = f->result;
-            stmt(f->body, false);
-            if (result.base != Base::Void && f->name.text != "main" && !returns(f->body))
-                fail(f->name.loc, "semantic",
-                     "non-void function must structurally return on all paths");
-            inFunction = false;
-        }
-        scopes.pop_back();
+        registerFunction(f);checkFunction(f);
     }
-    for (auto &name : called)
-        if (!definitions.contains(name))
-            fail(functions[name]->name.loc, "semantic",
-                 "called function has no definition: " + name);
-    if (!p.script && !definitions.contains("main"))
-        fail(p.items.empty()        ? Location{"<input>"}
-             : p.items[0].statement ? p.items[0].statement->token.loc
-                                    : p.items[0].function->name.loc,
-             "semantic", "missing main definition");
+    for(auto id:called){auto f=p.compiledFunctions.at(id);if(!f->body&&f->special==Function::Special::User)fail(f->name.loc,"semantic","called function has no definition: "+f->name.text);}
+    if(!p.script){auto main=functions.find("main");if(main==functions.end()||main->second.empty()||!main->second[0]->body)fail({"<input>"},"semantic","missing main definition");}
 }
 } // namespace praxis

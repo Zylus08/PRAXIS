@@ -42,7 +42,7 @@ with tempfile.TemporaryDirectory(dir=ROOT/'build') as tmp:
  (d/'main.cpp').write_text('#include "bad.hpp"\nint main(){}');(d/'bad.hpp').write_text('\nint x=;')
  r=run(['check',d/'main.cpp']);record('include_diagnostic_location','preprocess',r.returncode==1 and 'bad.hpp:2:' in r.stderr,r.stderr)
 report=dict(executable=str(exe),executable_sha256=hashlib.sha256(exe.read_bytes()).hexdigest(),total=len(results),passed=sum(r['passed'] for r in results),categories=dict(collections.Counter(r['category'] for r in results)),results=results)
-output=ROOT/'audit/m1'/('integration-'+exe.parent.name+'.json');output.parent.mkdir(parents=True,exist_ok=True);output.write_text(json.dumps(report,indent=2))
+output=ROOT/'audit/m2'/('regression-integration-'+exe.parent.name+'.json');output.parent.mkdir(parents=True,exist_ok=True);output.write_text(json.dumps(report,indent=2))
 for r in results:
  if not r['passed']:print('FAIL',r['name'],r['detail'])
 print(f"{report['passed']}/{report['total']} integration checks passed")

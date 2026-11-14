@@ -1,0 +1,1162 @@
+{
+  "executable": "E:\\PRAXIS\\build\\Debug\\praxis.exe",
+  "executable_sha256": "9c71aa25060a0ba22df6b265f9fac10795a630e1a63266d2d7ae4debf40aaad9",
+  "total": 126,
+  "passed": 126,
+  "categories": {
+    "class": 4,
+    "lifetime": 9,
+    "construction": 8,
+    "copy": 7,
+    "const": 1,
+    "access": 1,
+    "overload": 6,
+    "template": 13,
+    "rejection": 32,
+    "reference": 2,
+    "temporary": 8,
+    "scope": 1,
+    "native": 1,
+    "unsupported": 8,
+    "runtime": 8,
+    "generated_lifetime": 6,
+    "stress": 6,
+    "generated_template": 5
+  },
+  "results": [
+    {
+      "name": "basic_class",
+      "category": "class",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "5",
+      "stderr": ""
+    },
+    {
+      "name": "struct",
+      "category": "class",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "7",
+      "stderr": ""
+    },
+    {
+      "name": "constructor_destructor",
+      "category": "lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C1C2D2XD1",
+      "stderr": ""
+    },
+    {
+      "name": "member_initializer_order",
+      "category": "construction",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "12PQ21",
+      "stderr": ""
+    },
+    {
+      "name": "copy_constructor",
+      "category": "copy",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C7",
+      "stderr": ""
+    },
+    {
+      "name": "copy_assignment",
+      "category": "copy",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C22",
+      "stderr": ""
+    },
+    {
+      "name": "const_member",
+      "category": "const",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "8",
+      "stderr": ""
+    },
+    {
+      "name": "access_control",
+      "category": "access",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "9",
+      "stderr": ""
+    },
+    {
+      "name": "free_overload",
+      "category": "overload",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "121",
+      "stderr": ""
+    },
+    {
+      "name": "constructor_overload",
+      "category": "overload",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "12",
+      "stderr": ""
+    },
+    {
+      "name": "raii_return",
+      "category": "lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C1C2D2D17",
+      "stderr": ""
+    },
+    {
+      "name": "raii_loop_control",
+      "category": "lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C0D0C1D1",
+      "stderr": ""
+    },
+    {
+      "name": "nested_destruction",
+      "category": "lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "abBA",
+      "stderr": ""
+    },
+    {
+      "name": "function_template",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "5 3.5",
+      "stderr": ""
+    },
+    {
+      "name": "class_template",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3 2.5",
+      "stderr": ""
+    },
+    {
+      "name": "template_deduction",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "7 3.75",
+      "stderr": ""
+    },
+    {
+      "name": "ambiguous_overload",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\ambiguous_overload.cpp:3:68: semantic: ambiguous overload\n"
+    },
+    {
+      "name": "invalid_template",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\invalid_template.cpp:3:75: semantic: instantiating template:add<S,>T;T;: operator requires arithmetic operands\n"
+    },
+    {
+      "name": "default_member_initializer",
+      "category": "construction",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "7",
+      "stderr": ""
+    },
+    {
+      "name": "scalar_value_init_member",
+      "category": "construction",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "0",
+      "stderr": ""
+    },
+    {
+      "name": "copy_nested",
+      "category": "copy",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C39",
+      "stderr": ""
+    },
+    {
+      "name": "assign_nested",
+      "category": "copy",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "49",
+      "stderr": ""
+    },
+    {
+      "name": "object_reference",
+      "category": "reference",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "8",
+      "stderr": ""
+    },
+    {
+      "name": "const_object_reference",
+      "category": "reference",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "7",
+      "stderr": ""
+    },
+    {
+      "name": "class_by_value",
+      "category": "copy",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "CD81D1",
+      "stderr": ""
+    },
+    {
+      "name": "return_local_object",
+      "category": "copy",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "NCD7D",
+      "stderr": ""
+    },
+    {
+      "name": "return_prvalue_object",
+      "category": "temporary",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "N7D",
+      "stderr": ""
+    },
+    {
+      "name": "temporary_statement",
+      "category": "temporary",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3DX",
+      "stderr": ""
+    },
+    {
+      "name": "temporary_method",
+      "category": "temporary",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C7DX",
+      "stderr": ""
+    },
+    {
+      "name": "temporary_condition",
+      "category": "temporary",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "CDB",
+      "stderr": ""
+    },
+    {
+      "name": "prvalue_parameter",
+      "category": "temporary",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "2FDX",
+      "stderr": ""
+    },
+    {
+      "name": "const_overload",
+      "category": "overload",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "12",
+      "stderr": ""
+    },
+    {
+      "name": "member_overload",
+      "category": "overload",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "12",
+      "stderr": ""
+    },
+    {
+      "name": "reference_overload",
+      "category": "overload",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "12",
+      "stderr": ""
+    },
+    {
+      "name": "template_nontemplate_tie",
+      "category": "overload",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "211",
+      "stderr": ""
+    },
+    {
+      "name": "out_of_class_member",
+      "category": "class",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "6",
+      "stderr": ""
+    },
+    {
+      "name": "member_shadowing",
+      "category": "scope",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "239",
+      "stderr": ""
+    },
+    {
+      "name": "implicit_member_call",
+      "category": "class",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "4",
+      "stderr": ""
+    },
+    {
+      "name": "global_destruction",
+      "category": "lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C1C2MD2D1",
+      "stderr": ""
+    },
+    {
+      "name": "recursive_raii",
+      "category": "lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "32100123",
+      "stderr": ""
+    },
+    {
+      "name": "nested_template",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3",
+      "stderr": ""
+    },
+    {
+      "name": "template_reference",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "9",
+      "stderr": ""
+    },
+    {
+      "name": "template_two_parameters",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "71.5",
+      "stderr": ""
+    },
+    {
+      "name": "template_class_copy",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "47",
+      "stderr": ""
+    },
+    {
+      "name": "template_class_dtor",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "2.54",
+      "stderr": ""
+    },
+    {
+      "name": "template_repeated",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "463",
+      "stderr": ""
+    },
+    {
+      "name": "class_string_member",
+      "category": "native",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "hi",
+      "stderr": ""
+    },
+    {
+      "name": "constructor_body_mutation",
+      "category": "construction",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "5",
+      "stderr": ""
+    },
+    {
+      "name": "default_ctor_suppressed",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\default_ctor_suppressed.cpp:3:36: semantic: no viable overload (argument count, type or template deduction mismatch)\n"
+    },
+    {
+      "name": "private_field",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\private_field.cpp:3:35: semantic: private data member is inaccessible\n"
+    },
+    {
+      "name": "private_method",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\private_method.cpp:3:48: semantic: private member is inaccessible\n"
+    },
+    {
+      "name": "private_ctor",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\private_ctor.cpp:3:30: semantic: private member is inaccessible\n"
+    },
+    {
+      "name": "private_dtor",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\private_dtor.cpp:3:43: semantic: private member is inaccessible\n"
+    },
+    {
+      "name": "const_field_mutation",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\const_field_mutation.cpp:3:42: semantic: expression is not a modifiable scalar lvalue\n"
+    },
+    {
+      "name": "const_object_mutation",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\const_object_mutation.cpp:3:52: semantic: expression is not a modifiable scalar lvalue\n"
+    },
+    {
+      "name": "const_method_call",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\const_method_call.cpp:3:47: semantic: no viable overload (argument count, type or template deduction mismatch)\n"
+    },
+    {
+      "name": "const_nested_member",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\const_nested_member.cpp:3:70: semantic: expression is not a modifiable scalar lvalue\n"
+    },
+    {
+      "name": "invalid_member",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\invalid_member.cpp:3:30: semantic: unknown data member: missing\n"
+    },
+    {
+      "name": "class_type_mismatch",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\class_type_mismatch.cpp:3:46: semantic: incompatible class types\n"
+    },
+    {
+      "name": "class_reference_mismatch",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\class_reference_mismatch.cpp:3:45: semantic: reference requires compatible lvalue\n"
+    },
+    {
+      "name": "temporary_reference",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\temporary_reference.cpp:3:36: semantic: reference requires compatible lvalue\n"
+    },
+    {
+      "name": "duplicate_initializer",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\duplicate_initializer.cpp:3:26: semantic: duplicate member initializer\n"
+    },
+    {
+      "name": "unknown_initializer",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\unknown_initializer.cpp:3:15: semantic: unknown member initializer (delegation unsupported)\n"
+    },
+    {
+      "name": "recursive_member",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\recursive_member.cpp:3:13: semantic: recursive by-value class member\n"
+    },
+    {
+      "name": "deleted_assignment",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\deleted_assignment.cpp:3:55: semantic: implicit copy assignment is deleted (const member)\n"
+    },
+    {
+      "name": "ambiguous_cross_rank",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\ambiguous_cross_rank.cpp:3:77: semantic: ambiguous overload\n"
+    },
+    {
+      "name": "ambiguous_ref_value",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\ambiguous_ref_value.cpp:3:68: semantic: ambiguous overload\n"
+    },
+    {
+      "name": "template_wrong_count",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\template_wrong_count.cpp:3:61: semantic: no viable overload (argument count, type or template deduction mismatch)\n"
+    },
+    {
+      "name": "template_conflicting_deduction",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\template_conflicting_deduction.cpp:3:53: semantic: no viable overload (argument count, type or template deduction mismatch)\n"
+    },
+    {
+      "name": "class_template_wrong_count",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\class_template_wrong_count.cpp:3:55: semantic: incorrect class template argument count\n"
+    },
+    {
+      "name": "template_invalid_member",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\template_invalid_member.cpp:3:59: semantic: instantiating template:f<int,>T;: member operation requires a class object\n"
+    },
+    {
+      "name": "class_template_invalid_body",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\class_template_invalid_body.cpp:3:79: semantic: instantiating S<int>::f(): member operation requires a class object\n"
+    },
+    {
+      "name": "inheritance",
+      "category": "unsupported",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\inheritance.cpp:3:21: parse: inheritance is unsupported\n"
+    },
+    {
+      "name": "virtual",
+      "category": "unsupported",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\virtual.cpp:3:11: parse: unsupported class member feature\n"
+    },
+    {
+      "name": "throw",
+      "category": "unsupported",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\throw.cpp:3:12: parse: expected expression\n"
+    },
+    {
+      "name": "try_catch",
+      "category": "unsupported",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\try_catch.cpp:3:12: parse: expected expression\n"
+    },
+    {
+      "name": "pointer",
+      "category": "unsupported",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\pointer.cpp:3:25: parse: expected identifier\n"
+    },
+    {
+      "name": "user_assignment",
+      "category": "unsupported",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\user_assignment.cpp:3:14: parse: expected identifier\n"
+    },
+    {
+      "name": "constructor_failure",
+      "category": "runtime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "Aa",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\constructor_failure.cpp:3:87: runtime: division by zero\n"
+    },
+    {
+      "name": "partial_member_failure",
+      "category": "runtime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "Aa",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\partial_member_failure.cpp:3:83: runtime: division by zero\n"
+    },
+    {
+      "name": "uninitialized_member",
+      "category": "runtime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\uninitialized_member.cpp:3:47: runtime: read of uninitialized object\n"
+    },
+    {
+      "name": "later_member_read",
+      "category": "runtime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\later_member_read.cpp:3:29: runtime: member is not initialized yet: b\n"
+    },
+    {
+      "name": "runtime_unwind",
+      "category": "runtime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "21",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\runtime_unwind.cpp:3:84: runtime: division by zero\n"
+    },
+    {
+      "name": "nesting_1",
+      "category": "generated_lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "0110",
+      "stderr": ""
+    },
+    {
+      "name": "nesting_2",
+      "category": "generated_lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "012210",
+      "stderr": ""
+    },
+    {
+      "name": "nesting_3",
+      "category": "generated_lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "01233210",
+      "stderr": ""
+    },
+    {
+      "name": "nesting_4",
+      "category": "generated_lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "0123443210",
+      "stderr": ""
+    },
+    {
+      "name": "nesting_5",
+      "category": "generated_lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "012345543210",
+      "stderr": ""
+    },
+    {
+      "name": "nesting_6",
+      "category": "generated_lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "01234566543210",
+      "stderr": ""
+    },
+    {
+      "name": "objects_1",
+      "category": "stress",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "1:1",
+      "stderr": ""
+    },
+    {
+      "name": "objects_2",
+      "category": "stress",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "2:2",
+      "stderr": ""
+    },
+    {
+      "name": "objects_7",
+      "category": "stress",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "7:7",
+      "stderr": ""
+    },
+    {
+      "name": "objects_31",
+      "category": "stress",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "31:31",
+      "stderr": ""
+    },
+    {
+      "name": "objects_100",
+      "category": "stress",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "100:100",
+      "stderr": ""
+    },
+    {
+      "name": "objects_1000",
+      "category": "stress",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "1000:1000",
+      "stderr": ""
+    },
+    {
+      "name": "deduce_int",
+      "category": "generated_template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "6",
+      "stderr": ""
+    },
+    {
+      "name": "deduce_long_long",
+      "category": "generated_template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "6000000000",
+      "stderr": ""
+    },
+    {
+      "name": "deduce_float",
+      "category": "generated_template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "2.5",
+      "stderr": ""
+    },
+    {
+      "name": "deduce_double",
+      "category": "generated_template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "5.5",
+      "stderr": ""
+    },
+    {
+      "name": "deduce_std_string",
+      "category": "generated_template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "abab",
+      "stderr": ""
+    },
+    {
+      "name": "unused_template_member",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3",
+      "stderr": ""
+    },
+    {
+      "name": "partial_explicit_conflict",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\partial_explicit_conflict.cpp:3:70: semantic: no viable overload (argument count, type or template deduction mismatch)\n"
+    },
+    {
+      "name": "value_initialized_temporary",
+      "category": "construction",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "0",
+      "stderr": ""
+    },
+    {
+      "name": "value_initialized_member",
+      "category": "construction",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "0",
+      "stderr": ""
+    },
+    {
+      "name": "global_zero_class",
+      "category": "construction",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "00",
+      "stderr": ""
+    },
+    {
+      "name": "direct_prvalue_elision",
+      "category": "temporary",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3D",
+      "stderr": ""
+    },
+    {
+      "name": "member_prvalue_elision",
+      "category": "temporary",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3BD",
+      "stderr": ""
+    },
+    {
+      "name": "self_assignment",
+      "category": "copy",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "4",
+      "stderr": ""
+    },
+    {
+      "name": "template_const_deduction",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "4",
+      "stderr": ""
+    },
+    {
+      "name": "nested_type_deduction",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "8",
+      "stderr": ""
+    },
+    {
+      "name": "unselected_template_body",
+      "category": "template",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "7",
+      "stderr": ""
+    },
+    {
+      "name": "duplicate_template",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\duplicate_template.cpp:3:56: semantic: duplicate function template definition\n"
+    },
+    {
+      "name": "ctor_return_type",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\ctor_return_type.cpp:3:15: semantic: constructor cannot have a return type\n"
+    },
+    {
+      "name": "const_nested_assignment",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\const_nested_assignment.cpp:3:71: semantic: implicit copy assignment is deleted (const member)\n"
+    },
+    {
+      "name": "private_copy",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\private_copy.cpp:3:58: semantic: private member is inaccessible\n"
+    },
+    {
+      "name": "missing_method_definition",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\missing_method_definition.cpp:3:15: semantic: called function has no definition: f\n"
+    },
+    {
+      "name": "destructor_local_object",
+      "category": "lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "BA",
+      "stderr": ""
+    },
+    {
+      "name": "while_cleanup",
+      "category": "lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "01",
+      "stderr": ""
+    },
+    {
+      "name": "do_cleanup",
+      "category": "lifetime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "012",
+      "stderr": ""
+    },
+    {
+      "name": "destructor_failure_cleanup",
+      "category": "runtime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "BAA",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\destructor_failure_cleanup.cpp:3:83: runtime: division by zero\n"
+    },
+    {
+      "name": "parameter_constructor_failure",
+      "category": "runtime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "Ggg",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\parameter_constructor_failure.cpp:3:86: runtime: division by zero\n"
+    },
+    {
+      "name": "most_vexing_empty",
+      "category": "unsupported",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\most_vexing_empty.cpp:3:26: parse: empty parentheses declare a function; local function declarations unsupported\n"
+    },
+    {
+      "name": "most_vexing_nested",
+      "category": "unsupported",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\most_vexing_nested.cpp:3:26: parse: most-vexing function declaration unsupported; parenthesize the expression\n"
+    },
+    {
+      "name": "parenthesized_prvalue",
+      "category": "temporary",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "CD",
+      "stderr": ""
+    },
+    {
+      "name": "user_ctor_not_zeroed",
+      "category": "runtime",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\user_ctor_not_zeroed.cpp:3:50: runtime: read of uninitialized object\n"
+    },
+    {
+      "name": "nested_value_zero",
+      "category": "construction",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "0",
+      "stderr": ""
+    }
+  ]
+}

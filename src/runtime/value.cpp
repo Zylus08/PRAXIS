@@ -53,6 +53,7 @@ Value read(const Evaluation &e, const Location &l) {
         fail(l, "runtime", "read of uninitialized object");
     if (e.object->type.extent)
         fail(l, "runtime", "array cannot be read as scalar");
+    if(e.object->type.base==Base::Record)return {e.object->type,e.object};
     return e.object->value;
 }
 Value convertValue(Value v, Type t, const Location &l) {

@@ -1,0 +1,87 @@
+{
+  "executable": "E:\\PRAXIS\\build\\Debug\\praxis.exe",
+  "executable_sha256": "9c71aa25060a0ba22df6b265f9fac10795a630e1a63266d2d7ae4debf40aaad9",
+  "passed": 13,
+  "total": 13,
+  "results": [
+    {
+      "name": "deep_parentheses",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\deep_parentheses.cpp:1:274: parse: expression nesting limit\n"
+    },
+    {
+      "name": "deep_blocks",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\deep_blocks.cpp:1:268: parse: nesting limit\n"
+    },
+    {
+      "name": "deep_unary",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\deep_unary.cpp:1:274: parse: expression nesting limit\n"
+    },
+    {
+      "name": "deep_calls",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\deep_calls.cpp:1:552: parse: expression nesting limit\n"
+    },
+    {
+      "name": "large_integer",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\large_integer.cpp:1:19: semantic: integer literal out of range\n"
+    },
+    {
+      "name": "large_float",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\large_float.cpp:1:19: semantic: floating literal out of range\n"
+    },
+    {
+      "name": "missing_comment_end",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\missing_comment_end.cpp:1:12: lex: unterminated comment\n"
+    },
+    {
+      "name": "incomplete_escape",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\incomplete_escape.cpp:1:12: lex: unterminated escape\n"
+    },
+    {
+      "name": "embedded_nul",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\embedded_nul.cpp:1:12: lex: unsupported character\n"
+    },
+    {
+      "name": "recursive_macro",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\recursive_macro.cpp:3:19: semantic: unknown name: A\n"
+    },
+    {
+      "name": "bad_for_initializer",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\bad_for_initializer.cpp:1:12: semantic: invalid for initializer\n"
+    },
+    {
+      "name": "bad_reference_return",
+      "passed": true,
+      "exit": 1,
+      "diagnostic": "E:\\PRAXIS\\build\\tmpeo756sbh\\bad_reference_return.cpp:1:6: semantic: qualified/reference return types are unsupported\n"
+    },
+    {
+      "name": "no_compiler_path",
+      "passed": true,
+      "exit": 0,
+      "stdout": "3628800",
+      "diagnostic": ""
+    }
+  ]
+}

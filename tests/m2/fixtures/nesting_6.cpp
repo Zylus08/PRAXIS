@@ -1,0 +1,3 @@
+#include <iostream>
+#include <string>
+struct L0 {L0(){std::cout<<"0";}~L0(){std::cout<<"0";}};struct L1 {L0 inner;L1(){std::cout<<"1";}~L1(){std::cout<<"1";}};struct L2 {L1 inner;L2(){std::cout<<"2";}~L2(){std::cout<<"2";}};struct L3 {L2 inner;L3(){std::cout<<"3";}~L3(){std::cout<<"3";}};struct L4 {L3 inner;L4(){std::cout<<"4";}~L4(){std::cout<<"4";}};struct L5 {L4 inner;L5(){std::cout<<"5";}~L5(){std::cout<<"5";}};struct L6 {L5 inner;L6(){std::cout<<"6";}~L6(){std::cout<<"6";}};int main(){L6 value;}

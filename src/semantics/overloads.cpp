@@ -1,6 +1,7 @@
 #include "praxis/semantics/analyzer.hpp"
 #include <algorithm>
 #include <functional>
+#include "praxis/common/timing.hpp"
 namespace praxis {
 namespace {Type bare(Type t){t.constant=false;t.reference=false;return t;}bool same(Type a,Type b){return bare(a)==bare(b);}}
 std::string Analyzer::signature(const F& f)const{
@@ -22,6 +23,7 @@ int Analyzer::rank(Type target,const E& e)const{
 }
 void Analyzer::registerFunction(const F& f){
     if(f->name.text=="std")fail(f->name.loc,"semantic","std is reserved for native bindings");
+    if(f->owner.empty()&&classPatterns.contains(f->name.text))fail(f->name.loc,"semantic","functions hiding class names are unsupported");
     f->result=resolve(f->result,f->name.loc);
     if(f->result.reference||f->result.constant)fail(f->name.loc,"semantic","qualified/reference return types are unsupported");
     if(f->result.base==Base::String&&!f->name.stringAvailable)fail(f->name.loc,"semantic","std::string requires <string>");
@@ -49,7 +51,7 @@ Analyzer::F Analyzer::instantiateFunction(const F& pattern,const std::vector<Typ
     for(auto d:pattern->params)key+=typeName(d.type)+";";
     if(program->compiledFunctions.contains(key)){++program->cacheHits;return program->compiledFunctions.at(key);}
     if(program->instantiations>=limits.instantiations||templateLevel>=limits.templateDepth)fail(loc,"semantic","template instantiation limit");
-    ++program->instantiations;auto f=cloneFunction(pattern,map);f->templateParameters.clear();f->instantiated=true;f->id=key;
+    Timer timer(program->templateNanoseconds);++program->instantiations;auto f=cloneFunction(pattern,map);f->templateParameters.clear();f->instantiated=true;f->id=key;
     f->result=resolve(f->result,loc);for(auto& d:f->params)d.type=resolve(d.type,loc);
     if(f->result.reference||f->result.constant)fail(loc,"semantic","qualified/reference return types unsupported");
     program->compiledFunctions[key]=f;return f;
@@ -61,11 +63,11 @@ Analyzer::F Analyzer::select(std::vector<F> candidates,const std::vector<E>& arg
             if(explicitTypes.size()>f->templateParameters.size()||args.size()!=f->params.size())continue;
             Substitution deduced;for(size_t i=0;i<explicitTypes.size();++i)deduced[f->templateParameters[i]]=resolve(explicitTypes[i],loc);
             std::function<bool(Type,Type)> deduce=[&](Type param,Type actual){
-                if(param.base==Base::Parameter){actual=bare(actual);auto it=deduced.find(param.name);if(it!=deduced.end())return it->second==actual;deduced[param.name]=actual;return true;}
+                if(param.base==Base::Parameter){actual.reference=false;if(!param.reference||param.constant)actual.constant=false;auto it=deduced.find(param.name);if(it!=deduced.end())return it->second==actual;deduced[param.name]=actual;return true;}
                 if(param.base==Base::Record&&param.name==actual.name&&param.arguments.size()==actual.arguments.size()){for(size_t i=0;i<param.arguments.size();++i)if(!deduce(param.arguments[i],actual.arguments[i]))return false;}
                 return true;
             };
-            bool ok=true;for(size_t i=0;i<args.size();++i){auto param=f->params[i].type;if(param.base==Base::Parameter&&deduced.contains(param.name)&&!explicitTypes.empty())continue;ok=ok&&deduce(param,args[i]->type);}
+            bool ok=true;for(size_t i=0;i<args.size();++i){auto param=f->params[i].type;if(param.base==Base::Parameter&&deduced.contains(param.name)&&std::find(f->templateParameters.begin(),f->templateParameters.begin()+static_cast<ptrdiff_t>(explicitTypes.size()),param.name)!=f->templateParameters.begin()+static_cast<ptrdiff_t>(explicitTypes.size()))continue;ok=ok&&deduce(param,args[i]->type);}
             std::vector<Type> types;for(auto n:f->templateParameters){if(!deduced.contains(n)){ok=false;break;}types.push_back(deduced[n]);}
             if(!ok)continue;f=instantiateFunction(f,types,loc);
         }else if(!explicitTypes.empty())continue;
@@ -86,7 +88,7 @@ Analyzer::F Analyzer::select(std::vector<F> candidates,const std::vector<E>& arg
     if(!winner){if(viable.size()==1)winner=viable[0].f;else fail(loc,"semantic","ambiguous overload");}
     checkAccess(winner,loc);called.insert(winner->id);
     for(size_t i=0;i<args.size();++i)if(!winner->params[i].type.reference&&winner->params[i].type.base==Base::Record)planCopy(args[i],winner->params[i].type);
-    if(winner->instantiated||winner->special!=Function::Special::User)checkFunction(winner);
+    if(winner->instantiated||winner->special!=Function::Special::User){try{checkFunction(winner);}catch(const Error& error){if(winner->instantiated)fail(loc,"semantic","instantiating "+winner->id+": "+error.what());throw;}}
     return winner;
 }
 void Analyzer::checkAccess(const F& f,const Location& l){if(!f->publicAccess&&currentClass!=f->owner)fail(l,"semantic","private member is inaccessible");}

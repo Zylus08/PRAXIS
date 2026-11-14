@@ -30,7 +30,7 @@ struct Expr {
     bool lvalue = false;
     int height = 1;
     std::string target, copyTarget;
-    bool implicitMember=false;
+    bool implicitMember=false, parenthesized=false;
     std::vector<Type> typeArguments;
     Expr(Kind k, Token t, std::string o = "") : kind(k), token(std::move(t)), op(std::move(o)) {}
 };
@@ -64,7 +64,7 @@ struct Stmt {
     Decl decl;
     Stmt(Kind k, Token t) : kind(k), token(std::move(t)) {}
 };
-struct MemberInit { Token name; std::vector<E> args; std::string constructor; };
+struct MemberInit { Token name; std::vector<E> args; std::string constructor; bool valueInitialize=false; };
 struct Function {
     Token name;
     Type result;
@@ -86,6 +86,7 @@ struct Class {
     Type type;
     std::string copyConstructor, destructor;
     bool assignable=true;
+    size_t nestingDepth=1;
 };
 struct Item {
     S statement;
@@ -98,8 +99,9 @@ struct Program {
     std::map<std::string,std::shared_ptr<Function>> compiledFunctions;
     std::map<std::string,std::shared_ptr<Class>> compiledClasses;
     size_t instantiations=0, cacheHits=0;
+    std::uint64_t templateNanoseconds=0;
 };
 struct Limits { size_t calls=128, templateDepth=32, instantiations=256, objects=100000; std::uint64_t steps=10000000; };
-struct Profile { std::uint64_t objects=0,calls=0,destructors=0; size_t peakObjects=0;
+struct Profile { std::uint64_t objects=0,calls=0,destructors=0,constructions=0,copies=0,assignments=0; size_t peakObjects=0; std::uint64_t callNanoseconds=0,constructorNanoseconds=0,destructorNanoseconds=0;
 };
 } // namespace praxis

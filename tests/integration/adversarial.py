@@ -25,7 +25,7 @@ with tempfile.TemporaryDirectory(dir=root/'build') as d:
  r=subprocess.run([str(exe),'run',str(root/'examples/factorial.cpp')],env=env,capture_output=True,text=True,timeout=15)
  results.append(dict(name='no_compiler_path',passed=r.returncode==0 and r.stdout=='3628800',exit=r.returncode,stdout=r.stdout,diagnostic=r.stderr))
 report=dict(executable=str(exe),executable_sha256=hashlib.sha256(exe.read_bytes()).hexdigest(),passed=sum(r['passed'] for r in results),total=len(results),results=results)
-(root/'audit/m1'/('adversarial-'+exe.parent.name+'.json')).write_text(json.dumps(report,indent=2))
+(root/'audit/m2'/('regression-adversarial-'+exe.parent.name+'.json')).write_text(json.dumps(report,indent=2))
 print(f"{report['passed']}/{report['total']} adversarial/environment checks passed")
 for r in results:
  if not r['passed']:print(r)
