@@ -16,6 +16,10 @@ Program prepare(const Source &s, Preprocessor &pp, bool script = false, std::set
     auto p = Parser(pp.run(s),std::move(names)).parse(script);
     p.iostream = pp.iostream;
     p.strings = pp.string;
+    p.vector = pp.vector;
+    p.array = pp.array;
+    p.utility = pp.utility;
+    p.algorithm = pp.algorithm;
     return p;
 }
 int repl() {
@@ -25,7 +29,7 @@ int repl() {
     auto runtime = std::make_unique<Interpreter>(std::cout);
     std::string line, buffer;
     int submission = 0;
-    std::cout << "Praxis M2 REPL (:quit, :reset; finish multiline input with an empty line)\n";
+    std::cout << "Praxis v0.1.0-rc1 REPL (:quit, :reset; finish multiline input with an empty line)\n";
     while (std::getline(std::cin, line)) {
         if (buffer.empty() && line == ":quit")
             break;
@@ -76,6 +80,10 @@ int repl() {
             candidate.items.insert(candidate.items.end(), chunk.items.begin(), chunk.items.end());
             candidate.iostream = candidatePP.iostream;
             candidate.strings = candidatePP.string;
+            candidate.vector = candidatePP.vector;
+            candidate.array = candidatePP.array;
+            candidate.utility = candidatePP.utility;
+            candidate.algorithm = candidatePP.algorithm;
             Analyzer{}.check(candidate);
             history = std::move(candidate);
             pp = std::move(candidatePP);
@@ -97,7 +105,7 @@ int main(int argc, char **argv) {
     using namespace praxis;
     try {
         if (argc == 2 && std::string(argv[1]) == "--version") {
-            std::cout << "Praxis 0.1.0+M2 (class/template subset)\n";
+            std::cout << "Praxis 0.1.0-rc1 (M3 release candidate: pointers, dynamic storage, STL subset)\n";
             return 0;
         }
         if (argc == 1 || (argc == 2 && std::string(argv[1]) == "--help")) {
@@ -134,7 +142,7 @@ int main(int argc, char **argv) {
         }
         using Clock=std::chrono::steady_clock;
         auto start=Clock::now();auto tokens=pp.run(SourceManager{}.read(argv[2]));auto preprocessed=Clock::now();
-        auto p=Parser(std::move(tokens)).parse();p.iostream=pp.iostream;p.strings=pp.string;auto parsed=Clock::now();
+        auto p=Parser(std::move(tokens)).parse();p.iostream=pp.iostream;p.strings=pp.string;p.vector=pp.vector;p.array=pp.array;p.utility=pp.utility;p.algorithm=pp.algorithm;auto parsed=Clock::now();
         Analyzer{limits}.check(p);auto analyzed=Clock::now();Interpreter runtime(std::cout,limits);int code=0;
         if(std::string(argv[1])=="run")code=runtime.run(p);auto executed=Clock::now();
         if(profiling){
@@ -145,6 +153,7 @@ int main(int argc, char **argv) {
             std::cerr<<"{\"preprocess_ms\":"<<ms(start,preprocessed)<<",\"parse_ms\":"<<ms(preprocessed,parsed)<<",\"semantic_ms\":"<<ms(parsed,analyzed)<<",\"runtime_ms\":"<<ms(analyzed,executed)
                 <<",\"template_instantiation_ms_inclusive\":"<<p.templateNanoseconds/1e6<<",\"instantiations\":"<<p.instantiations<<",\"cache_hits\":"<<p.cacheHits
                 <<",\"live_objects\":"<<runtime.liveObjectCount()<<",\"objects\":"<<stat.objects<<",\"peak_live_objects\":"<<stat.peakObjects<<",\"constructions\":"<<stat.constructions<<",\"copies\":"<<stat.copies<<",\"assignments\":"<<stat.assignments
+                <<",\"dynamic_allocations\":"<<stat.dynamicAllocations<<",\"dynamic_deletions\":"<<stat.dynamicDeletions<<",\"container_operations\":"<<stat.containerOperations
                 <<",\"calls\":"<<stat.calls<<",\"destructors\":"<<stat.destructors<<",\"dispatch_ms_inclusive\":"<<stat.callNanoseconds/1e6<<",\"construction_ms_inclusive\":"<<stat.constructorNanoseconds/1e6
                 <<",\"destruction_ms_inclusive\":"<<stat.destructorNanoseconds/1e6<<",\"peak_working_set_bytes\":"<<peak<<"}\n";
         }

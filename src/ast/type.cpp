@@ -6,7 +6,7 @@ static_assert(sizeof(float) == 4 && sizeof(double) == 8 && std::numeric_limits<f
               std::numeric_limits<double>::is_iec559);
 namespace praxis {
 bool numeric(Type t) {
-    return !t.extent && t.base >= Base::Bool && t.base <= Base::Double;
+    return !t.extent && !t.pointer && t.base >= Base::Bool && t.base <= Base::Double;
 }
 bool integral(Type t) {
     return numeric(t) && t.base <= Base::Long;
@@ -24,11 +24,37 @@ Type common(Type a, Type b) {
     return {a.base > b.base ? a.base : b.base};
 }
 std::string typeName(Type t) {
-    if(t.base==Base::Record || t.base==Base::Parameter){std::string n=t.name;if(!t.arguments.empty()){n+="<";for(size_t i=0;i<t.arguments.size();++i){if(i)n+=",";n+=typeName(t.arguments[i]);}n+=">";}return std::string(t.constant?"const ":"")+n+(t.reference?"&":"")+(t.extent?"["+std::to_string(t.extent)+"]":"");}
-    const char *names[] = {
-        "void",   "bool",        "char",           "int",     "long long",       "float",
-        "double", "std::string", "string literal", "ostream", "endl manipulator"};
-    return std::string(t.constant ? "const " : "") + names[static_cast<int>(t.base)] +
-           (t.reference ? "&" : "") + (t.extent ? "[" + std::to_string(t.extent) + "]" : "");
+    if (t.base == Base::Nullptr)
+        return "std::nullptr_t";
+    std::string s;
+    if (t.pointeeConstant)
+        s += "const ";
+    if (t.base == Base::Record || t.base == Base::Parameter) {
+        s += t.name;
+        if (!t.arguments.empty()) {
+            s += "<";
+            for (size_t i = 0; i < t.arguments.size(); ++i) {
+                if (i)
+                    s += ",";
+                s += typeName(t.arguments[i]);
+            }
+            s += ">";
+        }
+    } else {
+        const char *names[] = {
+            "void",   "bool",        "char",           "int",     "long long",       "float",
+            "double", "std::string", "string literal", "ostream", "endl manipulator", "record",
+            "parameter", "std::nullptr_t", "auto"};
+        s += names[static_cast<int>(t.base)];
+    }
+    for (int i = 0; i < t.pointer; ++i)
+        s += "*";
+    if (t.constant)
+        s += " const";
+    if (t.reference)
+        s += "&";
+    if (t.extent)
+        s += "[" + std::to_string(t.extent) + "]";
+    return s;
 }
 } // namespace praxis

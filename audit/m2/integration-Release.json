@@ -1,6 +1,6 @@
 {
   "executable": "E:\\PRAXIS\\build\\Release\\praxis.exe",
-  "executable_sha256": "49c941abbadee878af4ed86b3936b8b3b5ac86ca1cfd7adba9277ce612794865",
+  "executable_sha256": "328b4802c5b280b8f8eda11c42e37bdd9c4a54a2d9a44f81ba7b582e8b2e4220",
   "total": 126,
   "passed": 126,
   "categories": {
@@ -17,7 +17,8 @@
     "temporary": 8,
     "scope": 1,
     "native": 1,
-    "unsupported": 8,
+    "unsupported": 7,
+    "pointer_extension": 1,
     "runtime": 8,
     "generated_lifetime": 6,
     "stress": 6,
@@ -710,12 +711,12 @@
     },
     {
       "name": "pointer",
-      "category": "unsupported",
+      "category": "pointer_extension",
       "passed": true,
-      "check_exit": 1,
-      "exit": 1,
+      "check_exit": 0,
+      "exit": 0,
       "stdout": "",
-      "stderr": "E:\\PRAXIS\\tests\\m2\\fixtures\\pointer.cpp:3:25: parse: expected identifier\n"
+      "stderr": ""
     },
     {
       "name": "user_assignment",

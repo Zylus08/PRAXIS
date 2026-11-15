@@ -1,6 +1,6 @@
 {
   "executable": "E:\\PRAXIS\\build\\Debug\\praxis.exe",
-  "executable_sha256": "b54df841c4811b3313429a593441adfe0f1eb66cede2205eb8f5fead309af6f5",
+  "executable_sha256": "5a10507737d32e1759993ab8fafd04903e6f05a570f96908934ba01406260037",
   "passed": 13,
   "total": 13,
   "results": [
@@ -8,73 +8,73 @@
       "name": "deep_parentheses",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\deep_parentheses.cpp:1:274: parse: expression nesting limit\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\deep_parentheses.cpp:1:274: parse: expression nesting limit\n"
     },
     {
       "name": "deep_blocks",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\deep_blocks.cpp:1:268: parse: nesting limit\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\deep_blocks.cpp:1:268: parse: nesting limit\n"
     },
     {
       "name": "deep_unary",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\deep_unary.cpp:1:274: parse: expression nesting limit\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\deep_unary.cpp:1:274: parse: expression nesting limit\n"
     },
     {
       "name": "deep_calls",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\deep_calls.cpp:1:552: parse: expression nesting limit\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\deep_calls.cpp:1:552: parse: expression nesting limit\n"
     },
     {
       "name": "large_integer",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\large_integer.cpp:1:19: semantic: integer literal out of range\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\large_integer.cpp:1:19: semantic: integer literal out of range\n"
     },
     {
       "name": "large_float",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\large_float.cpp:1:19: semantic: floating literal out of range\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\large_float.cpp:1:19: semantic: floating literal out of range\n"
     },
     {
       "name": "missing_comment_end",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\missing_comment_end.cpp:1:12: lex: unterminated comment\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\missing_comment_end.cpp:1:12: lex: unterminated comment\n"
     },
     {
       "name": "incomplete_escape",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\incomplete_escape.cpp:1:12: lex: unterminated escape\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\incomplete_escape.cpp:1:12: lex: unterminated escape\n"
     },
     {
       "name": "embedded_nul",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\embedded_nul.cpp:1:12: lex: unsupported character\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\embedded_nul.cpp:1:12: lex: unsupported character: '\n"
     },
     {
       "name": "recursive_macro",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\recursive_macro.cpp:3:19: semantic: unknown name: A\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\recursive_macro.cpp:3:19: semantic: unknown name: A\n"
     },
     {
       "name": "bad_for_initializer",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\bad_for_initializer.cpp:1:12: semantic: invalid for initializer\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\bad_for_initializer.cpp:1:12: semantic: invalid for initializer\n"
     },
     {
       "name": "bad_reference_return",
       "passed": true,
       "exit": 1,
-      "diagnostic": "E:\\PRAXIS\\build\\tmpn4o6e0s7\\bad_reference_return.cpp:1:6: semantic: qualified/reference return types are unsupported\n"
+      "diagnostic": "E:\\PRAXIS\\build\\tmp9hmatysc\\bad_reference_return.cpp:1:6: semantic: qualified/reference return types are unsupported\n"
     },
     {
       "name": "no_compiler_path",

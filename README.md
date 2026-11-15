@@ -1,21 +1,27 @@
-# Project PRAXIS — Milestone M2
-## Classes, Object Lifetimes, RAII, Templates & C++ Semantic Foundations
+# Project PRAXIS — Milestone M3
+## Pointers, Dynamic Storage, STL Subset, Adversarial Semantics & Release Readiness
+**Version: v0.1.0-rc1 (Release Candidate)**
 
 Praxis is an independent, self-contained C++20 implementation of a **restricted C++ interpreter**. It lexes, preprocesses, parses, type-checks, and tree-walks user source itself. It does not compile user code or depend on a compiler backend at runtime. This is not a fully conforming C++ implementation.
 
-Milestone M2 elevates Praxis from a scalar interpreter to a class-aware, lifetime-correct runtime supporting object-oriented and generic C++ programming.
+Milestone M3 advances Praxis into a production-grade, lifetime-correct interpreter supporting typed pointers, heap allocation, RAII resource ownership, standard library containers and algorithms, and range-based iteration.
 
 ---
 
-## Key Milestone M2 Capabilities
+## Key Milestone M3 Capabilities
 
-- **Classes and Structs:** `class` (default private access) and `struct` (default public access), data members, access control labels (`public:`, `private:`), member functions, `const` member functions, and implicit `this` member resolution.
-- **Constructors and Initializers:** Default constructors, parameterized constructors, copy constructors, member initializer lists executing strictly in **declaration order**, default member initializers, and scalar value initialization (`$zero`).
-- **Destructors and Deterministic RAII:** Reverse construction-order destruction, automatic cleanup on normal block exit, `return`, `break`, and `continue`, nested object cleanup, temporary expression lifecycle management, and constructor failure safety.
-- **Copy Semantics and Object Identity:** Explicit distinction between copy construction and copy assignment, synthesized memberwise copying, self-assignment guards, const field immutability, lvalue reference identity preservation (`T&`), and prvalue copy elision (`$elide`).
-- **Function and Constructor Overloading:** Principled overload resolution supporting free functions, member functions, constructors, and templates with standardized conversion ranks (0–3), const-correctness ranking, and ambiguity detection.
-- **Native Template Engine:** `template<typename T>` and `template<class T>`, function templates with explicit arguments and type deduction, class templates (`Box<T>`), deep AST cloning and type substitution, specialization caching, on-demand semantic analysis of instantiated bodies, and recursion limits.
-- **Telemetry and Resource Bounds:** High-resolution JSON profiling via `--profile`, with configurable limits (`--max-calls`, `--max-template-depth`, `--max-instantiations`, `--max-objects`, `--max-steps`).
+- **Typed Pointer Model:** First-class typed pointer values (`T*`, `const T*`, `T* const`, `T**`), address-of (`&`), dereference (`*`), arrow member access (`->`), and `nullptr` (`std::nullptr_t`). Pointers use an **Abstract Validated Handle Reference Model** (`targetId`, `generation`, `target`, `offset`) that strictly preserves object identity without leaking host virtual memory addresses.
+- **Pointer Arithmetic & Comparisons:** `ptr + n`, `ptr - n`, pointer subtraction `p2 - p1` yielding `ptrdiff_t`, increment/decrement (`++`, `--`), and relational ordering comparisons (`<`, `<=`, `>`, `>=`) within identical container slices.
+- **Dynamic Object Storage:** `new T` and `new T(arguments...)` with constructor overload resolution, `delete p`, safe `delete nullptr` no-ops, double-free runtime detection, protection against deleting automatic stack objects, and allocation quotas (`--max-objects`).
+- **Deterministic RAII & Ownership:** Recursive cleanup chains across automatic variables, member pointers, and dynamic recursive data structures (e.g. linked lists and binary trees), guaranteeing zero leaked objects on completion.
+- **Standard Library (STL) Subset:**
+  - `<vector>`: `std::vector<T>` supporting default, sized, and initializer-list constructors, deep copy construction and assignment, `push_back`, `pop_back`, `operator[]`, `at` (bounds-checked), `front`, `back`, `size`, `empty`, `clear`, `resize`, `reserve`, `begin`, and `end`.
+  - `<string>`: `size()`, `length()`, `empty()`, `at()`, `substr()`, and character indexing.
+  - `<utility>`: `std::pair<T1, T2>`, `std::make_pair`, `std::swap`, and `std::move`.
+  - `<algorithm>`: `std::min`, `std::max`, `std::sort`, `std::reverse`, `std::find`, `std::count`.
+  - `<array>`: Fixed-size container subset.
+- **Iterators & Range-Based For Loops:** Random-access iterator pointer handles and lowering of `for (decl : range) stmt` over vector, array, and string with `auto`, `int`, and reference deductions.
+- **Telemetry & Resource Bounds:** JSON profiling via `--profile`, with tracking for `dynamic_allocations`, `dynamic_deletions`, `container_operations`, `objects`, `peak_live_objects`, `constructions`, `destructors`, `copies`, `assignments`, and timing.
 
 ---
 
@@ -25,100 +31,106 @@ Prerequisites: Visual Studio 2022 Build Tools (MSVC v143 with C++ tools), CMake,
 
 ```powershell
 # Build Debug and Release configurations
-./tools/build.ps1 Debug
-./tools/build.ps1 Release
+./tools/build.ps1 -Configuration Debug
+./tools/build.ps1 -Configuration Release
 
 # Command-Line Usage
 ./build/Release/praxis.exe --version
 ./build/Release/praxis.exe --help
-./build/Release/praxis.exe run examples/m2/basic_class.cpp
-./build/Release/praxis.exe run examples/m2/class_template.cpp --profile
-./build/Release/praxis.exe check examples/m2/basic_class.cpp
+./build/Release/praxis.exe run examples/m3/accumulator.cpp
+./build/Release/praxis.exe run examples/m3/dynamic_scalar.cpp --profile
+./build/Release/praxis.exe check examples/m3/accumulator.cpp
 ./build/Release/praxis.exe repl
 ```
 
 ---
 
-## Example M2 Programs
+## Example M3 Programs
 
-### 1. Class with RAII Destructor & Member Initializer Order
+### 1. Representative Acceptance Program (`examples/m3/accumulator.cpp`)
 ```cpp
 #include <iostream>
-#include <string>
+#include <vector>
+
+int main() {
+    std::vector<int> numbers = {10, 20, 30};
+    int total = 0;
+    for (int n : numbers) {
+        total += n;
+    }
+    std::cout << total;
+}
+// Outputs: 60
+```
+
+### 2. Dynamic Memory & Arrow Member Access (`examples/m3/dynamic_class.cpp`)
+```cpp
+#include <iostream>
 
 struct Resource {
     int id;
-    Resource(int n) : id(n) { std::cout << "C" << id; }
+    Resource(int i) : id(i) { std::cout << "C" << id; }
     ~Resource() { std::cout << "D" << id; }
 };
 
-class Container {
-    Resource first;
-    Resource second;
-public:
-    // Initializer list text order differs, but declaration order governs execution
-    Container() : second(2), first(1) {
-        std::cout << "!";
-    }
-};
-
 int main() {
-    Container c;
+    Resource* r = new Resource(7);
+    std::cout << "M" << r->id;
+    delete r;
 }
-// Outputs: C1C2!D2D1
+// Outputs: C7M7D7
 ```
 
-### 2. Class Template with Type Deduction
+### 3. STL Algorithms & Iterators (`examples/m3/algorithm_demo.cpp`)
 ```cpp
 #include <iostream>
-#include <string>
-
-template<class T>
-class Box {
-    T value;
-public:
-    Box(T v) : value(v) {}
-    T get() const { return value; }
-};
-
-template<class T>
-T multiply(T a, T b) {
-    return a * b;
-}
+#include <vector>
+#include <algorithm>
 
 int main() {
-    Box<int> b(10);
-    std::cout << b.get() << " " << multiply(2.5, 4.0) << std::endl;
+    std::vector<int> v = {30, 10, 20};
+    std::sort(v.begin(), v.end());
+    for (auto it = v.begin(); it != v.end(); it++) {
+        std::cout << *it << " ";
+    }
 }
-// Outputs: 10 10
+// Outputs: 10 20 30 
 ```
 
 ---
 
 ## Verification and Testing
 
-Milestone M2 verification consists of 642 verification checks per configuration (1,284 total across Debug and Release):
-- **CTest Suite:** Frontend unit tests (`praxis_unit`), M2 unit tests (`praxis_m2_unit`), M2 integration tests, and M1 integration regression tests.
-- **Adversarial / Negative Tests:** 48 dedicated M2 negative and safety tests verifying parse rejection of unsupported constructs, semantic access control, overload ambiguity, const mutation, and constructor unwinding.
-- **Differential Verification:** 213 differential programs (78 M2 programs + 135 M1 regression programs) compiled with MSVC (`cl.exe /std:c++20 /EHsc /Od /Zc:nrvo-`) and compared byte-for-byte against Praxis execution.
+Milestone M3 verification consists of **781 checks per configuration** (**1,562 total across Debug and Release**):
+- **CTest Suite (6 test runners):**
+  - Frontend unit tests (`praxis_unit`): 15 checks
+  - M2 unit tests (`praxis_m2_unit`): 31 checks
+  - M3 unit tests (`praxis_m3_unit`): 39 checks
+  - M3 integration tests: 55 cases
+  - M2 integration tests: 126 cases
+  - M1 integration tests: 244 cases
+- **Adversarial / Safety Tests:** 13 dedicated safety checks verifying memory protection against use-after-free, double deletion, deleting stack objects, dangling pointers to expired frames, null dereferencing, and out-of-bounds container access.
+- **Differential Verification:** **258 differential programs** (42 M3 + 79 M2 + 137 M1 programs) compiled with native MSVC (`cl.exe /std:c++20 /EHsc /Od /Zc:nrvo-`) and compared byte-for-byte against Praxis execution with **100.0% pass rate**.
 
 ```powershell
-# Run full M2 verification suite (Unit, Integration, Adversarial, Differential)
-./tools/verify-m2.ps1 Debug
-./tools/verify-m2.ps1 Release
+# Run full M3 verification suite (Unit, Integration, Adversarial, Differential)
+./tools/verify-m3.ps1 -Configuration Debug
+./tools/verify-m3.ps1 -Configuration Release
 ```
 
 For full documentation and verification evidence, see:
-- [Milestone M2 Final Report](audit/m2/M2_FINAL_REPORT.md)
-- [Baseline Reconnaissance](audit/m2/BASELINE_RECONNAISSANCE.md)
-- [Object Model & Copy Semantics](audit/m2/OBJECT_MODEL.md)
-- [Constructor & Destructor Semantics](audit/m2/CONSTRUCTOR_DESTRUCTOR_SEMANTICS.md)
-- [Template Instantiation Engine](audit/m2/TEMPLATE_INSTANTIATION.md)
-- [Overload Resolution](audit/m2/OVERLOAD_RESOLUTION.md)
-- [Differential Results vs MSVC](audit/m2/DIFFERENTIAL_RESULTS.md)
-- [Adversarial & Negative Results](audit/m2/ADVERSARIAL_RESULTS.md)
-- [Performance Profile](audit/m2/PERFORMANCE_PROFILE.md)
-- [Known Limitations](audit/m2/KNOWN_LIMITATIONS.md)
+- [Milestone M3 Final Report](audit/m3/M3_FINAL_REPORT.md)
+- [Baseline Reconnaissance](audit/m3/BASELINE_RECONNAISSANCE.md)
+- [Pointer Model Architecture](audit/m3/POINTER_MODEL.md)
+- [Dynamic Storage Management](audit/m3/DYNAMIC_STORAGE.md)
+- [Lifetime Safety & RAII](audit/m3/LIFETIME_SAFETY.md)
+- [STL Subset Compatibility](audit/m3/STL_COMPATIBILITY.md)
+- [Iterator Semantics & Range-For](audit/m3/ITERATOR_SEMANTICS.md)
+- [Template Integration](audit/m3/TEMPLATE_INTEGRATION.md)
+- [Differential Results vs MSVC](audit/m3/DIFFERENTIAL_RESULTS.md)
+- [Adversarial & Negative Results](audit/m3/ADVERSARIAL_RESULTS.md)
+- [Resource Profile & Telemetry](audit/m3/RESOURCE_PROFILE.md)
+- [Catalog of Release Limitations](audit/m3/RELEASE_LIMITATIONS.md)
 - [Architecture Guide](docs/ARCHITECTURE.md)
 - [Execution Model](docs/EXECUTION_MODEL.md)
 - [Language Support](docs/LANGUAGE_SUPPORT.md)

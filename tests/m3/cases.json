@@ -1,0 +1,442 @@
+[
+  {
+    "name": "pointer_scalar_int",
+    "category": "pointer",
+    "source": "#include <iostream>\nint main(){int x=10;int* p=&x;*p=25;std::cout<<x<<\" \"<<*p;}",
+    "stdout": "25 25",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_scalar_double",
+    "category": "pointer",
+    "source": "#include <iostream>\nint main(){double d=3.5;double* p=&d;*p=7.25;std::cout<<d;}",
+    "stdout": "7.25",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_nullptr",
+    "category": "pointer",
+    "source": "#include <iostream>\nint main(){int* p=nullptr;if(p==nullptr)std::cout<<\"1\";if(p!=nullptr)std::cout<<\"2\";if(p)std::cout<<\"3\";else std::cout<<\"4\";}",
+    "stdout": "14",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_arrow_struct",
+    "category": "pointer",
+    "source": "#include <iostream>\nstruct Point{int x;int y;};int main(){Point pt;Point* p=&pt;p->x=12;p->y=34;std::cout<<p->x<<\",\"<<p->y;}",
+    "stdout": "12,34",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_to_class",
+    "category": "pointer",
+    "source": "#include <iostream>\nclass Counter{int count;public:Counter(int n):count(n){}void inc(){count++;}int get()const{return count;}};int main(){Counter c(5);Counter* p=&c;p->inc();std::cout<<p->get();} ",
+    "stdout": "6",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_param",
+    "category": "pointer",
+    "source": "#include <iostream>\nvoid modify(int* p){*p+=10;}int main(){int a=20;modify(&a);std::cout<<a;}",
+    "stdout": "30",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_multi_level",
+    "category": "pointer",
+    "source": "#include <iostream>\nint main(){int x=5;int* p=&x;int** pp=&p;**pp=99;std::cout<<x;}",
+    "stdout": "99",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_const_pointee",
+    "category": "pointer",
+    "source": "#include <iostream>\nint main(){int x=42;const int* p=&x;std::cout<<*p;}",
+    "stdout": "42",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_const_pointer",
+    "category": "pointer",
+    "source": "#include <iostream>\nint main(){int x=10;int* const p=&x;*p=50;std::cout<<x;}",
+    "stdout": "50",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "dynamic_scalar",
+    "category": "dynamic",
+    "source": "#include <iostream>\nint main(){int* p=new int(42);std::cout<<*p;delete p;}",
+    "stdout": "42",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "dynamic_class",
+    "category": "dynamic",
+    "source": "#include <iostream>\nstruct Resource{int id;Resource(int i):id(i){std::cout<<\"C\"<<id;}~Resource(){std::cout<<\"D\"<<id;}};int main(){Resource* r=new Resource(7);std::cout<<\"M\"<<r->id;delete r;}",
+    "stdout": "C7M7D7",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "delete_null",
+    "category": "dynamic",
+    "source": "#include <iostream>\nint main(){int* p=nullptr;delete p;std::cout<<\"OK\";}",
+    "stdout": "OK",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "dynamic_loop",
+    "category": "dynamic",
+    "source": "#include <iostream>\nint main(){int sum=0;for(int i=1;i<=5;i++){int* p=new int(i*10);sum+=*p;delete p;}std::cout<<sum;}",
+    "stdout": "150",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "raii_raw_wrapper",
+    "category": "raii",
+    "source": "#include <iostream>\nclass Box{int* ptr;public:Box(int val):ptr(new int(val)){std::cout<<\"C\";}~Box(){delete ptr;std::cout<<\"D\";}int get()const{return *ptr;}};int main(){Box b(100);std::cout<<b.get();}",
+    "stdout": "C100D",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "raii_linked_list",
+    "category": "raii",
+    "source": "#include <iostream>\nstruct Node{int val;Node* next;Node(int v,Node* n):val(v),next(n){std::cout<<\"C\"<<val;}~Node(){delete next;std::cout<<\"D\"<<val;}};int main(){Node* head=new Node(1,new Node(2,nullptr));delete head;}",
+    "stdout": "C2C1D2D1",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "raii_early_return",
+    "category": "raii",
+    "source": "#include <iostream>\nstruct G{int id;G(int i):id(i){std::cout<<\"C\"<<id;}~G(){std::cout<<\"D\"<<id;}};int f(){G g1(1);{G g2(2);return 42;}return 0;}int main(){std::cout<<f();}",
+    "stdout": "C1C2D2D142",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "vector_default",
+    "category": "stl_vector",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v;if(v.empty())std::cout<<v.size()<<\" empty\";else std::cout<<v.size()<<\" not empty\";}",
+    "stdout": "0 empty",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "vector_init_list",
+    "category": "stl_vector",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={10,20,30};std::cout<<v.size()<<\" \"<<v[0]<<\" \"<<v[1]<<\" \"<<v[2];}",
+    "stdout": "3 10 20 30",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "vector_push_pop",
+    "category": "stl_vector",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v;v.push_back(1);v.push_back(2);v.push_back(3);std::cout<<v.size();v.pop_back();std::cout<<v.size()<<v.back();}",
+    "stdout": "322",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "vector_front_back",
+    "category": "stl_vector",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={100,200,300};std::cout<<v.front()<<\" \"<<v.back();}",
+    "stdout": "100 300",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "vector_indexing",
+    "category": "stl_vector",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={5,15,25};v[1]=50;std::cout<<v.at(0)<<\" \"<<v.at(1)<<\" \"<<v.at(2);}",
+    "stdout": "5 50 25",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "vector_clear",
+    "category": "stl_vector",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={1,2,3};v.clear();if(v.empty())std::cout<<v.size()<<\" empty\";else std::cout<<v.size()<<\" not empty\";}",
+    "stdout": "0 empty",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "vector_copy_ctor",
+    "category": "stl_vector",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v1={1,2};std::vector<int> v2=v1;v2.push_back(3);std::cout<<v1.size()<<\" \"<<v2.size();}",
+    "stdout": "2 3",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "vector_copy_assign",
+    "category": "stl_vector",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v1={10,20};std::vector<int> v2;v2=v1;v2.push_back(30);std::cout<<v1.size()<<\" \"<<v2.size();}",
+    "stdout": "2 3",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "vector_iterator_loop",
+    "category": "stl_vector",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={1,2,3};for(auto it=v.begin();it!=v.end();it++)std::cout<<*it;}",
+    "stdout": "123",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "utility_pair",
+    "category": "stl_utility",
+    "source": "#include <iostream>\n#include <utility>\nint main(){std::pair<int,int> p(10,20);std::cout<<p.first<<\" \"<<p.second;}",
+    "stdout": "10 20",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "utility_make_pair",
+    "category": "stl_utility",
+    "source": "#include <iostream>\n#include <utility>\nint main(){auto p=std::make_pair(30,40);std::cout<<p.first<<\" \"<<p.second;}",
+    "stdout": "30 40",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "utility_swap",
+    "category": "stl_utility",
+    "source": "#include <iostream>\n#include <utility>\nint main(){int a=1;int b=2;std::swap(a,b);std::cout<<a<<\" \"<<b;}",
+    "stdout": "2 1",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "utility_move",
+    "category": "stl_utility",
+    "source": "#include <iostream>\n#include <utility>\nint main(){int a=42;int b=std::move(a);std::cout<<b;}",
+    "stdout": "42",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "algo_min_max",
+    "category": "stl_algorithm",
+    "source": "#include <iostream>\n#include <algorithm>\nint main(){std::cout<<std::min(10,20)<<\" \"<<std::max(10,20);}",
+    "stdout": "10 20",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "algo_sort",
+    "category": "stl_algorithm",
+    "source": "#include <iostream>\n#include <vector>\n#include <algorithm>\nint main(){std::vector<int> v={30,10,20};std::sort(v.begin(),v.end());for(auto it=v.begin();it!=v.end();it++)std::cout<<*it<<\" \";}",
+    "stdout": "10 20 30 ",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "algo_reverse",
+    "category": "stl_algorithm",
+    "source": "#include <iostream>\n#include <vector>\n#include <algorithm>\nint main(){std::vector<int> v={1,2,3};std::reverse(v.begin(),v.end());for(auto it=v.begin();it!=v.end();it++)std::cout<<*it<<\" \";}",
+    "stdout": "3 2 1 ",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "algo_find",
+    "category": "stl_algorithm",
+    "source": "#include <iostream>\n#include <vector>\n#include <algorithm>\nint main(){std::vector<int> v={10,20,30};auto it=std::find(v.begin(),v.end(),20);if(it!=v.end())std::cout<<*it;}",
+    "stdout": "20",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "algo_count",
+    "category": "stl_algorithm",
+    "source": "#include <iostream>\n#include <vector>\n#include <algorithm>\nint main(){std::vector<int> v={1,2,2,3,2,4};std::cout<<std::count(v.begin(),v.end(),2);}",
+    "stdout": "3",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "range_for_vector_int",
+    "category": "range_for",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={10,20,30};int sum=0;for(int x:v)sum+=x;std::cout<<sum;}",
+    "stdout": "60",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "range_for_vector_auto",
+    "category": "range_for",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={2,3,4};int prod=1;for(auto x:v)prod*=x;std::cout<<prod;}",
+    "stdout": "24",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "range_for_string",
+    "category": "range_for",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"praxis\";int n=0;for(char c:s)n++;std::cout<<n;}",
+    "stdout": "6",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "accumulator",
+    "category": "acceptance",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> numbers={10,20,30};int total=0;for(int n:numbers){total+=n;}std::cout<<total;}",
+    "stdout": "60",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "string_methods",
+    "category": "stl_string",
+    "source": "#include <iostream>\n#include <string>\nint main(){std::string s=\"Hello, Praxis!\";std::cout<<s.size()<<\" \"<<s.length()<<\" \"<<s.substr(7,6)<<\" \"<<s.at(0);}",
+    "stdout": "14 14 Praxis H",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_arithmetic",
+    "category": "pointer",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={100,200,300};auto p=v.begin();p++;std::cout<<*p<<\" \";std::cout<<*(p+1)<<\" \";std::cout<<*(p-1);}",
+    "stdout": "200 300 100",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_subtraction",
+    "category": "pointer",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={1,2,3,4};auto p1=v.begin();auto p2=p1+3;std::cout<<(p2-p1);}",
+    "stdout": "3",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "pointer_relational",
+    "category": "pointer",
+    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={1,2,3};auto p1=v.begin();auto p2=p1+1;std::cout<<(p1<p2)<<\" \"<<(p1>p2)<<\" \"<<(p1<=p2)<<\" \"<<(p1>=p2);}",
+    "stdout": "1 0 1 0",
+    "phase": null,
+    "exit": 0
+  },
+  {
+    "name": "err_double_free",
+    "category": "adversarial",
+    "source": "int main(){int* p=new int(1);delete p;delete p;}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "err_delete_stack",
+    "category": "adversarial",
+    "source": "int main(){int x=10;int* p=&x;delete p;}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "err_use_after_free",
+    "category": "adversarial",
+    "source": "int main(){int* p=new int(10);delete p;return *p;}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "err_dangling_stack",
+    "category": "adversarial",
+    "source": "int* f(){int x=42;return &x;}int main(){int* p=f();return *p;}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "err_null_deref",
+    "category": "adversarial",
+    "source": "int main(){int* p=nullptr;return *p;}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "err_vector_at_bounds",
+    "category": "adversarial",
+    "source": "#include <vector>\nint main(){std::vector<int> v={1,2};return v.at(5);}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "err_string_at_bounds",
+    "category": "adversarial",
+    "source": "#include <string>\nint main(){std::string s=\"abc\";return s.at(10);}",
+    "stdout": "",
+    "phase": "runtime",
+    "exit": 1
+  },
+  {
+    "name": "err_deref_non_pointer",
+    "category": "rejection",
+    "source": "int main(){return *5;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "err_arrow_non_pointer",
+    "category": "rejection",
+    "source": "struct S{int x;};int main(){S s;return s->x;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "err_const_pointee_write",
+    "category": "rejection",
+    "source": "int main(){int x=1;const int* p=&x;*p=2;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "err_const_pointer_reassign",
+    "category": "rejection",
+    "source": "int main(){int x=1;int y=2;int* const p=&x;p=&y;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "err_delete_non_pointer",
+    "category": "rejection",
+    "source": "int main(){delete 10;}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  },
+  {
+    "name": "err_address_of_rvalue",
+    "category": "rejection",
+    "source": "int main(){int* p=&(1+2);}",
+    "stdout": "",
+    "phase": "semantic",
+    "exit": 1
+  }
+]

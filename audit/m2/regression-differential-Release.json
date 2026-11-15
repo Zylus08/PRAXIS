@@ -1,9 +1,9 @@
 {
   "compiler": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.43.34808\\bin\\HostX64\\x64\\cl.EXE",
   "executable": "E:\\PRAXIS\\build\\Release\\praxis.exe",
-  "executable_sha256": "49c941abbadee878af4ed86b3936b8b3b5ac86ca1cfd7adba9277ce612794865",
-  "total": 135,
-  "passed": 135,
+  "executable_sha256": "328b4802c5b280b8f8eda11c42e37bdd9c4a54a2d9a44f81ba7b582e8b2e4220",
+  "total": 137,
+  "passed": 137,
   "results": [
     {
       "name": "add",
@@ -1646,6 +1646,34 @@
     {
       "name": "overload",
       "source_sha256": "5ef9d2ba10ca2fe8c1258a5c432b24907ef029e9e340c7f73ec647451e9d760a",
+      "reference_reused": false,
+      "compile_exit": 0,
+      "stage": "comparison",
+      "passed": true,
+      "reference_stdout": "",
+      "praxis_stdout": "",
+      "reference_exit": 0,
+      "praxis_exit": 0,
+      "check_exit": 0,
+      "diagnostic": ""
+    },
+    {
+      "name": "pointer",
+      "source_sha256": "2db14c34e520993dfc39b3a833112e1fcbae1426d60c0d172ec73e13d64522b0",
+      "reference_reused": false,
+      "compile_exit": 0,
+      "stage": "comparison",
+      "passed": true,
+      "reference_stdout": "",
+      "praxis_stdout": "",
+      "reference_exit": 0,
+      "praxis_exit": 0,
+      "check_exit": 0,
+      "diagnostic": ""
+    },
+    {
+      "name": "scalar_braces",
+      "source_sha256": "f431f4405abccd5542a97cff359aa55101ca30163d17db728952e2aeb570bdf4",
       "reference_reused": false,
       "compile_exit": 0,
       "stage": "comparison",

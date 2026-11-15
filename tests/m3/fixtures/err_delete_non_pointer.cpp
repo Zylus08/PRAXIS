@@ -1,0 +1,1 @@
+int main(){delete 10;}

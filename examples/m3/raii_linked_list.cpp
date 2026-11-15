@@ -1,0 +1,2 @@
+#include <iostream>
+struct Node{int val;Node* next;Node(int v,Node* n):val(v),next(n){std::cout<<"C"<<val;}~Node(){delete next;std::cout<<"D"<<val;}};int main(){Node* head=new Node(1,new Node(2,nullptr));delete head;}

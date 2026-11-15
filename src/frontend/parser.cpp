@@ -32,13 +32,23 @@ bool Parser::typeStart() const {
         return false;
     auto s = peek().text;
     return s == "const" || s == "bool" || s == "char" || s == "int" || s == "long" ||
-           s == "float" || s == "double" || s == "void" ||
-           (s == "std" && peek(1).is("::") && peek(2).is("string")) || knownTypes.contains(s) || templateTypes.contains(s);
+           s == "float" || s == "double" || s == "void" || s == "nullptr_t" || s == "auto" ||
+           s == "vector" || s == "pair" || s == "array" ||
+           (s == "std" && peek(1).is("::") &&
+            (peek(2).is("string") || peek(2).is("vector") || peek(2).is("pair") || peek(2).is("array") || peek(2).is("nullptr_t"))) ||
+           knownTypes.contains(s) || templateTypes.contains(s);
 }
 Type Parser::type() {
-    if(++depth>128)fail(peek().loc,"parse","type nesting limit");struct TypeExit{int& d;~TypeExit(){--d;}}typeExit{depth};
+    if (++depth > 128)
+        fail(peek().loc, "parse", "type nesting limit");
+    struct TypeExit {
+        int &d;
+        ~TypeExit() {
+            --d;
+        }
+    } typeExit{depth};
     Type t;
-    t.constant = match("const");
+    bool leadingConst = match("const");
     auto tok = take();
     auto s = tok.text;
     if (s == "bool")
@@ -56,15 +66,55 @@ Type Parser::type() {
         t.base = Base::Double;
     else if (s == "void")
         t.base = Base::Void;
-    else if (s == "std") {
+    else if (s == "nullptr_t")
+        t.base = Base::Nullptr;
+    else if (s == "auto")
+        t.base = Base::Auto;
+    else if (s == "std" && peek().is("::")) {
         expect("::");
-        expect("string");
-        t.base = Base::String;
-    } else if(templateTypes.contains(s)){t.base=Base::Parameter;t.name=s;}
-    else if(knownTypes.contains(s)){t.base=Base::Record;t.name=s;if(peek().is("<"))t.arguments=typeArguments();}
-    else fail(tok.loc, "parse", "expected supported type");
+        auto name = take();
+        if (name.text == "string") {
+            t.base = Base::String;
+        } else if (name.text == "nullptr_t") {
+            t.base = Base::Nullptr;
+        } else if (name.text == "vector" || name.text == "pair" || name.text == "array") {
+            t.base = Base::Record;
+            t.name = "std::" + name.text;
+            if (peek().is("<"))
+                t.arguments = typeArguments();
+        } else {
+            fail(name.loc, "parse", "unknown standard type: " + name.text);
+        }
+    } else if (s == "vector" || s == "pair" || s == "array") {
+        t.base = Base::Record;
+        t.name = "std::" + s;
+        if (peek().is("<"))
+            t.arguments = typeArguments();
+    } else if (templateTypes.contains(s)) {
+        t.base = Base::Parameter;
+        t.name = s;
+    } else if (knownTypes.contains(s)) {
+        t.base = Base::Record;
+        t.name = s;
+        if (peek().is("<"))
+            t.arguments = typeArguments();
+    } else
+        fail(tok.loc, "parse", "expected supported type");
+
     if (match("const"))
-        t.constant = true;
+        leadingConst = true;
+
+    while (match("*")) {
+        t.pointer++;
+        if (match("const"))
+            t.constant = true;
+    }
+    if (leadingConst) {
+        if (t.pointer > 0)
+            t.pointeeConstant = true;
+        else
+            t.constant = true;
+    }
     t.reference = match("&");
     return t;
 }
@@ -96,8 +146,16 @@ Decl Parser::declaration(Type t, Token name) {
             }
         } else
             d.init = expression();
+    } else if (match("{")) {
+        d.braced = true;
+        if (!match("}")) {
+            do {
+                d.elements.push_back(expression());
+            } while (match(",") && !peek().is("}"));
+            expect("}");
+        }
     }
-    if(match("(")){d.direct=true;if(!match(")")){do{d.arguments.push_back(expression());}while(match(","));expect(")");}}
+    if (match("(")) {d.direct=true;if(!match(")")){do{d.arguments.push_back(expression());}while(match(","));expect(")");}}
     if(d.direct&&d.arguments.empty())fail(name.loc,"parse","empty parentheses declare a function; local function declarations unsupported");
     if(d.direct&&d.arguments.size()==1){auto e=d.arguments[0];if(!e->parenthesized&&e->kind==Expr::Kind::Call&&e->args.size()==1&&e->args[0]->kind==Expr::Kind::Name&&knownTypes.contains(e->args[0]->op))fail(name.loc,"parse","most-vexing function declaration unsupported; parenthesize the expression");}
     expect(";");
@@ -164,8 +222,29 @@ S Parser::statement() {
         return s;
     }
     if (match("for")) {
-        auto s = std::make_shared<Stmt>(Stmt::Kind::For, t);
         expect("(");
+        if (typeStart()) {
+            size_t savedPos = pos;
+            int savedDepth = depth;
+            try {
+                auto ty = type();
+                if (peek().kind == TokenKind::Identifier && peek(1).is(":")) {
+                    auto nameTok = take();
+                    expect(":");
+                    auto rangeExpr = expression();
+                    expect(")");
+                    auto s = std::make_shared<Stmt>(Stmt::Kind::RangeFor, t);
+                    s->decl = Decl{nameTok, ty, {}, {}, false};
+                    s->expr = rangeExpr;
+                    s->children.push_back(statement());
+                    return s;
+                }
+            } catch (...) {
+            }
+            pos = savedPos;
+            depth = savedDepth;
+        }
+        auto s = std::make_shared<Stmt>(Stmt::Kind::For, t);
         s->children.push_back(statement());
         if (!peek().is(";"))
             s->condition = expression();
@@ -231,7 +310,7 @@ E Parser::expression(int minimum) {
 }
 E Parser::prefix() {
     auto t = peek();
-    if (t.is("+") || t.is("-") || t.is("!") || t.is("++") || t.is("--")) {
+    if (t.is("+") || t.is("-") || t.is("!") || t.is("++") || t.is("--") || t.is("&") || t.is("*")) {
         take();
         auto e = std::make_shared<Expr>(Expr::Kind::Unary, t, t.text);
         e->args = {expression(9)};
@@ -240,11 +319,61 @@ E Parser::prefix() {
             fail(t.loc, "parse", "expression tree depth limit");
         return e;
     }
+    if (match("new")) {
+        auto ty = type();
+        auto e = std::make_shared<Expr>(Expr::Kind::New, t);
+        e->type = ty;
+        e->type.pointer++;
+        if (match("[")) {
+            e->op = "[]";
+            e->args.push_back(expression());
+            expect("]");
+        } else if (match("(")) {
+            if (!match(")")) {
+                do {
+                    e->args.push_back(expression());
+                } while (match(","));
+                expect(")");
+            }
+        } else if (match("{")) {
+            if (!match("}")) {
+                do {
+                    e->args.push_back(expression());
+                } while (match(","));
+                expect("}");
+            }
+        }
+        return postfix(e);
+    }
+    if (match("delete")) {
+        auto e = std::make_shared<Expr>(Expr::Kind::Delete, t);
+        if (match("[")) {
+            expect("]");
+            e->op = "[]";
+        }
+        e->args.push_back(expression(9));
+        e->type.base = Base::Void;
+        return e;
+    }
+    if (match("{")) {
+        auto e = std::make_shared<Expr>(Expr::Kind::InitList, t);
+        if (!match("}")) {
+            do {
+                e->args.push_back(expression());
+            } while (match(",") && !peek().is("}"));
+            expect("}");
+        }
+        return postfix(e);
+    }
     E e;
     if (match("(")) {
         e = expression();
         e->parenthesized=true;
         expect(")");
+    } else if (t.is("nullptr")) {
+        take();
+        e = std::make_shared<Expr>(Expr::Kind::Literal, t);
+        e->type.base = Base::Nullptr;
     } else if (t.kind == TokenKind::Integer || t.kind == TokenKind::Floating ||
                t.kind == TokenKind::String || t.kind == TokenKind::Character || t.is("true") ||
                t.is("false")) {
@@ -279,11 +408,23 @@ E Parser::postfix(E e) {
             c->args = {e, expression()};
             expect("]");
             e = c;
-        } else if (match(".")) {
+        } else if (match(".") || match("->")) {
+            bool isArrow = (tokens[pos - 1].text == "->");
             auto n = identifier();
-            auto c = std::make_shared<Expr>(Expr::Kind::Member, n, n.text);
-            c->args = {e};
-            e = c;
+            if (isArrow) {
+                Token starTok = tokens[pos - 2];
+                starTok.text = "*";
+                auto deref = std::make_shared<Expr>(Expr::Kind::Unary, starTok, "*");
+                deref->args = {e};
+                deref->height = e->height + 1;
+                auto c = std::make_shared<Expr>(Expr::Kind::Member, n, n.text);
+                c->args = {deref};
+                e = c;
+            } else {
+                auto c = std::make_shared<Expr>(Expr::Kind::Member, n, n.text);
+                c->args = {e};
+                e = c;
+            }
         } else if (match("++") || match("--")) {
             auto c = std::make_shared<Expr>(Expr::Kind::Postfix, t, t.text);
             c->args = {e};
@@ -303,7 +444,18 @@ E Parser::postfix(E e) {
 std::vector<Type> Parser::typeArguments(){
     expect("<");std::vector<Type> a;
     if(peek().is(">"))fail(peek().loc,"parse","empty template argument list unsupported");
-    do{a.push_back(type());if(a.size()>8)fail(peek().loc,"parse","template argument limit");}while(match(","));
+    do{
+        if (peek().kind == TokenKind::Integer) {
+            auto szTok = take();
+            Type sizeTy;
+            sizeTy.base = Base::Int;
+            sizeTy.extent = std::stoi(szTok.text);
+            a.push_back(sizeTy);
+        } else {
+            a.push_back(type());
+        }
+        if(a.size()>8)fail(peek().loc,"parse","template argument limit");
+    }while(match(","));
     if(peek().is(">>")){auto t=take();t.text=">";tokens.insert(tokens.begin()+static_cast<ptrdiff_t>(pos),t);}
     else expect(">");return a;
 }
@@ -320,7 +472,7 @@ std::vector<Decl> Parser::parameters(){
 bool Parser::functionAhead()const{
     if(!peek().is("("))return false;
     if(peek(1).is(")"))return true;
-    const auto& t=peek(1);return t.kind==TokenKind::Keyword || knownTypes.contains(t.text)||templateTypes.contains(t.text)||(t.is("std")&&peek(2).is("::"));
+    const auto& t=peek(1);return t.kind==TokenKind::Keyword || knownTypes.contains(t.text)||templateTypes.contains(t.text)||(t.is("std")&&peek(2).is("::"))||t.text=="vector"||t.text=="pair"||t.text=="array";
 }
 void Parser::functionBody(const std::shared_ptr<Function>& f){
     f->constMember=match("const");

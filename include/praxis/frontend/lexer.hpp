@@ -6,7 +6,7 @@ struct Token {
     TokenKind kind;
     std::string text;
     Location loc;
-    bool iostreamAvailable = false, stringAvailable = false;
+    bool iostreamAvailable = false, stringAvailable = false, vectorAvailable = false, utilityAvailable = false, algorithmAvailable = false, arrayAvailable = false;
     bool is(const std::string &s) const {
         return (kind == TokenKind::Symbol || kind == TokenKind::Keyword ||
                 kind == TokenKind::Identifier) &&

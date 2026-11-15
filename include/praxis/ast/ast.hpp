@@ -3,10 +3,12 @@
 #include <memory>
 #include <map>
 namespace praxis {
-enum class Base { Void, Bool, Char, Int, Long, Float, Double, String, Text, Stream, Endl, Record, Parameter };
+enum class Base { Void, Bool, Char, Int, Long, Float, Double, String, Text, Stream, Endl, Record, Parameter, Nullptr, Auto };
 struct Type {
     Base base = Base::Void;
     bool constant = false, reference = false;
+    int pointer = 0;
+    bool pointeeConstant = false;
     int extent = 0;
     std::string name;
     std::vector<Type> arguments;
@@ -22,7 +24,7 @@ struct Stmt;
 using E = std::shared_ptr<Expr>;
 using S = std::shared_ptr<Stmt>;
 struct Expr {
-    enum class Kind { Literal, Name, Unary, Binary, Assign, Call, Index, Postfix, Member, Construct } kind;
+    enum class Kind { Literal, Name, Unary, Binary, Assign, Call, Index, Postfix, Member, Construct, New, Delete, InitList } kind;
     Token token;
     std::string op;
     std::vector<E> args;
@@ -56,7 +58,8 @@ struct Stmt {
         Return,
         Break,
         Continue,
-        Empty
+        Empty,
+        RangeFor
     } kind;
     Token token;
     std::vector<S> children;
@@ -96,6 +99,7 @@ struct Item {
 struct Program {
     std::vector<Item> items;
     bool iostream = false, strings = false, script = false;
+    bool vector = false, array = false, utility = false, algorithm = false;
     std::map<std::string,std::shared_ptr<Function>> compiledFunctions;
     std::map<std::string,std::shared_ptr<Class>> compiledClasses;
     size_t instantiations=0, cacheHits=0;
@@ -103,5 +107,6 @@ struct Program {
 };
 struct Limits { size_t calls=128, templateDepth=32, instantiations=256, objects=100000; std::uint64_t steps=10000000; };
 struct Profile { std::uint64_t objects=0,calls=0,destructors=0,constructions=0,copies=0,assignments=0; size_t peakObjects=0; std::uint64_t callNanoseconds=0,constructorNanoseconds=0,destructorNanoseconds=0;
+    std::uint64_t dynamicAllocations=0, dynamicDeletions=0, containerOperations=0;
 };
 } // namespace praxis

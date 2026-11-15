@@ -11,7 +11,7 @@ class Preprocessor {
 
   public:
     std::vector<std::filesystem::path> paths;
-    bool iostream = false, string = false;
+    bool iostream = false, string = false, vector = false, utility = false, algorithm = false, array = false;
     std::vector<Token> run(const Source &);
 };
 } // namespace praxis

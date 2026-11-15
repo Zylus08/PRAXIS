@@ -1,0 +1,1 @@
+int main(){int x=1;int y=2;int* const p=&x;p=&y;}

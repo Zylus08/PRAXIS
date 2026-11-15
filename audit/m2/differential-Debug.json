@@ -1,9 +1,9 @@
 {
   "compiler": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.43.34808\\bin\\HostX64\\x64\\cl.EXE",
   "executable": "E:\\PRAXIS\\build\\Debug\\praxis.exe",
-  "executable_sha256": "b54df841c4811b3313429a593441adfe0f1eb66cede2205eb8f5fead309af6f5",
-  "total": 78,
-  "passed": 78,
+  "executable_sha256": "5a10507737d32e1759993ab8fafd04903e6f05a570f96908934ba01406260037",
+  "total": 79,
+  "passed": 79,
   "results": [
     {
       "name": "basic_class",
@@ -644,6 +644,20 @@
       "passed": true,
       "reference_stdout": "5",
       "praxis_stdout": "5",
+      "reference_exit": 0,
+      "praxis_exit": 0,
+      "check_exit": 0,
+      "diagnostic": ""
+    },
+    {
+      "name": "pointer",
+      "source_sha256": "3bc21383eb7630084c269cba0389b44c01400f51a1566dd010ea55d93014de76",
+      "reference_reused": true,
+      "compile_exit": 0,
+      "stage": "comparison",
+      "passed": true,
+      "reference_stdout": "",
+      "praxis_stdout": "",
       "reference_exit": 0,
       "praxis_exit": 0,
       "check_exit": 0,

@@ -12,6 +12,15 @@ int Analyzer::rank(Type target,const E& e)const{
     auto source=e->type;if(source.extent||target.extent)return -1;
     if(target.reference){if(!e->lvalue||!same(source,target)||(!target.constant&&source.constant))return -1;return 0;}
     if(source.base==Base::Void||target.base==Base::Void)return -1;
+    if (target.pointer > 0) {
+        if (source.base == Base::Nullptr) return 1;
+        if (source.pointer == target.pointer && source.base == target.base && source.name == target.name && source.arguments == target.arguments) {
+            if (!target.pointeeConstant && source.pointeeConstant) return -1;
+            return target.pointeeConstant == source.pointeeConstant ? 0 : 1;
+        }
+        return -1;
+    }
+    if (source.pointer > 0) return -1;
     if(same(source,target))return 0;
     if(numeric(source)&&numeric(target)){
         if((source.base==Base::Bool||source.base==Base::Char)&&target.base==Base::Int)return 1;
@@ -87,14 +96,14 @@ Analyzer::F Analyzer::select(std::vector<F> candidates,const std::vector<E>& arg
     F winner;for(auto& c:viable){bool wins=true;for(auto& other:viable)if(&other!=&c&&!better(c,other)){wins=false;break;}if(wins){winner=c.f;break;}}
     if(!winner){if(viable.size()==1)winner=viable[0].f;else fail(loc,"semantic","ambiguous overload");}
     checkAccess(winner,loc);called.insert(winner->id);
-    for(size_t i=0;i<args.size();++i)if(!winner->params[i].type.reference&&winner->params[i].type.base==Base::Record)planCopy(args[i],winner->params[i].type);
+    for(size_t i=0;i<args.size();++i)if(!winner->params[i].type.reference&&winner->params[i].type.base==Base::Record&&winner->params[i].type.pointer==0)planCopy(args[i],winner->params[i].type);
     if(winner->instantiated||winner->special!=Function::Special::User){try{checkFunction(winner);}catch(const Error& error){if(winner->instantiated)fail(loc,"semantic","instantiating "+winner->id+": "+error.what());throw;}}
     return winner;
 }
 void Analyzer::checkAccess(const F& f,const Location& l){if(!f->publicAccess&&currentClass!=f->owner)fail(l,"semantic","private member is inaccessible");}
 void Analyzer::planCopy(const E& e,Type t){
-    if(t.base!=Base::Record)return;
-    if(!e->lvalue&&e->type.base==Base::Record&&same(e->type,t))return;
+    if(t.base!=Base::Record||t.pointer>0)return;
+    if(!e->lvalue&&e->type.base==Base::Record&&e->type.pointer==0&&same(e->type,t))return;
     auto f=constructor(t,{e},e->token.loc);e->copyTarget=f->id;
 }
 Type Analyzer::callExpression(const E& e){
@@ -102,12 +111,151 @@ Type Analyzer::callExpression(const E& e){
     std::vector<F> candidates;E object;
     if(callee->kind==Expr::Kind::Member){
         object=callee->args[0];auto t=expr(object);
-        if(t.base==Base::String){if(!args.empty())fail(e->token.loc,"semantic","string member takes no arguments");if(callee->op!="size"&&callee->op!="length"&&callee->op!="empty")fail(callee->token.loc,"semantic","unsupported string member");e->target="native:"+callee->op;return {callee->op=="empty"?Base::Bool:Base::Long};}
+        if(t.base==Base::String){
+            if(callee->op=="size"||callee->op=="length"||callee->op=="empty"){
+                if(!args.empty())fail(e->token.loc,"semantic","string member takes no arguments");
+                e->target="native:string."+callee->op;
+                return {callee->op=="empty"?Base::Bool:Base::Long};
+            }
+            if(callee->op=="at"){
+                if(args.size()!=1||!integral(args[0]->type))fail(e->token.loc,"semantic","string::at takes 1 integer argument");
+                e->target="native:string.at";
+                e->lvalue=!t.constant;
+                return {Base::Char};
+            }
+            if(callee->op=="substr"){
+                if(args.empty()||args.size()>2)fail(e->token.loc,"semantic","string::substr takes 1 or 2 arguments");
+                for(auto a:args)if(!integral(a->type))fail(e->token.loc,"semantic","string::substr arguments must be integral");
+                e->target="native:string.substr";
+                return {Base::String};
+            }
+            fail(callee->token.loc,"semantic","unsupported string member: "+callee->op);
+        }
+        if(t.base==Base::Record && (t.name=="std::vector" || t.name=="std::array")){
+            Type elemTy = t.arguments[0];
+            if(callee->op=="size"||callee->op=="empty"){
+                if(!args.empty())fail(e->token.loc,"semantic","container method takes no arguments");
+                e->target="native:vector."+callee->op;
+                return {callee->op=="empty"?Base::Bool:Base::Long};
+            }
+            if(callee->op=="push_back"){
+                if(args.size()!=1)fail(e->token.loc,"semantic","push_back requires 1 argument");
+                convert(args[0],elemTy);
+                e->target="native:vector.push_back";
+                return {Base::Void};
+            }
+            if(callee->op=="pop_back"||callee->op=="clear"){
+                if(!args.empty())fail(e->token.loc,"semantic","pop_back/clear takes no arguments");
+                e->target="native:vector."+callee->op;
+                return {Base::Void};
+            }
+            if(callee->op=="front"||callee->op=="back"){
+                if(!args.empty())fail(e->token.loc,"semantic","front/back takes no arguments");
+                e->target="native:vector."+callee->op;
+                e->lvalue=true;
+                return elemTy;
+            }
+            if(callee->op=="at"){
+                if(args.size()!=1||!integral(args[0]->type))fail(e->token.loc,"semantic","at takes 1 integral argument");
+                e->target="native:vector.at";
+                e->lvalue=true;
+                return elemTy;
+            }
+            if(callee->op=="begin"||callee->op=="end"){
+                if(!args.empty())fail(e->token.loc,"semantic","begin/end takes no arguments");
+                e->target="native:vector."+callee->op;
+                Type ptrTy = elemTy;
+                ptrTy.pointer = 1;
+                ptrTy.constant = false;
+                ptrTy.pointeeConstant = t.constant;
+                return ptrTy;
+            }
+            if(callee->op=="reserve"){
+                if(args.size()!=1||!integral(args[0]->type))fail(e->token.loc,"semantic","reserve takes 1 integral argument");
+                e->target="native:vector.reserve";
+                return {Base::Void};
+            }
+            if(callee->op=="resize"){
+                if(args.empty()||args.size()>2||!integral(args[0]->type))fail(e->token.loc,"semantic","resize takes 1 or 2 arguments");
+                if(args.size()==2)convert(args[1],elemTy);
+                e->target="native:vector.resize";
+                return {Base::Void};
+            }
+            fail(callee->token.loc,"semantic","unsupported container method: "+callee->op);
+        }
         auto c=record(t,e->token.loc);for(auto f:c->methods)if(!f->constructor&&!f->destructor&&f->name.text==callee->op)candidates.push_back(program->compiledFunctions.at(f->id));
     }else if(callee->kind==Expr::Kind::Name){
+        std::string name = callee->op;
+        if(name=="std::make_pair"||name=="make_pair"){
+            if(args.size()!=2)fail(e->token.loc,"semantic","make_pair requires 2 arguments");
+            Type pairTy{Base::Record};
+            pairTy.name="std::pair";
+            pairTy.arguments={args[0]->type,args[1]->type};
+            e->target="native:make_pair";
+            return pairTy;
+        }
+        if(name=="std::move"||name=="move"){
+            if(args.size()!=1)fail(e->token.loc,"semantic","move requires 1 argument");
+            e->target="native:move";
+            return args[0]->type;
+        }
+        if(name=="std::swap"||name=="swap"){
+            if(args.size()!=2)fail(e->token.loc,"semantic","swap requires 2 arguments");
+            modifiable(args[0]);modifiable(args[1]);
+            if(args[0]->type!=args[1]->type)fail(e->token.loc,"semantic","swap arguments type mismatch");
+            e->target="native:swap";
+            return {Base::Void};
+        }
+        if(name=="std::min"||name=="min"||name=="std::max"||name=="max"){
+            if(args.size()!=2)fail(e->token.loc,"semantic","min/max requires 2 arguments");
+            if(!numeric(args[0]->type)||!numeric(args[1]->type))fail(e->token.loc,"semantic","min/max requires arithmetic arguments");
+            e->target=std::string("native:")+(name.ends_with("min")?"min":"max");
+            return common(args[0]->type,args[1]->type);
+        }
+        if(name=="std::sort"||name=="sort"||name=="std::reverse"||name=="reverse"){
+            if(args.size()!=2)fail(e->token.loc,"semantic","sort/reverse requires 2 iterators");
+            if(args[0]->type.pointer<=0||args[1]->type.pointer<=0)fail(e->token.loc,"semantic","sort/reverse arguments must be iterators/pointers");
+            e->target=std::string("native:")+(name.ends_with("sort")?"sort":"reverse");
+            return {Base::Void};
+        }
+        if(name=="std::find"||name=="find"){
+            if(args.size()!=3)fail(e->token.loc,"semantic","find requires 3 arguments (first, last, val)");
+            if(args[0]->type.pointer<=0||args[1]->type.pointer<=0)fail(e->token.loc,"semantic","find first/last must be iterators/pointers");
+            e->target="native:find";
+            return args[0]->type;
+        }
+        if(name=="std::count"||name=="count"){
+            if(args.size()!=3)fail(e->token.loc,"semantic","count requires 3 arguments (first, last, val)");
+            if(args[0]->type.pointer<=0||args[1]->type.pointer<=0)fail(e->token.loc,"semantic","count first/last must be iterators/pointers");
+            e->target="native:count";
+            return {Base::Long};
+        }
         Type constructed=callee->type;
-        if(classPatterns.contains(callee->op)||program->compiledClasses.contains(callee->op)){constructed.base=Base::Record;constructed.name=callee->op;constructed.arguments=callee->typeArguments;if(callee->op==currentClass)constructed=program->compiledClasses.at(currentClass)->type;}
-        if(constructed.base!=Base::Void){constructed=resolve(constructed,e->token.loc);if(constructed.base!=Base::Record)fail(e->token.loc,"semantic","dependent scalar functional casts unsupported");auto f=constructor(constructed,args,e->token.loc);e->kind=Expr::Kind::Construct;e->args=args;e->target=f->id;checkDestructor(constructed,e->token.loc);return constructed;}
+        if(classPatterns.contains(callee->op)||program->compiledClasses.contains(callee->op)||(callee->op.starts_with("std::")&&(callee->op.ends_with("vector")||callee->op.ends_with("pair")))){
+            constructed.base=Base::Record;constructed.name=callee->op;constructed.arguments=callee->typeArguments;if(callee->op==currentClass)constructed=program->compiledClasses.at(currentClass)->type;
+        }
+        if(constructed.base!=Base::Void){
+            constructed=resolve(constructed,e->token.loc);
+            if(constructed.name=="std::pair"){
+                e->kind=Expr::Kind::Construct;
+                e->args=args;
+                e->target="native:pair.$ctor";
+                return constructed;
+            }
+            if(constructed.name=="std::vector"){
+                e->kind=Expr::Kind::Construct;
+                e->args=args;
+                e->target="native:vector.$ctor";
+                return constructed;
+            }
+            if(constructed.base!=Base::Record)fail(e->token.loc,"semantic","dependent scalar functional casts unsupported");
+            auto f=constructor(constructed,args,e->token.loc);
+            e->kind=Expr::Kind::Construct;
+            e->args=args;
+            e->target=f->id;
+            checkDestructor(constructed,e->token.loc);
+            return constructed;
+        }
         bool memberName=false;if(!currentClass.empty()){auto c=program->compiledClasses.at(currentClass);for(auto f:c->methods)if(!f->constructor&&!f->destructor&&f->name.text==callee->op){candidates.push_back(program->compiledFunctions.at(f->id));memberName=true;}}
         for(size_t i=scopes.size();i>1;--i)if(scopes[i-1].contains(callee->op))fail(callee->token.loc,"semantic","called name denotes an object");
         if(memberName){object=std::make_shared<Expr>(Expr::Kind::Name,callee->token);object->type=program->compiledClasses.at(currentClass)->type;object->type.constant=constMethod;e->implicitMember=true;}

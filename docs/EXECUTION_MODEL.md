@@ -1,9 +1,9 @@
-# Execution and Lifetime Model (Milestone M2)
+# Execution and Lifetime Model (v0.1.0-rc1 / Milestone M3)
 
 ## 1. Values and Object Identity
 
-- `Value` contains a semantic type plus a variant data payload (`std::int64_t`, `double`, `std::string`, or `std::shared_ptr<Object>`). The variant is an internal storage vehicle; target-language behavior is governed entirely by explicit type metadata, conversion rules, and operator semantics.
-- `Object` represents an lvalue storage location. It stores declared type, initialization status (`initialized`), storage activity (`alive`), construction completeness (`complete`), destruction re-entry guard (`destroying`), scalar payload, array elements, and class member structures (`fields` for name lookup, `members` for declaration-order operations).
+- `Value` contains a semantic type plus a variant data payload (`std::int64_t`, `double`, `std::string`, `std::shared_ptr<Object>`, or `Pointer`). The variant is an internal storage vehicle; target-language behavior is governed entirely by explicit type metadata, conversion rules, and operator semantics.
+- `Object` represents an lvalue storage location. It stores declared type, initialization status (`initialized`), storage activity (`alive`), construction completeness (`complete`), destruction re-entry guard (`destroying`), unique identifier (`id`), incarnation epoch (`generation`), dynamic allocation flag (`isHeap`), deallocation flag (`deleted`), scalar payload, array elements, and class member structures (`fields` for name lookup, `members` for declaration-order operations).
 - References (`T&`) alias existing `Object` instances without transferring ownership or creating duplicate storage.
 - Reading or writing through an alias whose referent has expired (`alive == false`) is trapped and diagnosed at runtime:
   ```text
@@ -28,8 +28,8 @@ Praxis implements complete, deterministic Resource Acquisition Is Initialization
 - When execution leaves a scope, `Interpreter::cleanup(Scope& scope)` unwinds `scope.owned` in **reverse construction order** (`rbegin()` to `rend()`):
   1. The class destructor (if defined) is invoked via `Interpreter::destroy()`.
   2. The object's member variables are destroyed in reverse declaration order.
-  3. Array elements are destroyed in reverse index order.
-  4. The object is tombstoned (`alive = false`, `complete = false`).
+  3. Container elements are destroyed in reverse index order.
+  4. The object is tombstoned (`alive = false`, `complete = false`, `generation++`).
   5. The global live object count is decremented.
 
 ### 3.1 Control-Flow Scope Boundaries
@@ -49,7 +49,29 @@ If construction is interrupted by an error (e.g. division by zero in an initiali
 
 ---
 
-## 5. Execution Limits and Profiling
+## 5. Abstract Pointer Handles & Generation Epochs
+
+Pointers (`praxis::Pointer`) are represented as abstract handles rather than virtual memory addresses:
+- `targetId`: Monotonic global ID of the target object.
+- `generation`: Incarnation counter of the target object.
+- `offset`: Index offset within sequential element storage.
+- `isNull`: Explicit null status flag.
+
+When an object is destroyed, `generation` is incremented. Dereferencing a pointer checks that `target->generation == generation` and `target->alive == true`. Dangling stack references and use-after-free conditions are trapped immediately.
+
+---
+
+## 6. Dynamic Heap Object Storage
+
+- Objects allocated via `new T` have `isHeap = true`.
+- Deallocation via `delete p` validates that `target->isHeap` is true, ensuring stack objects cannot be deleted as heap storage.
+- `delete nullptr` is a safe no-op.
+- Double deletion is intercepted via `target->deleted == true`.
+- Dynamic allocations honor the `--max-objects` limit and increment `profile.dynamicAllocations` / `profile.dynamicDeletions`.
+
+---
+
+## 7. Execution Limits and Profiling
 
 Praxis bounds interpreter resource consumption to prevent host stack exhaustion, uncontrolled memory growth, or infinite loops:
 - Step limit: 10,000,000 steps per run (configurable via `--max-steps`).
@@ -59,4 +81,4 @@ Praxis bounds interpreter resource consumption to prevent host stack exhaustion,
 - Live object limit: 100,000 concurrent objects (configurable via `--max-objects`).
 - Parsing and preprocessing limits: AST height 128, expression depth 256, macro recursion 100, expansion size 1,000,000 tokens.
 
-Telemetry is available via `praxis run FILE --profile`, which outputs a JSON breakdown of preprocessing, parsing, semantic analysis, template substitution, runtime dispatch, object constructions, destructors, and peak memory working set.
+Telemetry is available via `praxis run FILE --profile`, which outputs a JSON breakdown of preprocessing, parsing, semantic analysis, template substitution, runtime dispatch, object constructions, destructors, dynamic allocations, deallocations, container operations, and peak memory working set.

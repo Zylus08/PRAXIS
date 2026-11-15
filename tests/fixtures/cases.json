@@ -1321,19 +1321,19 @@
   },
   {
     "name": "pointer",
-    "category": "syntax_rejection",
+    "category": "pointer_extension",
     "source": "#include <iostream>\n#include <string>\nint main(){int* p;}\n",
     "stdout": "",
-    "exit": 1,
-    "phase": "parse"
+    "exit": 0,
+    "phase": null
   },
   {
     "name": "scalar_braces",
-    "category": "syntax_rejection",
+    "category": "initializer_list_extension",
     "source": "#include <iostream>\n#include <string>\nint main(){int x{1};}\n",
     "stdout": "",
-    "exit": 1,
-    "phase": "parse"
+    "exit": 0,
+    "phase": null
   },
   {
     "name": "missing_paren",
@@ -1434,7 +1434,7 @@
   {
     "name": "unknown_header",
     "category": "preprocess_rejection",
-    "source": "#include <vector>\nint main(){}",
+    "source": "#include <future>\nint main(){}\n",
     "stdout": "",
     "exit": 1,
     "phase": "preprocess"

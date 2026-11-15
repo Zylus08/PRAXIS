@@ -1,7 +1,13 @@
 #include "praxis/native/bindings.hpp"
 namespace praxis {
 void output(std::ostream &out, const Value &v) {
-    if (std::holds_alternative<std::string>(v.data))
+    if (std::holds_alternative<Pointer>(v.data)) {
+        const auto &p = std::get<Pointer>(v.data);
+        if (p.isNull || p.targetId == 0)
+            out << "0";
+        else
+            out << p.targetId;
+    } else if (std::holds_alternative<std::string>(v.data))
         out << (v.type.base == Base::Text ? std::get<std::string>(v.data).substr(
                                                 0, std::get<std::string>(v.data).find(char(0)))
                                           : std::get<std::string>(v.data));

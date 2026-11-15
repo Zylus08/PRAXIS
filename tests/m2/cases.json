@@ -609,11 +609,11 @@
   },
   {
     "name": "pointer",
-    "category": "unsupported",
+    "category": "pointer_extension",
     "source": "#include <iostream>\n#include <string>\nstruct S {};int main(){S* p;}",
     "stdout": "",
-    "phase": "parse",
-    "exit": 1
+    "phase": null,
+    "exit": 0
   },
   {
     "name": "user_assignment",

@@ -23,6 +23,8 @@ std::pair<std::int64_t, std::int64_t> bounds(Base b) {
 Value zero(Type t) {
     t.reference = false;
     t.extent = 0;
+    if (t.pointer > 0 || t.base == Base::Nullptr)
+        return {t, Pointer{}};
     if (t.base == Base::String || t.base == Base::Text)
         return {t, std::string{}};
     if (t.base == Base::Float || t.base == Base::Double)
@@ -31,6 +33,8 @@ Value zero(Type t) {
 }
 Value literal(const Expr &e) {
     auto t = e.type;
+    if (t.base == Base::Nullptr || e.token.text == "nullptr")
+        return {{Base::Nullptr}, Pointer{}};
     if (t.base == Base::Text)
         return {t, e.token.text};
     if (t.base == Base::Bool)
@@ -42,6 +46,8 @@ Value literal(const Expr &e) {
     return {t, std::stoll(e.token.text)};
 }
 bool truth(const Value &v) {
+    if (std::holds_alternative<Pointer>(v.data))
+        return !std::get<Pointer>(v.data).isNull && std::get<Pointer>(v.data).targetId != 0;
     return std::holds_alternative<double>(v.data) ? std::get<double>(v.data) != 0 : integer(v) != 0;
 }
 Value read(const Evaluation &e, const Location &l) {
@@ -53,12 +59,20 @@ Value read(const Evaluation &e, const Location &l) {
         fail(l, "runtime", "read of uninitialized object");
     if (e.object->type.extent)
         fail(l, "runtime", "array cannot be read as scalar");
-    if(e.object->type.base==Base::Record)return {e.object->type,e.object};
+    if (e.object->type.base == Base::Record && e.object->type.pointer == 0)
+        return {e.object->type, e.object};
     return e.object->value;
 }
 Value convertValue(Value v, Type t, const Location &l) {
     t.reference = false;
     t.extent = 0;
+    if (t.pointer > 0) {
+        if (v.type.base == Base::Nullptr)
+            return {t, Pointer{}};
+        if (v.type.pointer > 0 && std::holds_alternative<Pointer>(v.data))
+            return {t, std::get<Pointer>(v.data)};
+        fail(l, "runtime", "invalid pointer conversion");
+    }
     if (t.base == Base::String) {
         if (v.type.base == Base::Text) {
             auto &text = std::get<std::string>(v.data);
@@ -98,6 +112,41 @@ Value convertValue(Value v, Type t, const Location &l) {
 }
 Value binary(const std::string &op, Value a, Value b, const Location &l) {
     auto boolean = [](bool x) { return Value{{Base::Bool}, std::int64_t{x ? 1 : 0}}; };
+    if (a.type.pointer > 0 || a.type.base == Base::Nullptr || b.type.pointer > 0 || b.type.base == Base::Nullptr) {
+        auto getPtr = [](const Value &v) {
+            return std::holds_alternative<Pointer>(v.data) ? std::get<Pointer>(v.data) : Pointer{};
+        };
+        auto p1 = getPtr(a);
+        auto p2 = getPtr(b);
+        if (op == "==")
+            return boolean(p1 == p2);
+        if (op == "!=")
+            return boolean(!(p1 == p2));
+        if (op == "<")
+            return boolean(p1.offset < p2.offset);
+        if (op == "<=")
+            return boolean(p1.offset <= p2.offset);
+        if (op == ">")
+            return boolean(p1.offset > p2.offset);
+        if (op == ">=")
+            return boolean(p1.offset >= p2.offset);
+        if (op == "+" && a.type.pointer > 0 && integral(b.type)) {
+            p1.offset += static_cast<int>(integer(b));
+            return {a.type, p1};
+        }
+        if (op == "+" && b.type.pointer > 0 && integral(a.type)) {
+            p2.offset += static_cast<int>(integer(a));
+            return {b.type, p2};
+        }
+        if (op == "-" && a.type.pointer > 0 && integral(b.type)) {
+            p1.offset -= static_cast<int>(integer(b));
+            return {a.type, p1};
+        }
+        if (op == "-" && a.type.pointer > 0 && b.type.pointer > 0) {
+            return Value{Type{Base::Long}, static_cast<std::int64_t>(p1.offset - p2.offset)};
+        }
+        fail(l, "runtime", "unsupported pointer binary operator");
+    }
     if (a.type.base == Base::String || a.type.base == Base::Text || b.type.base == Base::String ||
         b.type.base == Base::Text) {
         auto text = [](const Value &v) {

@@ -154,13 +154,13 @@ std::vector<Token> lex(const Source &s) {
         } else {
             static const std::unordered_set<std::string> pairs = {
                 "++", "--", "+=", "-=", "*=", "/=", "%=", "==",
-                "!=", "<=", ">=", "&&", "||", "<<", ">>", "::"};
+                "!=", "<=", ">=", "&&", "||", "<<", ">>", "::", "->"};
             t += take();
             std::string pair = t + peek();
             if (pairs.contains(pair))
                 t += take();
             else if (std::string("+-*/%=!<>&|;:,(){}[].#~").find(t[0]) == std::string::npos)
-                fail(start, "lex", "unsupported character");
+                fail(start, "lex", std::string("unsupported character: '") + t + "' (" + std::to_string(static_cast<unsigned char>(t[0])) + ")");
         }
         out.push_back({k, t, start});
     }

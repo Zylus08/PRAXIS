@@ -1,0 +1,516 @@
+{
+  "executable": "E:\\PRAXIS\\build\\Release\\praxis.exe",
+  "executable_sha256": "328b4802c5b280b8f8eda11c42e37bdd9c4a54a2d9a44f81ba7b582e8b2e4220",
+  "total": 55,
+  "passed": 55,
+  "categories": {
+    "pointer": 12,
+    "dynamic": 4,
+    "raii": 3,
+    "stl_vector": 9,
+    "stl_utility": 4,
+    "stl_algorithm": 5,
+    "range_for": 3,
+    "acceptance": 1,
+    "stl_string": 1,
+    "adversarial": 7,
+    "rejection": 6
+  },
+  "results": [
+    {
+      "name": "pointer_scalar_int",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "25 25",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_scalar_double",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "7.25",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_nullptr",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "14",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_arrow_struct",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "12,34",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_to_class",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "6",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_param",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "30",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_multi_level",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "99",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_const_pointee",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "42",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_const_pointer",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "50",
+      "stderr": ""
+    },
+    {
+      "name": "dynamic_scalar",
+      "category": "dynamic",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "42",
+      "stderr": ""
+    },
+    {
+      "name": "dynamic_class",
+      "category": "dynamic",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C7M7D7",
+      "stderr": ""
+    },
+    {
+      "name": "delete_null",
+      "category": "dynamic",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "OK",
+      "stderr": ""
+    },
+    {
+      "name": "dynamic_loop",
+      "category": "dynamic",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "150",
+      "stderr": ""
+    },
+    {
+      "name": "raii_raw_wrapper",
+      "category": "raii",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C100D",
+      "stderr": ""
+    },
+    {
+      "name": "raii_linked_list",
+      "category": "raii",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C2C1D2D1",
+      "stderr": ""
+    },
+    {
+      "name": "raii_early_return",
+      "category": "raii",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "C1C2D2D142",
+      "stderr": ""
+    },
+    {
+      "name": "vector_default",
+      "category": "stl_vector",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "0 empty",
+      "stderr": ""
+    },
+    {
+      "name": "vector_init_list",
+      "category": "stl_vector",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3 10 20 30",
+      "stderr": ""
+    },
+    {
+      "name": "vector_push_pop",
+      "category": "stl_vector",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "322",
+      "stderr": ""
+    },
+    {
+      "name": "vector_front_back",
+      "category": "stl_vector",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "100 300",
+      "stderr": ""
+    },
+    {
+      "name": "vector_indexing",
+      "category": "stl_vector",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "5 50 25",
+      "stderr": ""
+    },
+    {
+      "name": "vector_clear",
+      "category": "stl_vector",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "0 empty",
+      "stderr": ""
+    },
+    {
+      "name": "vector_copy_ctor",
+      "category": "stl_vector",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "2 3",
+      "stderr": ""
+    },
+    {
+      "name": "vector_copy_assign",
+      "category": "stl_vector",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "2 3",
+      "stderr": ""
+    },
+    {
+      "name": "vector_iterator_loop",
+      "category": "stl_vector",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "123",
+      "stderr": ""
+    },
+    {
+      "name": "utility_pair",
+      "category": "stl_utility",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "10 20",
+      "stderr": ""
+    },
+    {
+      "name": "utility_make_pair",
+      "category": "stl_utility",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "30 40",
+      "stderr": ""
+    },
+    {
+      "name": "utility_swap",
+      "category": "stl_utility",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "2 1",
+      "stderr": ""
+    },
+    {
+      "name": "utility_move",
+      "category": "stl_utility",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "42",
+      "stderr": ""
+    },
+    {
+      "name": "algo_min_max",
+      "category": "stl_algorithm",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "10 20",
+      "stderr": ""
+    },
+    {
+      "name": "algo_sort",
+      "category": "stl_algorithm",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "10 20 30 ",
+      "stderr": ""
+    },
+    {
+      "name": "algo_reverse",
+      "category": "stl_algorithm",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3 2 1 ",
+      "stderr": ""
+    },
+    {
+      "name": "algo_find",
+      "category": "stl_algorithm",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "20",
+      "stderr": ""
+    },
+    {
+      "name": "algo_count",
+      "category": "stl_algorithm",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3",
+      "stderr": ""
+    },
+    {
+      "name": "range_for_vector_int",
+      "category": "range_for",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "60",
+      "stderr": ""
+    },
+    {
+      "name": "range_for_vector_auto",
+      "category": "range_for",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "24",
+      "stderr": ""
+    },
+    {
+      "name": "range_for_string",
+      "category": "range_for",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "6",
+      "stderr": ""
+    },
+    {
+      "name": "accumulator",
+      "category": "acceptance",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "60",
+      "stderr": ""
+    },
+    {
+      "name": "string_methods",
+      "category": "stl_string",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "14 14 Praxis H",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_arithmetic",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "200 300 100",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_subtraction",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "3",
+      "stderr": ""
+    },
+    {
+      "name": "pointer_relational",
+      "category": "pointer",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 0,
+      "stdout": "1 0 1 0",
+      "stderr": ""
+    },
+    {
+      "name": "err_double_free",
+      "category": "adversarial",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_double_free.cpp:1:39: runtime: double free detected\n"
+    },
+    {
+      "name": "err_delete_stack",
+      "category": "adversarial",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_delete_stack.cpp:1:31: runtime: cannot delete non-heap object\n"
+    },
+    {
+      "name": "err_use_after_free",
+      "category": "adversarial",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_use_after_free.cpp:1:47: runtime: use after free\n"
+    },
+    {
+      "name": "err_dangling_stack",
+      "category": "adversarial",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_dangling_stack.cpp:1:59: runtime: dereference of expired object\n"
+    },
+    {
+      "name": "err_null_deref",
+      "category": "adversarial",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_null_deref.cpp:1:34: runtime: null pointer dereference\n"
+    },
+    {
+      "name": "err_vector_at_bounds",
+      "category": "adversarial",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_vector_at_bounds.cpp:2:48: runtime: vector::at out of range\n"
+    },
+    {
+      "name": "err_string_at_bounds",
+      "category": "adversarial",
+      "passed": true,
+      "check_exit": 0,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_string_at_bounds.cpp:2:43: runtime: string::at out of range\n"
+    },
+    {
+      "name": "err_deref_non_pointer",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_deref_non_pointer.cpp:1:19: semantic: dereference requires pointer operand\n"
+    },
+    {
+      "name": "err_arrow_non_pointer",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_arrow_non_pointer.cpp:1:41: semantic: dereference requires pointer operand\n"
+    },
+    {
+      "name": "err_const_pointee_write",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_const_pointee_write.cpp:1:36: semantic: expression is not a modifiable scalar lvalue\n"
+    },
+    {
+      "name": "err_const_pointer_reassign",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_const_pointer_reassign.cpp:1:44: semantic: expression is not a modifiable scalar lvalue\n"
+    },
+    {
+      "name": "err_delete_non_pointer",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_delete_non_pointer.cpp:1:12: semantic: delete requires pointer operand\n"
+    },
+    {
+      "name": "err_address_of_rvalue",
+      "category": "rejection",
+      "passed": true,
+      "check_exit": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "E:\\PRAXIS\\tests\\m3\\fixtures\\err_address_of_rvalue.cpp:1:19: semantic: address-of requires an lvalue\n"
+    }
+  ]
+}

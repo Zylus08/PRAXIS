@@ -1,10 +1,10 @@
-# Semantic Rules and Evaluation Model (Milestone M2)
+# Semantic Rules and Evaluation Model (v0.1.0-rc1 / Milestone M3)
 
 ## 1. Static Analysis and Execution Separation
 
 Praxis enforces strict separation between static analysis and runtime evaluation:
 1. **Frontend Parsing:** Constructs a typed Abstract Syntax Tree (AST).
-2. **Semantic Analysis (`Analyzer`):** Resolves symbols, checks types, verifies access control, validates member initializer lists, performs overload resolution, instantiates templates on demand, and annotates AST nodes with type and value category information without executing interpreted code.
+2. **Semantic Analysis (`Analyzer`):** Resolves symbols, checks types, verifies access control, validates member initializer lists, performs overload resolution, instantiates templates on demand, and annotates AST nodes with type, value category, and overload information without executing interpreted code.
 3. **Runtime Interpretation (`Interpreter`):** The runtime tree-walker consumes only statically verified ASTs.
 
 ---
@@ -12,10 +12,8 @@ Praxis enforces strict separation between static analysis and runtime evaluation
 ## 2. Object Model and Value Categories
 
 - **Lvalues and Prvalues:** Expressions evaluating to storage locations are marked `lvalue = true`. Literals, arithmetic results, and constructor expressions are prvalues (`lvalue = false`).
-- **References:** Lvalue references (`T&`, `const T&`) bind directly to existing `Object` instances. References do not transfer ownership, and destroying a reference alias does not affect the referent's lifetime. Reading or writing through an alias to a destroyed object triggers a runtime diagnostic:
-  ```text
-  runtime: object lifetime has ended
-  ```
+- **References:** Lvalue references (`T&`, `const T&`) bind directly to existing `Object` instances. References do not transfer ownership, and destroying a reference alias does not affect the referent's lifetime. Reading or writing through an alias to a destroyed object triggers a runtime diagnostic: `runtime: object lifetime has ended`.
+- **Pointers vs References:** Unlike references, pointers are first-class values stored in `praxis::Value` as abstract handles (`targetId`, `generation`, `target`, `offset`). Pointers can be reassigned, point to null, and undergo arithmetic.
 - **Copy Elision:** In direct initialization of the form `C c = C(10);`, Praxis detects that the initializer is an un-aliased prvalue of matching type and elides the redundant copy constructor, taking direct ownership of the temporary storage.
 
 ---
@@ -25,7 +23,7 @@ Praxis enforces strict separation between static analysis and runtime evaluation
 - **Declaration Order Invariant:** Data members are always initialized in their order of declaration within the class body, regardless of the textual order in the constructor's member initializer list.
 - **Default Member Initializers:** Data members with in-class initializers (e.g. `int x = 5;`) are automatically evaluated if omitted from the constructor's initializer list.
 - **Scalar Value Initialization:** An empty member initializer `Member()` executes zero-initialization on scalar fields.
-- **Construction Failure Safety:** If an exception or runtime error occurs during member initialization or constructor body execution:
+- **Construction Failure Safety:** If an error occurs during member initialization or constructor body execution:
   - Construction is immediately aborted.
   - Sub-objects that completed construction prior to the error are destroyed in reverse order of their construction.
   - The incompletely initialized object is never registered in the lexical scope.
@@ -43,46 +41,51 @@ Destruction follows the exact reverse order of construction:
   - Next-iteration step via `continue`.
   - Loop condition termination.
 - **Member Cleanup:** An object's destructor body executes first, followed by the automatic destruction of its member objects in reverse declaration order.
-- **Double Destruction Prevention:** Object storage is tombstoned upon destruction (`alive = false`), and re-entrant destruction calls are rejected via internal guard flags.
+- **Double Destruction Prevention:** Object storage is tombstoned upon destruction (`alive = false`, `generation++`), and re-entrant destruction calls are rejected via internal guard flags.
 
 ---
 
-## 5. Copy Construction and Copy Assignment
+## 5. Pointer Semantics & Abstract Handle Invariants
 
-- **Copy Construction:** Allocates a new `Object` and initializes its fields from a valid, complete source object. Synthesized copy constructors recursively copy-construct member sub-objects.
-- **Copy Assignment:** Mutates an existing destination object's fields using values from a source object:
-  - Self-assignment (`a = a;`) is detected and treated as a safe no-op.
-  - Attempting copy assignment on a class containing `const` data members is rejected at compile time.
-
----
-
-## 6. Overload Resolution Rules
-
-When resolving function calls, constructor calls, or member method calls:
-1. **Candidate Gathering:** Candidates matching the target name are collected into an overload set.
-2. **Viability Filtering:** Candidates with incorrect arity, incompatible types, or const-mismatches are discarded.
-3. **Conversion Ranking:**
-   - **Rank 0 (Exact Match):** Identical types, or binding an lvalue to a reference of matching type and constness.
-   - **Rank 1 (Promotion):** `bool`/`char` $\to$ `int`, `float` $\to$ `double`.
-   - **Rank 2 (Standard Conversion):** Other numeric conversions.
-   - **Rank 3 (String Conversion):** Text literal $\to$ `std::string`.
-4. **Pareto Dominance:** Candidate $A$ is chosen over $B$ if $A$ is at least as good as $B$ on all parameters and strictly better on at least one parameter.
-5. **Tie-Breaker:** Non-template functions are preferred over template instantiations when conversion ranks are equal.
-6. **Ambiguity:** If no unique best candidate exists, analysis terminates with `semantic: ambiguous overload`.
+- **Address-Of (`&`):** Produces a `Pointer` referencing the lvalue operand's `id` and current `generation`, with `offset = 0`.
+- **Dereference (`*`):**
+  1. Validates `!ptr.isNull` and `ptr.targetId != 0` (otherwise `null pointer dereference`).
+  2. Validates `!target->deleted` (otherwise `use after free`).
+  3. Validates `target->alive` (otherwise `dereference of expired object`).
+  4. Validates `target->generation == ptr.generation` (otherwise `dereference through stale pointer handle`).
+  5. If `target` has elements (`vector`, `array`), bounds-checks `0 <= ptr.offset < target->elements.size()` and returns the element at `ptr.offset`.
+- **Pointer Arithmetic:**
+  - `ptr + n` and `ptr - n` modify `offset` without changing `targetId` or `generation`.
+  - `p2 - p1` computes difference between offsets when pointing to the same container object.
+  - Comparisons (`==`, `!=`, `<`, `<=`, `>`, `>=`) evaluate identity, generation, and relative offset.
 
 ---
 
-## 7. Template Substitution and Instantiation
+## 6. Dynamic Storage Allocation & Deallocation
 
-- **Type Parameters:** Uninstantiated template declarations store type parameters as `Base::Parameter`.
-- **Deduction:** When a function template is called without explicit arguments, types are deduced from the call arguments. Contradictory deductions produce a semantic error.
-- **Substitution:** A specialized AST is generated via deep cloning, replacing type parameter nodes with concrete types.
-- **Caching:** Instantiated specializations are cached by signature key; repeated invocations reuse the cached specialization.
-- **Lazy Semantic Validation:** Instantiated function bodies undergo semantic checking on demand. Semantic errors within the instantiated body report both the failure and the instantiation context.
+- **`new T` / `new T(...)`:**
+  - Enforces quota `liveObjects < limits.objects`.
+  - Allocates heap object with `isHeap = true` and `generation = 1`.
+  - Executes scalar initialization or constructor overload.
+  - Tracks metric `++profile.dynamicAllocations`.
+  - Returns pointer handle.
+- **`delete ptr`:**
+  - If `ptr` is null, safely returns as a no-op without incrementing deallocations.
+  - Validates `ptr` targets a heap object (`isHeap == true`).
+  - Detects double deletion (`target->deleted == true`).
+  - Marks `target->deleted = true`, increments `target->generation`, and calls `destroy(target)`.
+  - Tracks metric `++profile.dynamicDeletions`.
 
 ---
 
-## 8. Arithmetic, Conversion and Safety Diagnostics
+## 7. Container & Range-Based For Semantics
 
-- Windows LLP64 model: `char` (8-bit signed), `int` (32-bit signed), `long long` (64-bit signed), `float` (binary32), `double` (binary64).
-- Arithmetic overflow, division by zero, out-of-range integer conversions, and non-finite floating values are trapped and diagnosed at runtime as safety policies.
+- **Range-For Lowering:**
+  - `for (decl : range) stmt` evaluates `range` once.
+  - Iterates over container elements from `0` to `size - 1`.
+  - For reference declarations (`T&`, `const auto&`), loop variable aliases the element directly.
+  - For value declarations (`T`, `auto`), element is deep-copied or value-converted.
+  - Nested scope is created and destroyed per iteration.
+- **Container Copy & Assignment:**
+  - Copy constructor deep-copies each element into fresh storage cells.
+  - Copy assignment destroys existing elements and deep-copies elements from source.

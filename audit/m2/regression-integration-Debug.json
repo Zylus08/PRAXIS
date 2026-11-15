@@ -1,6 +1,6 @@
 {
   "executable": "E:\\PRAXIS\\build\\Debug\\praxis.exe",
-  "executable_sha256": "b54df841c4811b3313429a593441adfe0f1eb66cede2205eb8f5fead309af6f5",
+  "executable_sha256": "5a10507737d32e1759993ab8fafd04903e6f05a570f96908934ba01406260037",
   "total": 244,
   "passed": 244,
   "categories": {
@@ -20,7 +20,9 @@
     "preprocess": 8,
     "semantic_rejection": 46,
     "overload_extension": 1,
-    "syntax_rejection": 10,
+    "syntax_rejection": 8,
+    "pointer_extension": 1,
+    "initializer_list_extension": 1,
     "lex_rejection": 9,
     "preprocess_rejection": 6,
     "runtime_rejection": 19,
@@ -1019,13 +1021,13 @@
     },
     {
       "name": "pointer",
-      "category": "syntax_rejection",
+      "category": "pointer_extension",
       "passed": true,
       "detail": ""
     },
     {
       "name": "scalar_braces",
-      "category": "syntax_rejection",
+      "category": "initializer_list_extension",
       "passed": true,
       "detail": ""
     },

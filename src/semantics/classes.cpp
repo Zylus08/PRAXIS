@@ -6,6 +6,11 @@ namespace praxis {
 Type Analyzer::resolve(Type t,const Location& l){
     if(t.base==Base::Parameter)fail(l,"semantic","unsubstituted template type: "+t.name);
     if(t.base!=Base::Record)return t;
+    if(t.name=="std::vector" || t.name=="std::pair" || t.name=="std::array") {
+        for(auto& a:t.arguments) a=resolve(a,l);
+        return t;
+    }
+    if(t.pointer > 0) return t;
     for(auto& a:t.arguments){a=resolve(a,l);if(a.reference||a.constant||a.extent||a.base==Base::Void)fail(l,"semantic","unsupported template type argument");}
     auto c=record(t,l);t.name=c->type.name;t.arguments=c->type.arguments;return t;
 }
@@ -13,6 +18,15 @@ std::shared_ptr<Class> Analyzer::record(Type t,const Location& l){
     if(t.base!=Base::Record||t.extent)fail(l,"semantic","member operation requires a class object");
     t.constant=false;t.reference=false;auto key=typeName(t);
     if(program->compiledClasses.contains(key)){if(!t.arguments.empty())++program->cacheHits;return program->compiledClasses.at(key);}
+    if(t.name=="std::vector" || t.name=="std::pair" || t.name=="std::array"){
+        auto c = std::make_shared<Class>();
+        c->key = key;
+        c->name = Token{TokenKind::Identifier, t.name, l};
+        c->type = t;
+        c->assignable = true;
+        program->compiledClasses[key] = c;
+        return c;
+    }
     if(!classPatterns.contains(t.name))fail(l,"semantic","unknown class type: "+t.name);
     auto pattern=classPatterns.at(t.name);
     if(pattern->templateParameters.size()!=t.arguments.size())fail(l,"semantic","incorrect class template argument count");
@@ -32,12 +46,12 @@ void Analyzer::defineClass(const std::shared_ptr<Class>& c){
     for(auto& d:c->fields){
         if(!names.insert(d.name.text).second||d.name.text==c->name.text)fail(d.name.loc,"semantic","duplicate or invalid data member");
         if(d.type.reference||d.type.extent||d.direct)fail(d.name.loc,"semantic","reference/array members and parenthesized in-class data initializers are unsupported");
-        auto raw=d.type;raw.constant=false;raw.reference=false;if(buildingClasses.contains(typeName(raw)))fail(d.name.loc,"semantic","recursive by-value class member");
+        auto raw=d.type;raw.constant=false;raw.reference=false;if(d.type.pointer==0 && buildingClasses.contains(typeName(raw)))fail(d.name.loc,"semantic","recursive by-value class member");
         d.type=resolve(d.type,d.name.loc);
         if(d.type.base==Base::Void)fail(d.name.loc,"semantic","void data member");
         if(d.type.base==Base::String&&!d.name.stringAvailable)fail(d.name.loc,"semantic","std::string requires <string>");
         if(d.type.constant)c->assignable=false;
-        if(d.type.base==Base::Record){auto member=record(d.type,d.name.loc);if(!member->assignable)c->assignable=false;c->nestingDepth=std::max(c->nestingDepth,member->nestingDepth+1);if(c->nestingDepth>limits.templateDepth)fail(d.name.loc,"semantic","nested object depth limit");}
+        if(d.type.base==Base::Record && d.type.pointer==0){auto member=record(d.type,d.name.loc);if(!member->assignable)c->assignable=false;c->nestingDepth=std::max(c->nestingDepth,member->nestingDepth+1);if(c->nestingDepth>limits.templateDepth)fail(d.name.loc,"semantic","nested object depth limit");}
     }
     bool hasConstructor=false,hasCopy=false;size_t destructors=0;
     for(auto f:c->methods){f->owner=c->key;
@@ -72,7 +86,13 @@ void Analyzer::classDeclaration(Decl& d){
         d.constructor=constructor(d.type,d.arguments,d.name.loc)->id;}
 }
 Type Analyzer::memberExpression(const E& e){
-    auto t=expr(e->args[0]);auto c=record(t,e->token.loc);
+    auto t=expr(e->args[0]);
+    if(t.base==Base::Record && t.name=="std::pair"){
+        if(e->op=="first"){e->lvalue=e->args[0]->lvalue;return t.arguments[0];}
+        if(e->op=="second"){e->lvalue=e->args[0]->lvalue;return t.arguments[1];}
+        fail(e->token.loc,"semantic","std::pair member must be 'first' or 'second'");
+    }
+    auto c=record(t,e->token.loc);
     for(auto& d:c->fields)if(d.name.text==e->op){if(!d.publicAccess&&currentClass!=c->key)fail(e->token.loc,"semantic","private data member is inaccessible");auto r=d.type;r.constant=r.constant||t.constant;e->lvalue=e->args[0]->lvalue;if(!e->lvalue&&r.base==Base::Record)fail(e->token.loc,"semantic","class-valued members of temporary objects are unsupported");return r;}
     fail(e->token.loc,"semantic","unknown data member: "+e->op);
 }
@@ -89,7 +109,7 @@ void Analyzer::checkFunction(const F& f){
         if(f->constructor){
             auto c=program->compiledClasses.at(f->owner);
             if(f->special==Function::Special::CopyConstructor){
-                for(auto& d:c->fields)if(d.type.base==Base::Record){auto e=std::make_shared<Expr>(Expr::Kind::Name,d.name);e->type=d.type;e->type.constant=true;e->lvalue=true;constructor(d.type,{e},d.name.loc);checkDestructor(d.type,d.name.loc);}
+                for(auto& d:c->fields)if(d.type.base==Base::Record && d.type.pointer==0){auto e=std::make_shared<Expr>(Expr::Kind::Name,d.name);e->type=d.type;e->type.constant=true;e->lvalue=true;constructor(d.type,{e},d.name.loc);checkDestructor(d.type,d.name.loc);}
             }else{
                 std::set<std::string> seen;
                 for(auto& init:f->initializers){if(!seen.insert(init.name.text).second)fail(init.name.loc,"semantic","duplicate member initializer");bool found=false;for(auto& d:c->fields)found=found||d.name.text==init.name.text;if(!found)fail(init.name.loc,"semantic","unknown member initializer (delegation unsupported)");}
@@ -99,7 +119,7 @@ void Analyzer::checkFunction(const F& f){
                     for(auto& i:f->initializers)if(i.name.text==d.name.text){init=i;explicitInit=true;break;}
                     if(!explicitInit&&d.init)init.args={cloneExpr(d.init,{})};
                     for(auto a:init.args)expr(a);
-                    if(d.type.base==Base::Record){checkDestructor(d.type,d.name.loc);bool elide=false;if(init.args.size()==1&&!init.args[0]->lvalue){auto a=init.args[0]->type,b=d.type;a.constant=false;b.constant=false;elide=a==b;}init.constructor=elide?"$elide":constructor(d.type,init.args,d.name.loc)->id;init.valueInitialize=explicitInit&&init.args.empty();}
+                    if(d.type.base==Base::Record && d.type.pointer==0){checkDestructor(d.type,d.name.loc);bool elide=false;if(init.args.size()==1&&!init.args[0]->lvalue){auto a=init.args[0]->type,b=d.type;a.constant=false;b.constant=false;elide=a==b;}init.constructor=elide?"$elide":constructor(d.type,init.args,d.name.loc)->id;init.valueInitialize=explicitInit&&init.args.empty();}
                     else {if(init.args.size()>1)fail(d.name.loc,"semantic","scalar member takes at most one initializer");if(!init.args.empty())convert(init.args[0],d.type);else if(d.type.constant&&d.type.base!=Base::String&&!explicitInit)fail(d.name.loc,"semantic","const member requires initializer");if(explicitInit&&init.args.empty())init.constructor="$zero";}
                     ordered.push_back(init);
                 }

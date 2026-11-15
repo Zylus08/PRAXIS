@@ -50,6 +50,10 @@ std::vector<Token> Preprocessor::process(const Source &s, int depth) {
             for (auto &t : e) {
                 t.iostreamAvailable = iostream;
                 t.stringAvailable = string;
+                t.vectorAvailable = vector;
+                t.utilityAvailable = utility;
+                t.algorithmAvailable = algorithm;
+                t.arrayAvailable = array;
             }
             out.insert(out.end(), e.begin(), e.end());
             continue;
@@ -85,11 +89,19 @@ std::vector<Token> Preprocessor::process(const Source &s, int depth) {
                     name += line[j].text;
             } else
                 fail(loc, "preprocess", "expected quoted or bracketed header");
-            if (angle && (name == "iostream" || name == "string")) {
+            if (angle && (name == "iostream" || name == "string" || name == "vector" || name == "utility" || name == "algorithm" || name == "array")) {
                 if (name == "iostream")
                     iostream = true;
-                else
+                else if (name == "string")
                     string = true;
+                else if (name == "vector")
+                    vector = true;
+                else if (name == "utility")
+                    utility = true;
+                else if (name == "algorithm")
+                    algorithm = true;
+                else if (name == "array")
+                    array = true;
                 continue;
             }
             std::vector<std::filesystem::path> search = paths;
