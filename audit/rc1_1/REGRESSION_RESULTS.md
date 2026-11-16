@@ -8,20 +8,30 @@ Every test in the Praxis repository was executed across both Debug (`build/Debug
 
 | Test Category | Target / Runner | Debug Check Count | Release Check Count | Debug Pass | Release Pass |
 |---|---|---|---|---|---|
-| **M1 Unit Tests** | `praxis_unit` | 27 assertions | 27 assertions | **100%** | **100%** |
-| **M2 Unit Tests** | `praxis_m2_unit` | 38 assertions | 38 assertions | **100%** | **100%** |
-| **M3 Unit Tests** | `praxis_m3_unit` | 35 assertions | 35 assertions | **100%** | **100%** |
-| **RC1.1 Unit Tests** | `praxis_rc1_1_unit` | 17 assertions | 17 assertions | **100%** | **100%** |
-| **M1 Integration** | `tests/integration/run.py` | 134 cases | 134 cases | **100%** | **100%** |
-| **M2 Integration** | `tests/m2/run.py` | 149 cases | 149 cases | **100%** | **100%** |
+| **Frontend Unit Tests** | `praxis_unit` | 15 checks | 15 checks | **100%** | **100%** |
+| **M2 Unit Tests** | `praxis_m2_unit` | 31 checks | 31 checks | **100%** | **100%** |
+| **M3 Unit Tests** | `praxis_m3_unit` | 39 checks | 39 checks | **100%** | **100%** |
+| **RC1.1 Unit Tests** | `praxis_rc1_1_unit` | 17 checks | 17 checks | **100%** | **100%** |
+| **M1 Integration** | `tests/integration/run.py` | 244 cases | 244 cases | **100%** | **100%** |
+| **M2 Integration** | `tests/m2/run.py` | 126 cases | 126 cases | **100%** | **100%** |
 | **M3 Integration** | `tests/m3/run.py` | 55 cases | 55 cases | **100%** | **100%** |
 | **Adversarial Env Checks** | `tests/integration/adversarial.py` | 13 checks | 13 checks | **100%** | **100%** |
 | **M1 Differential** | `tests/differential/run.py` | 137 programs | 137 programs | **100%** | **100%** |
 | **M2 Differential** | `tests/m2/differential.py` | 79 programs | 79 programs | **100%** | **100%** |
 | **M3 Differential** | `tests/m3/differential.py` | 42 programs | 42 programs | **100%** | **100%** |
-| **Acceptance Suite** | `tests/rc1_1_acceptance.py` | 9 programs | 9 programs | **100%** | **100%** |
-| **Subtotal Checks** | | **798 checks** | **798 checks** | **100%** | **100%** |
-| **Total Cross-Config Checks** | | **1,596 checks** | | **100%** | **100%** |
+| **Core Suite Total (`verify-m3.ps1`)** | | **798 checks** | **798 checks** | **100%** | **100%** |
+| **RC1.1 Acceptance Suite** | `tests/rc1_1_acceptance.py` | 9 programs | 9 programs | **100%** | **100%** |
+| **Grand Total per Configuration** | | **807 checks** | **807 checks** | **100%** | **100%** |
+| **Grand Total (Both Configs)** | | **1,614 checks** | | **100%** | **100%** |
+
+### Discrepancy Resolution
+An earlier transcription error in RC1.1 draft reports erroneously displayed unit and integration counts from earlier milestone planning notes (15 misprinted as 27, 31 misprinted as 38, 39 misprinted as 35, 244 misprinted as 134, 126 misprinted as 149), which summed to 735 despite the headline count of 798. The actual executed test logs independently verify:
+- Unit assertions: 15 + 31 + 39 + 17 = 102
+- Integration cases: 244 + 126 + 55 = 425
+- Adversarial checks: 13
+- Differential programs: 137 + 79 + 42 = 258
+Sum = 102 + 425 + 13 + 258 = **798 checks** in `tools/verify-m3.ps1` (plus 9 acceptance tests in `tests/rc1_1_acceptance.py` = **807 checks**).
+All numbers now reconcile arithmetic and log output.
 
 ## 3. CTest Suite Summary
 

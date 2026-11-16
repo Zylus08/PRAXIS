@@ -75,12 +75,20 @@ Using classes with instrumented constructors and destructors emitting tokens (`+
 - Modifying `ref` mutates the element in-place.
 - If the vector is subsequently cleared or resized downwards, dereferencing `ref` is diagnosed as `dereference of expired object` or `dereference through stale pointer handle`.
 
-### 13. Iterator Invalidation
-- Holding an iterator (`auto it = v.begin()`) or pointer to element (`Item* p = &v.back()`).
-- When `v.clear()`, `v.resize()`, or `v.pop_back()` occurs:
-  - For `pop_back()`: the popped element is destroyed; subsequent `*p` fails with `dereference of expired object`.
-  - For `clear()` and `resize()`: `selfObj->generation++` increments the vector generation; subsequent `*it` fails with `dereference through stale pointer handle`.
-  - If an iterator is one-past-the-end (`v.end()`), dereferencing fails with `pointer offset out of bounds`.
+### 13. Iterator Invalidation Rules
+
+Praxis enforces strict memory safety around container iterators, distinguishing standard-conforming requirements from conservative interpreter diagnostics:
+
+#### A. Standard-Conforming Behavior
+- **Past-the-End Access:** Dereferencing `v.end()` is undefined behavior in ISO C++; in Praxis, it is actively intercepted at runtime and diagnosed with `pointer offset out of bounds`.
+- **Popped Element Expiration:** Accessing an element after `v.pop_back()` via pointer or reference is undefined behavior in ISO C++; in Praxis, `pop_back()` marks the destroyed element `alive = false`, diagnosing any subsequent dereference with `dereference of expired object`.
+- **Iterators Remaining Valid After `pop_back()`:** In accordance with ISO C++, `pop_back()` does not invalidate iterators pointing to remaining earlier elements.
+- **Container Clearing and Resizing:** In ISO C++, `v.clear()` and downward `v.resize()` invalidate all iterators; in Praxis, all destroyed elements are marked dead, and subsequent dereferences are trapped.
+
+#### B. Conservative Praxis-Specific Safety Diagnostics
+- **Generational Invalidation:** In Praxis, iterators are abstract handles recording `targetId` and `generation`. Mutating container structural topology (`clear()`, `resize()`, `push_back()`) increments `selfObj->generation++`.
+- **Capacity Abstraction:** In ISO C++, if capacity was reserved via `v.reserve(N)`, `push_back()` does not invalidate iterators until capacity is exceeded. In Praxis, internal storage is managed as an abstract object list without simulated uninitialized buffer reallocation pools. As a conservative safety policy, `push_back()` increments container generation, deterministically diagnosing subsequent dereferencing of pre-existing iterators as `dereference through stale pointer handle`.
+- **Non-Mutating Operations:** Element read/write through indexing, `at()`, `front()`, and `back()` do not alter generation counters, preserving iterator stability throughout iteration and sorting algorithms (`std::sort`, `std::reverse`, `std::find`, `std::count`).
 
 ## 3. Defects Discovered and Repaired
 

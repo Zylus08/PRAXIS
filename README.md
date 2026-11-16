@@ -121,17 +121,18 @@ int main() {
 
 ## Verification and Testing
 
-Praxis v0.1.0 verification consists of **798 checks per configuration** (**1,596 total across Debug and Release**):
+Praxis v0.1.0 verification consists of **798 checks per configuration** in the primary verification suite (**1,596 total across Debug and Release**; **807 checks / 1,614 total** including the dedicated acceptance test harness):
 - **CTest Suite (7 test runners):**
-  - Frontend unit tests (`praxis_unit`): 27 assertions
-  - M2 unit tests (`praxis_m2_unit`): 38 assertions
-  - M3 unit tests (`praxis_m3_unit`): 35 assertions
-  - RC1.1 unit tests (`praxis_rc1_1_unit`): 17 assertions
-  - M3 integration tests: 55 cases
-  - M2 integration tests: 149 cases
-  - M1 integration tests: 134 cases
+  - Frontend unit tests (`praxis_unit`): 15 checks
+  - M2 unit tests (`praxis_m2_unit`): 31 checks
+  - M3 unit tests (`praxis_m3_unit`): 39 checks
+  - RC1.1 unit tests (`praxis_rc1_1_unit`): 17 checks
+  - M3 integration tests (`tests/m3/run.py`): 55 cases
+  - M2 integration tests (`tests/m2/run.py`): 126 cases
+  - M1 integration tests (`tests/integration/run.py`): 244 cases
 - **Adversarial / Safety Tests:** 13 dedicated safety checks verifying memory protection against use-after-free, double deletion, deleting stack objects, dangling pointers to expired frames, null dereferencing, and out-of-bounds container access.
 - **Differential Verification:** **258 differential programs** (42 M3 + 79 M2 + 137 M1 programs) compiled with native MSVC (`cl.exe /std:c++20 /EHsc /Od /Zc:nrvo-`) and compared byte-for-byte against Praxis execution with **100.0% pass rate**.
+- **Dedicated RC1.1 Acceptance Suite:** 9 programs verifying templated Accumulator, type variants, container members, and copying.
 
 ```powershell
 # Run full verification suite (Unit, Integration, Adversarial, Differential)
