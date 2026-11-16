@@ -1,4 +1,4 @@
-# Execution and Lifetime Model (v0.1.0-rc1 / Milestone M3)
+# Execution and Lifetime Model (Praxis v0.1.0)
 
 ## 1. Values and Object Identity
 

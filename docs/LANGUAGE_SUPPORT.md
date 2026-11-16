@@ -1,4 +1,4 @@
-# Praxis Language Boundary (v0.1.0-rc1 / Milestone M3)
+# Praxis Language Boundary (Praxis v0.1.0)
 
 ## 1. Implemented C++ Subset
 

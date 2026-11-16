@@ -109,7 +109,10 @@ void Analyzer::checkFunction(const F& f){
         if(f->constructor){
             auto c=program->compiledClasses.at(f->owner);
             if(f->special==Function::Special::CopyConstructor){
-                for(auto& d:c->fields)if(d.type.base==Base::Record && d.type.pointer==0){auto e=std::make_shared<Expr>(Expr::Kind::Name,d.name);e->type=d.type;e->type.constant=true;e->lvalue=true;constructor(d.type,{e},d.name.loc);checkDestructor(d.type,d.name.loc);}
+                for(auto& d:c->fields)if(d.type.base==Base::Record && d.type.pointer==0){
+                    if(d.type.name=="std::vector" || d.type.name=="std::array" || d.type.name=="std::pair") continue;
+                    auto e=std::make_shared<Expr>(Expr::Kind::Name,d.name);e->type=d.type;e->type.constant=true;e->lvalue=true;constructor(d.type,{e},d.name.loc);checkDestructor(d.type,d.name.loc);
+                }
             }else{
                 std::set<std::string> seen;
                 for(auto& init:f->initializers){if(!seen.insert(init.name.text).second)fail(init.name.loc,"semantic","duplicate member initializer");bool found=false;for(auto& d:c->fields)found=found||d.name.text==init.name.text;if(!found)fail(init.name.loc,"semantic","unknown member initializer (delegation unsupported)");}
@@ -119,7 +122,17 @@ void Analyzer::checkFunction(const F& f){
                     for(auto& i:f->initializers)if(i.name.text==d.name.text){init=i;explicitInit=true;break;}
                     if(!explicitInit&&d.init)init.args={cloneExpr(d.init,{})};
                     for(auto a:init.args)expr(a);
-                    if(d.type.base==Base::Record && d.type.pointer==0){checkDestructor(d.type,d.name.loc);bool elide=false;if(init.args.size()==1&&!init.args[0]->lvalue){auto a=init.args[0]->type,b=d.type;a.constant=false;b.constant=false;elide=a==b;}init.constructor=elide?"$elide":constructor(d.type,init.args,d.name.loc)->id;init.valueInitialize=explicitInit&&init.args.empty();}
+                    if(d.type.base==Base::Record && d.type.pointer==0){
+                        if(d.type.name=="std::vector" || d.type.name=="std::array" || d.type.name=="std::pair"){
+                            if(explicitInit){
+                                for(auto a:init.args)expr(a);
+                                if(init.args.size()==1)convert(init.args[0],d.type);
+                            }
+                            init.constructor="$container";
+                        }else{
+                            checkDestructor(d.type,d.name.loc);bool elide=false;if(init.args.size()==1&&!init.args[0]->lvalue){auto a=init.args[0]->type,b=d.type;a.constant=false;b.constant=false;elide=a==b;}init.constructor=elide?"$elide":constructor(d.type,init.args,d.name.loc)->id;init.valueInitialize=explicitInit&&init.args.empty();
+                        }
+                    }
                     else {if(init.args.size()>1)fail(d.name.loc,"semantic","scalar member takes at most one initializer");if(!init.args.empty())convert(init.args[0],d.type);else if(d.type.constant&&d.type.base!=Base::String&&!explicitInit)fail(d.name.loc,"semantic","const member requires initializer");if(explicitInit&&init.args.empty())init.constructor="$zero";}
                     ordered.push_back(init);
                 }

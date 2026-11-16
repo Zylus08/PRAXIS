@@ -1,4 +1,4 @@
-# Semantic Rules and Evaluation Model (v0.1.0-rc1 / Milestone M3)
+# Semantic Rules and Evaluation Model (Praxis v0.1.0)
 
 ## 1. Static Analysis and Execution Separation
 

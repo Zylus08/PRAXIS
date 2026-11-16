@@ -1,8 +1,8 @@
-# Known Limitations and Non-Goals (v0.1.0-rc1 / Milestone M3)
+# Known Limitations and Non-Goals (Praxis v0.1.0)
 
 ## 1. Scope and Conformance
 
-Praxis v0.1.0-rc1 is an independent, lifetime-correct C++ tree-walking interpreter for a documented subset of C++20. It is not a fully conforming C++20 compiler and cannot parse unmapped system toolchain headers.
+Praxis v0.1.0 is an independent, lifetime-correct C++ tree-walking interpreter for a documented subset of C++20. It is not a fully conforming C++20 compiler and cannot parse unmapped system toolchain headers.
 
 ---
 

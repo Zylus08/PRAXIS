@@ -178,6 +178,10 @@ Type Analyzer::callExpression(const E& e){
             if(callee->op=="resize"){
                 if(args.empty()||args.size()>2||!integral(args[0]->type))fail(e->token.loc,"semantic","resize takes 1 or 2 arguments");
                 if(args.size()==2)convert(args[1],elemTy);
+                else if(elemTy.base==Base::Record && elemTy.pointer==0){
+                    auto f=constructor(elemTy,{},e->token.loc);
+                    e->copyTarget=f->id;
+                }
                 e->target="native:vector.resize";
                 return {Base::Void};
             }

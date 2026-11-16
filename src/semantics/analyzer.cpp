@@ -388,8 +388,13 @@ void Analyzer::declare(Decl &d) {
                 expr(d.init);
                 convert(d.init, t);
             } else {
+                Type elemTy = t.arguments[0];
                 for (auto a : d.arguments)
                     expr(a);
+                if (d.arguments.size() == 1 && elemTy.base == Base::Record && elemTy.pointer == 0) {
+                    auto f = constructor(elemTy, {}, d.name.loc);
+                    d.constructor = f->id;
+                }
             }
             return;
         }

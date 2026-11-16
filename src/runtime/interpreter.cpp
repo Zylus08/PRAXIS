@@ -292,13 +292,16 @@ Evaluation Interpreter::eval(const E &e) {
             if (method == "empty")
                 return {{{Base::Bool}, std::int64_t{selfObj->elements.empty() ? 1 : 0}}, {}};
             if (method == "push_back") {
-                auto argVal = value(e->args[1]);
-                auto cell = allocate(selfObj->type.arguments[0], true);
-                if (cell->type.base == Base::Record) {
+                selfObj->generation++;
+                Type elemTy = selfObj->type.arguments[0];
+                O cell;
+                if (elemTy.base == Base::Record && elemTy.pointer == 0) {
                     auto a = eval(e->args[1]);
                     auto src = object(a, l);
-                    cell = copyObject(src, cell->type, "", l);
+                    cell = copyObject(src, elemTy, "", l);
                 } else {
+                    auto argVal = value(e->args[1]);
+                    cell = allocate(elemTy, true);
                     cell->value = convertValue(argVal, cell->type, l);
                 }
                 selfObj->elements.push_back(cell);
@@ -311,6 +314,7 @@ Evaluation Interpreter::eval(const E &e) {
                 return {{zero({Base::Void})}, {}};
             }
             if (method == "clear") {
+                selfObj->generation++;
                 for (auto it = selfObj->elements.rbegin(); it != selfObj->elements.rend(); ++it)
                     destroy(*it);
                 selfObj->elements.clear();
@@ -352,6 +356,7 @@ Evaluation Interpreter::eval(const E &e) {
                 return {{zero({Base::Void})}, {}};
             }
             if (method == "resize") {
+                selfObj->generation++;
                 auto newSize = std::get<std::int64_t>(value(e->args[1]).data);
                 if (newSize < 0) fail(l, "runtime", "negative vector size");
                 size_t targetCount = static_cast<size_t>(newSize);
@@ -362,8 +367,21 @@ Evaluation Interpreter::eval(const E &e) {
                     selfObj->elements.pop_back();
                 }
                 while (selfObj->elements.size() < targetCount) {
-                    auto cell = allocate(elemTy, true);
-                    cell->value = defaultVal;
+                    O cell;
+                    if (elemTy.base == Base::Record && elemTy.pointer == 0) {
+                        if (e->args.size() > 2) {
+                            auto a = eval(e->args[2]);
+                            auto src = object(a, l);
+                            cell = copyObject(src, elemTy, "", l);
+                        } else {
+                            cell = allocate(elemTy, false);
+                            cell->location = l;
+                            construct(cell, e->copyTarget, {});
+                        }
+                    } else {
+                        cell = allocate(elemTy, true);
+                        cell->value = defaultVal;
+                    }
                     selfObj->elements.push_back(cell);
                 }
                 return {{zero({Base::Void})}, {}};
@@ -501,7 +519,8 @@ Evaluation Interpreter::eval(const E &e) {
                 fail(l, "runtime", "dereference of expired object");
             if (target->generation != ptr.generation)
                 fail(l, "runtime", "dereference through stale pointer handle");
-            if (!target->elements.empty()) {
+            bool isContainer = target->type.extent > 0 || (target->type.base == Base::Record && (target->type.name == "std::vector" || target->type.name == "std::array"));
+            if (isContainer) {
                 if (ptr.offset < 0 || ptr.offset >= static_cast<int>(target->elements.size()))
                     fail(l, "runtime", "pointer offset out of bounds");
                 return {{}, target->elements[static_cast<size_t>(ptr.offset)]};
@@ -610,12 +629,13 @@ void Interpreter::declare(const Decl &d) {
         if (d.braced || !d.elements.empty()) {
             Type elemTy = d.type.arguments[0];
             for (auto el : d.elements) {
-                auto cell = allocate(elemTy, true);
-                if (elemTy.base == Base::Record) {
+                O cell;
+                if (elemTy.base == Base::Record && elemTy.pointer == 0) {
                     auto a = eval(el);
                     auto src = object(a, d.name.loc);
                     cell = copyObject(src, elemTy, "", d.name.loc);
                 } else {
+                    cell = allocate(elemTy, true);
                     cell->value = convertValue(value(el), elemTy, d.name.loc);
                 }
                 o->elements.push_back(cell);
@@ -627,11 +647,28 @@ void Interpreter::declare(const Decl &d) {
         } else if (!d.arguments.empty()) {
             auto count = std::get<std::int64_t>(value(d.arguments[0]).data);
             Type elemTy = d.type.arguments[0];
-            Value initVal = d.arguments.size() > 1 ? convertValue(value(d.arguments[1]), elemTy, d.name.loc) : zero(elemTy);
-            for (std::int64_t i = 0; i < count; ++i) {
-                auto cell = allocate(elemTy, true);
-                cell->value = initVal;
-                o->elements.push_back(cell);
+            if (elemTy.base == Base::Record && elemTy.pointer == 0) {
+                if (d.arguments.size() > 1) {
+                    auto a = eval(d.arguments[1]);
+                    auto src = object(a, d.name.loc);
+                    for (std::int64_t i = 0; i < count; ++i) {
+                        o->elements.push_back(copyObject(src, elemTy, "", d.name.loc));
+                    }
+                } else {
+                    for (std::int64_t i = 0; i < count; ++i) {
+                        auto cell = allocate(elemTy, false);
+                        cell->location = d.name.loc;
+                        construct(cell, d.constructor, {});
+                        o->elements.push_back(cell);
+                    }
+                }
+            } else {
+                Value initVal = d.arguments.size() > 1 ? convertValue(value(d.arguments[1]), elemTy, d.name.loc) : zero(elemTy);
+                for (std::int64_t i = 0; i < count; ++i) {
+                    auto cell = allocate(elemTy, true);
+                    cell->value = initVal;
+                    o->elements.push_back(cell);
+                }
             }
         }
         o->initialized = true;

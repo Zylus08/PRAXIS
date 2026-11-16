@@ -298,7 +298,7 @@
   {
     "name": "accumulator",
     "category": "acceptance",
-    "source": "#include <iostream>\n#include <vector>\nint main(){std::vector<int> numbers={10,20,30};int total=0;for(int n:numbers){total+=n;}std::cout<<total;}",
+    "source": "#include <iostream>\n#include <vector>\n\ntemplate<typename T>\nclass Accumulator {\n    T value;\n\npublic:\n    Accumulator(T initial) : value(initial) {}\n\n    void add(T x) {\n        value += x;\n    }\n\n    T result() const {\n        return value;\n    }\n};\n\nint main() {\n    std::vector<int> numbers = {10, 20, 30};\n\n    Accumulator<int> sum(0);\n\n    for (int n : numbers) {\n        sum.add(n);\n    }\n\n    std::cout << sum.result();\n}\n",
     "stdout": "60",
     "phase": null,
     "exit": 0

@@ -42,9 +42,12 @@ Interpreter::O Interpreter::copyObject(const O& source,Type t,const std::string&
         result->initialized = true;
         result->complete = true;
         for (auto e : source->elements) {
-            auto copy = allocate(e->type, true);
+            O copy;
             if (e->type.base == Base::Record && e->type.pointer == 0) copy = copyObject(e, e->type, "", l);
-            else copy->value = e->value;
+            else {
+                copy = allocate(e->type, true);
+                copy->value = e->value;
+            }
             result->elements.push_back(copy);
         }
         return result;
@@ -57,13 +60,18 @@ void Interpreter::assignObject(const O& destination,const O& source,const Locati
     if(!destination->complete||!source->complete)fail(l,"runtime","assignment involving incomplete object");
     if(destination->type.base==Base::Record && (destination->type.name == "std::vector" || destination->type.name == "std::array" || destination->type.name == "std::pair")) {
         ++profile.containerOperations;
+        for (auto it = destination->elements.rbegin(); it != destination->elements.rend(); ++it)
+            destroy(*it);
         destination->elements.clear();
         destination->initialized = true;
         destination->complete = true;
         for (auto e : source->elements) {
-            auto copy = allocate(e->type, true);
+            O copy;
             if (e->type.base == Base::Record && e->type.pointer == 0) copy = copyObject(e, e->type, "", l);
-            else copy->value = e->value;
+            else {
+                copy = allocate(e->type, true);
+                copy->value = e->value;
+            }
             destination->elements.push_back(copy);
         }
         return;
@@ -84,9 +92,25 @@ void Interpreter::initializeMembers(const O& o,const std::shared_ptr<Function>& 
     }
     for(size_t i=0;i<o->definition->fields.size();++i){auto& d=o->definition->fields[i];auto& init=f->initializers.at(i);size_t mark=temporaries.size();auto member=allocate(d.type,false);member->location=d.name.loc;member->zeroInitialize=o->zeroInitialize;if(o->zeroInitialize&&(d.type.base!=Base::Record || d.type.pointer>0))member->initialized=true;o->fields[d.name.text]=member;
         try{
-            if(d.type.base==Base::Record && d.type.pointer==0){std::vector<Evaluation> values;for(auto e:init.args)values.push_back(eval(e));
-                if(init.constructor=="$elide"){auto source=object(values.at(0),d.name.loc);destroy(member);member=source;member->type=d.type;detachTemporary(member);o->fields[d.name.text]=member;}
-                else {if(init.valueInitialize&&functions.at(init.constructor)->special==Function::Special::DefaultConstructor)member->zeroInitialize=true;construct(member,init.constructor,values);}}
+            if(d.type.base==Base::Record && d.type.pointer==0){
+                if(init.constructor=="$container"){
+                    member->complete=true;
+                    member->initialized=true;
+                    if(!init.args.empty() && init.args.size()==1){
+                        auto a=eval(init.args[0]);
+                        auto src=a.object ? a.object : (std::holds_alternative<O>(a.value.data)?std::get<O>(a.value.data):nullptr);
+                        if(src){
+                            destroy(member);
+                            member=copyObject(src,d.type,"",d.name.loc);
+                            o->fields[d.name.text]=member;
+                        }
+                    }
+                }else{
+                    std::vector<Evaluation> values;for(auto e:init.args)values.push_back(eval(e));
+                    if(init.constructor=="$elide"){auto source=object(values.at(0),d.name.loc);destroy(member);member=source;member->type=d.type;detachTemporary(member);o->fields[d.name.text]=member;}
+                    else {if(init.valueInitialize&&functions.at(init.constructor)->special==Function::Special::DefaultConstructor)member->zeroInitialize=true;construct(member,init.constructor,values);}
+                }
+            }
             else if(!init.args.empty()){member->value=convertValue(value(init.args[0]),d.type,d.name.loc);member->initialized=true;}
             else if(init.constructor=="$zero"){member->value=zero(d.type);member->initialized=true;}
             o->members.push_back(member);cleanupTemporaries(mark);

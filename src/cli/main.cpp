@@ -29,7 +29,7 @@ int repl() {
     auto runtime = std::make_unique<Interpreter>(std::cout);
     std::string line, buffer;
     int submission = 0;
-    std::cout << "Praxis v0.1.0-rc1 REPL (:quit, :reset; finish multiline input with an empty line)\n";
+    std::cout << "Praxis v0.1.0 REPL (:quit, :reset; finish multiline input with an empty line)\n";
     while (std::getline(std::cin, line)) {
         if (buffer.empty() && line == ":quit")
             break;
@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
     using namespace praxis;
     try {
         if (argc == 2 && std::string(argv[1]) == "--version") {
-            std::cout << "Praxis 0.1.0-rc1 (M3 release candidate: pointers, dynamic storage, STL subset)\n";
+            std::cout << "Praxis 0.1.0 (Classes, templates, RAII, pointers, dynamic storage, STL subset)\n";
             return 0;
         }
         if (argc == 1 || (argc == 2 && std::string(argv[1]) == "--help")) {
